@@ -234,6 +234,47 @@ class PasswordResetResendAPIView(APIView):
         return success_response(message=_('Password reset code resent'))
 
 
+class RegisterResendAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        from .serializers import ResendOTPSerializer
+        serializer = ResendOTPSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data['email']
+
+        from .models import PasswordResetOTP
+        # rate limit: max 5 attempts per 25 minutes for registration purpose
+        window_minutes = 25
+        max_attempts = 5
+        cutoff = timezone.now() - timedelta(minutes=window_minutes)
+        recent_count = PasswordResetOTP.objects.filter(email=email, purpose='registration', created_at__gte=cutoff).count()
+        if recent_count >= max_attempts:
+            return error_response(message=_('Too many resend attempts. Try again later.'), status_code=status.HTTP_429_TOO_MANY_REQUESTS)
+
+        # invalidate previous unused registration otps
+        PasswordResetOTP.objects.filter(email=email, purpose='registration', is_used=False).update(is_used=True)
+
+        otp_length = int(getattr(settings, 'OTP_LENGTH', 6))
+        otp_code = ''.join([str(random.randint(0, 9)) for _ in range(otp_length)])
+        expiry_seconds = int(getattr(settings, 'OTP_EXPIRY_SECONDS', 300))
+        expires_at = timezone.now() + timedelta(seconds=expiry_seconds)
+
+        otp = PasswordResetOTP.objects.create(email=email, code=otp_code, expires_at=expires_at, purpose='registration')
+
+        subject = _('Your Kibegi registration code')
+        message = _('Your registration verification code is: {code}. It will expire in {mins} minutes.').format(code=otp_code, mins=int(expiry_seconds / 60))
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+        try:
+            if from_email:
+                send_mail(subject, message, from_email, [email])
+        except Exception:
+            pass
+
+        return success_response(message=_('Registration code resent'))
+
+
 class RegisterVerifyAPIView(APIView):
     permission_classes = [AllowAny]
 

@@ -68,6 +68,7 @@ class PasswordResetOTP(models.Model):
     """
     email = models.EmailField(_('email address'))
     code = models.CharField(_('otp code'), max_length=32)
+    purpose = models.CharField(_('purpose'), max_length=32, default='password_reset')
     reset_token = models.CharField(_('reset token'), max_length=128, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
