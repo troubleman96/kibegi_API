@@ -16,13 +16,32 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from authentication.views import RegisterAPIView, LoginAPIView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Authentication endpoints (mounted at /api/auth/)
-    path('api/auth/', include('authentication.urls')),
-    # Compatibility shortcuts used during testing (top-level)
+    
+    # API Documentation
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    
+    # API v1 endpoints
+    path('api/v1/auth/', include('authentication.urls')),
+    path('api/v1/classes/', include('classes.urls')),
+    path('api/v1/uploads/', include('uploads.urls')),
+    path('api/v1/sharing/', include('sharing.urls')),
+    path('api/v1/friends/', include('friends.urls')),
+    path('api/v1/notifications/', include('notifications.urls')),
+    
+    # Compatibility shortcuts (deprecated - use /api/v1/auth/ instead)
     path('register/', RegisterAPIView.as_view()),
     path('login/', LoginAPIView.as_view()),
 ]
+
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

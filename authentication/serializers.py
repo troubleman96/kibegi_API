@@ -46,6 +46,23 @@ class ResendOTPSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
 
 
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField(required=True)
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    new_password = serializers.CharField(write_only=True, required=True, validators=[validate_password], style={'input_type': 'password'})
+    confirm_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['confirm_password']:
+            raise serializers.ValidationError({
+                'password': "Password fields didn't match."
+            })
+        return attrs
+
+
 class PasswordResetConfirmSerializer(serializers.Serializer):
     token = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True, validators=[validate_password], style={'input_type': 'password'})
@@ -60,7 +77,11 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    # expose `full_name` as `username` in API so clients use `username` key
+    username = serializers.CharField(source='full_name')
+
     class Meta:
         model = User
-        fields = ['id', 'email', 'full_name', 'user_type', 'date_joined']
+        # present username and email to clients; email is read-only
+        fields = ['id', 'email', 'username', 'user_type', 'date_joined']
         read_only_fields = ['id', 'email', 'date_joined']

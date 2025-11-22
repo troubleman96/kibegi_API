@@ -1,0 +1,260 @@
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from django.db.models import Count
+from drf_spectacular.utils import extend_schema, extend_schema_view
+from .models import Class, Membership
+from .serializers import (
+    ClassSerializer, ClassListSerializer, JoinClassSerializer,
+    MemberSerializer, MembershipSerializer
+)
+from .services import ClassService
+from core.utils.responses import success_response, error_response
+from core.pagination import StandardResultsSetPagination
+
+
+@extend_schema(tags=['Classes'])
+class ClassListCreateAPIView(generics.ListCreateAPIView):
+    """List classes or create a new class"""
+    permission_classes = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return ClassSerializer
+        return ClassListSerializer
+    
+    def get_queryset(self):
+        """Return classes the user is a member of or public classes"""
+        user = self.request.user
+        return Class.objects.filter(
+            members=user
+        ).annotate(total_members=Count('members')).distinct()
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        class_obj = serializer.save()
+        
+        return success_response(
+            message="Class created successfully",
+            data=ClassSerializer(class_obj, context={'request': request}).data,
+            status_code=status.HTTP_201_CREATED
+        )
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return success_response(
+            message="Classes retrieved successfully",
+            data=serializer.data
+        )
+
+
+@extend_schema(tags=["Classes"])
+class ClassDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """Retrieve, update or delete a class"""
+    serializer_class = ClassSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Class.objects.all()
+    
+    def get_object(self):
+        obj = super().get_object()
+        # Check if user has access to this class
+        if not ClassService.user_can_access_class(self.request.user, obj):
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("You don't have access to this class")
+        return obj
+    
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return success_response(
+            message="Class retrieved successfully",
+            data=serializer.data
+        )
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        
+        # Only creator can update
+        if instance.creator != request.user:
+            return error_response(
+                message="Only the class creator can update this class",
+                status_code=status.HTTP_403_FORBIDDEN
+            )
+        
+        partial = kwargs.pop('partial', False)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return success_response(
+            message="Class updated successfully",
+            data=serializer.data
+        )
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        
+        # Only creator can delete
+        if instance.creator != request.user:
+            return error_response(
+                message="Only the class creator can delete this class",
+                status_code=status.HTTP_403_FORBIDDEN
+            )
+        
+        instance.delete()
+        return success_response(
+            message="Class deleted successfully",
+            status_code=status.HTTP_200_OK
+        )
+
+
+@extend_schema(tags=["Classes"])
+class ClassSearchAPIView(generics.ListAPIView):
+    """Search for classes"""
+    serializer_class = ClassListSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    
+    def get_queryset(self):
+        query = self.request.query_params.get('q', '')
+        if query:
+            return ClassService.search_classes(query, self.request.user)
+        return Class.objects.none()
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return success_response(
+            message="Search results retrieved successfully",
+            data=serializer.data
+        )
+
+
+@extend_schema(tags=["Classes"])
+class JoinClassAPIView(APIView):
+    """Join a class using class code"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = JoinClassSerializer
+    
+    def post(self, request):
+        serializer = JoinClassSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        
+        class_obj = serializer.context['class_obj']
+        user = request.user
+        
+        # Check if already a member
+        if class_obj.members.filter(id=user.id).exists():
+            return error_response(
+                message="You are already a member of this class",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Add user as member
+        Membership.objects.create(
+            user=user,
+            class_obj=class_obj,
+            role='student'
+        )
+        
+        return success_response(
+            message="Successfully joined class",
+            data=ClassSerializer(class_obj, context={'request': request}).data
+        )
+
+
+@extend_schema(tags=["Classes"])
+class ClassMembersAPIView(generics.ListAPIView):
+    """List members of a class"""
+    serializer_class = MemberSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    
+    def get_queryset(self):
+        class_id = self.kwargs.get('pk')
+        try:
+            class_obj = Class.objects.get(pk=class_id)
+            
+            # Check if user has access
+            if not ClassService.user_can_access_class(self.request.user, class_obj):
+                from rest_framework.exceptions import PermissionDenied
+                raise PermissionDenied("You don't have access to this class")
+            
+            return class_obj.members.all()
+        except Class.DoesNotExist:
+            from rest_framework.exceptions import NotFound
+            raise NotFound("Class not found")
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        class_id = self.kwargs.get('pk')
+        try:
+            context['class_obj'] = Class.objects.get(pk=class_id)
+        except Class.DoesNotExist:
+            pass
+        return context
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return success_response(
+            message="Class members retrieved successfully",
+            data=serializer.data
+        )
+
+
+@extend_schema(tags=["Classes"])
+class LeaveClassAPIView(APIView):
+    """Leave a class"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = None
+    
+    def post(self, request, pk):
+        try:
+            class_obj = Class.objects.get(pk=pk)
+        except Class.DoesNotExist:
+            return error_response(
+                message="Class not found",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Cannot leave if you're the creator
+        if class_obj.creator == request.user:
+            return error_response(
+                message="Class creator cannot leave the class",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Check if member
+        membership = class_obj.memberships.filter(user=request.user).first()
+        if not membership:
+            return error_response(
+                message="You are not a member of this class",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        
+        membership.delete()
+        return success_response(
+            message="Successfully left the class"
+        )
