@@ -1,10 +1,16 @@
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
+from django.http import FileResponse, Http404
+from django.utils.encoding import smart_str
 from datetime import timedelta
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
+from drf_spectacular.types import OpenApiTypes
+import mimetypes
+import os
 from .models import Upload
 from .serializers import UploadSerializer, UploadListSerializer
 from core.utils.responses import success_response, error_response
@@ -171,6 +177,80 @@ class RestoreUploadAPIView(APIView):
         )
 
 
+@extend_schema(
+    summary="Permanently Delete File",
+    description="""
+    Permanently delete a file from trash (hard delete).
+    
+    WARNING: This action is irreversible!
+    - The file will be permanently removed from the database
+    - The physical file will be deleted from storage
+    - This action cannot be undone
+    
+    Requirements:
+    - File must be in trash (is_deleted=True)
+    - You must be the uploader (owner)
+    """,
+    parameters=[
+        OpenApiParameter(
+            name='pk',
+            type=OpenApiTypes.UUID,
+            location=OpenApiParameter.PATH,
+            description='UUID of the file to permanently delete'
+        ),
+    ],
+    responses={
+        200: OpenApiResponse(description="File permanently deleted"),
+        403: OpenApiResponse(description="Not authorized to delete this file"),
+        404: OpenApiResponse(description="File not found in trash"),
+    },
+    tags=['Uploads']
+)
+class PermanentDeleteAPIView(APIView):
+    """
+    Permanently delete a file from trash.
+    
+    This endpoint performs a hard delete:
+    1. Deletes the physical file from storage
+    2. Removes the database record
+    
+    The file must be in trash (soft deleted) first.
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def delete(self, request, pk):
+        """Permanently delete the file"""
+        try:
+            upload = Upload.objects.get(pk=pk, uploader=request.user, is_deleted=True)
+        except Upload.DoesNotExist:
+            return Response(
+                error_response("File not found in trash"),
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Store file info before deletion
+        file_name = upload.file_name
+        file_path = upload.file.path if upload.file else None
+        
+        # Delete physical file from storage
+        if file_path and os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except OSError as e:
+                # Log error but continue with database deletion
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Failed to delete physical file {file_path}: {e}")
+        
+        # Delete database record
+        upload.delete()
+        
+        return success_response(
+            message=f"'{file_name}' permanently deleted",
+            status_code=status.HTTP_200_OK
+        )
+
+
 @extend_schema(tags=["Uploads"])
 class SearchUploadsAPIView(generics.ListAPIView):
     """Search uploads by filename"""
@@ -243,3 +323,127 @@ class RecentFilesAPIView(generics.ListAPIView):
             message="Recent files retrieved successfully",
             data=serializer.data
         )
+
+
+@extend_schema(
+    summary="Download File",
+    description="""
+    Download a file with proper headers for cross-device compatibility.
+    
+    Features:
+    - Works on PC, mobile, and tablet devices
+    - Automatic MIME type detection
+    - Downloads with original filename
+    - Supports streaming for large files
+    - Secure access control
+    
+    Access Control:
+    - Must be authenticated
+    - Must be member of file's class OR have accepted share
+    """,
+    parameters=[
+        OpenApiParameter(
+            name='file_code',
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.PATH,
+            description='Unique 8-character file code'
+        ),
+    ],
+    responses={
+        200: OpenApiResponse(
+            description="File downloaded successfully"
+        ),
+        403: OpenApiResponse(description="Not authorized to download this file"),
+        404: OpenApiResponse(description="File not found or deleted"),
+    },
+    tags=['Uploads']
+)
+class DownloadFileAPIView(APIView):
+    """
+    Download file with proper headers for cross-device access.
+    
+    This endpoint:
+    1. Validates user has access (class member OR accepted share)
+    2. Serves file with correct MIME type
+    3. Sets proper headers for download
+    4. Supports streaming for large files
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, file_code):
+        try:
+            # Get upload by file_code
+            upload = Upload.objects.select_related('class_obj', 'uploader').get(
+                file_code=file_code,
+                is_deleted=False
+            )
+        except Upload.DoesNotExist:
+            return Response(
+                error_response("File not found or has been deleted"),
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Check access: Must be class member OR have accepted share
+        user = request.user
+        from classes.models import Membership
+        
+        is_class_member = Membership.objects.filter(
+            user=user,
+            class_obj=upload.class_obj
+        ).exists()
+        
+        # Check if file is shared with user (accepted)
+        has_share_access = False
+        if not is_class_member:
+            try:
+                from sharing.models import SharedFile
+                has_share_access = SharedFile.objects.filter(
+                    upload=upload,
+                    shared_with=user,
+                    status='accepted'
+                ).exists()
+            except:
+                pass  # Sharing app might not be available
+        
+        if not (is_class_member or has_share_access):
+            return Response(
+                error_response("You don't have permission to download this file"),
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Check if file exists on disk
+        if not os.path.exists(upload.file.path):
+            return Response(
+                error_response("File not found on server"),
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Detect MIME type
+        mime_type, _ = mimetypes.guess_type(upload.file.path)
+        if not mime_type:
+            mime_type = 'application/octet-stream'
+        
+        # Open file for reading
+        try:
+            file_handle = upload.file.open('rb')
+        except IOError:
+            return Response(
+                error_response("Error opening file"),
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+        # Create response with proper headers
+        response = FileResponse(
+            file_handle,
+            content_type=mime_type,
+            as_attachment=True,  # Force download instead of display
+            filename=smart_str(upload.file_name)  # Handle unicode filenames
+        )
+        
+        # Set additional headers for better compatibility
+        response['Content-Length'] = upload.file_size
+        response['Content-Disposition'] = f'attachment; filename="{smart_str(upload.file_name)}"'
+        response['X-Content-Type-Options'] = 'nosniff'  # Security header
+        response['Cache-Control'] = 'private, max-age=3600'  # Cache for 1 hour
+        
+        return response

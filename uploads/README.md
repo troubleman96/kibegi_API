@@ -180,10 +180,11 @@ All endpoints require authentication (JWT token).
 - `class_obj` - UUID of the class (String)
 
 **Optional Fields:**
-- `file_name` - Custom display name (auto-detected if not provided)
+- `file_name` - Custom display name (defaults to uploaded filename if not provided)
 
 **Auto-Detected Fields:**
-- `file_type` - Automatically detected from file
+- `file_name` - Extracted from uploaded file if not provided
+- `file_type` - Automatically detected from file extension and MIME type
 - `file_size` - Automatically extracted from file
 - `file_code` - Auto-generated unique 8-char code
 - `uploader` - Current authenticated user
@@ -192,14 +193,23 @@ All endpoints require authentication (JWT token).
 ```
 file: [binary file data]
 class_obj: "665f6af4-b52f-415f-ab30-6f0ba182db70"
+file_name: "My Custom Name.pdf"  (optional - uses uploaded filename if omitted)
 ```
 
 **Example Request (cURL):**
 ```bash
+# Upload with auto-detected filename
 curl -X POST http://localhost:8000/api/v1/uploads/ \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -F "file=@/path/to/document.pdf" \
   -F "class_obj=665f6af4-b52f-415f-ab30-6f0ba182db70"
+
+# Upload with custom filename
+curl -X POST http://localhost:8000/api/v1/uploads/ \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -F "file=@/path/to/document.pdf" \
+  -F "class_obj=665f6af4-b52f-415f-ab30-6f0ba182db70" \
+  -F "file_name=Custom Name.pdf"
 ```
 
 **Success Response (201):**
@@ -425,9 +435,194 @@ curl -X POST http://localhost:8000/api/v1/uploads/ \
 
 ---
 
+### 6B. Permanently Delete File
+
+**Endpoint:** `DELETE /api/v1/uploads/{file_id}/permanent-delete/`
+
+**Authentication:** Required (Uploader only)
+
+**Description:** Permanently delete a file from trash (hard delete). ⚠️ **WARNING: This action is irreversible!**
+
+**URL Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `file_id` | UUID | File's UUID (not file_code) |
+
+**Requirements:**
+- File must be in trash (`is_deleted = True`)
+- You must be the uploader (owner)
+- This is a **hard delete** - cannot be undone
+
+**What Happens:**
+1. Physical file is deleted from storage
+2. Database record is permanently removed
+3. All associated data is lost forever
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "message": "'document.pdf' permanently deleted"
+}
+```
+
+**Error Responses:**
+- `403` - Not the uploader
+- `404` - File not found in trash
+
+**⚠️ Important Notes:**
+- This endpoint requires the file's **UUID** (from database), not the `file_code`
+- File must be soft-deleted first (in trash)
+- Get the UUID from trash list: `GET /api/v1/uploads/trash/`
+- Once deleted, the file cannot be recovered
+- Use with caution!
+
+**Recommended Workflow:**
+1. Soft delete file: `DELETE /api/v1/uploads/{file_code}/` → File goes to trash
+2. View trash: `GET /api/v1/uploads/trash/` → Get file UUID
+3. Permanent delete: `DELETE /api/v1/uploads/{uuid}/permanent-delete/` → File gone forever
+
+---
+
 ### 7. Download File
 
-**Direct Download:** `GET {file_url}`
+**Endpoint:** `GET /api/v1/uploads/{file_code}/download/`
+
+**Authentication:** Required
+
+**Description:** Download file with proper headers for cross-device compatibility (PC, mobile, tablet).
+
+**Features:**
+- ✅ Works seamlessly on all devices
+- ✅ Automatic MIME type detection
+- ✅ Downloads with original filename
+- ✅ Supports large file streaming
+- ✅ Secure access control (class member OR accepted share)
+- ✅ Proper unicode filename handling
+- ✅ Cache headers for performance
+
+**URL Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `file_code` | string | 8-character unique file code |
+
+**Access Control:**
+- Must be a member of the file's class, OR
+- Have an accepted share for the file
+
+**Success Response (200):**
+
+Returns the file as binary data with headers:
+```
+Content-Type: application/pdf (or appropriate MIME type)
+Content-Disposition: attachment; filename="document.pdf"
+Content-Length: 2456789
+Cache-Control: private, max-age=3600
+X-Content-Type-Options: nosniff
+```
+
+The browser will automatically download the file with the correct filename.
+
+**Example Usage:**
+
+**Browser (Direct Link):**
+```html
+<a href="http://localhost:8000/api/v1/uploads/DOC12345/download/" 
+   download>
+  Download File
+</a>
+```
+
+**JavaScript (Fetch API):**
+```javascript
+async function downloadFile(fileCode, fileName) {
+  const response = await fetch(
+    `http://localhost:8000/api/v1/uploads/${fileCode}/download/`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+  );
+  
+  if (response.ok) {
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  }
+}
+
+// Usage
+downloadFile('DOC12345', 'document.pdf');
+```
+
+**cURL:**
+```bash
+# Download with authentication
+curl -X GET http://localhost:8000/api/v1/uploads/DOC12345/download/ \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -o downloaded-file.pdf
+
+# Or let cURL detect filename from headers
+curl -OJ http://localhost:8000/api/v1/uploads/DOC12345/download/ \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Mobile App (React Native):**
+```javascript
+import RNFS from 'react-native-fs';
+
+async function downloadFile(fileCode, fileName) {
+  const downloadUrl = `http://localhost:8000/api/v1/uploads/${fileCode}/download/`;
+  const downloadDest = `${RNFS.DocumentDirectoryPath}/${fileName}`;
+  
+  const download = RNFS.downloadFile({
+    fromUrl: downloadUrl,
+    toFile: downloadDest,
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  
+  const result = await download.promise;
+  if (result.statusCode === 200) {
+    console.log('File downloaded to:', downloadDest);
+    // Open file or show success message
+  }
+}
+```
+
+**Error Responses:**
+
+- `403` - Not authorized (not a class member and no accepted share)
+- `404` - File not found, deleted, or doesn't exist on server
+- `500` - Error reading file from disk
+
+**Cross-Device Benefits:**
+
+1. **PC/Laptop**: Direct download to Downloads folder with correct filename
+2. **Mobile Browser**: Downloads to device with save dialog
+3. **Mobile App**: Stream large files efficiently without loading all into memory
+4. **Tablet**: Works identically to mobile/PC
+
+**Use Cases:**
+
+- Download lecture materials on mobile while commuting
+- Share file link that works on any device
+- Stream large videos without browser timeout
+- Download course materials offline for later viewing
+
+---
+
+### 8. Direct File Access (Media URL)
 
 **Example:** `http://localhost:8000/media/uploads/user-id/document.pdf`
 
@@ -540,12 +735,14 @@ Access: `http://localhost:8000/api/docs/`
 1. Go to `GET /api/v1/uploads/{file_code}/`
 2. Enter your `file_code`
 3. See complete file information
-4. Note the `file_url` for downloading
+4. Note the `file_code` for downloading
 
-**Step 5: Download File**
-1. Copy `file_url` from response
-2. Open URL in browser or use wget/curl
-3. File downloads with original name
+**Step 5: Download File (Cross-Device)**
+1. Go to `GET /api/v1/uploads/{file_code}/download/`
+2. Enter your `file_code`
+3. Click "Execute"
+4. File downloads automatically with correct filename
+5. Test on mobile/tablet - works the same way!
 
 **Step 6: Update Metadata**
 1. Go to `PATCH /api/v1/uploads/{file_code}/`
@@ -601,7 +798,18 @@ curl -X GET http://localhost:8000/api/v1/uploads/DOC12345/ \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-**5. Update File Name:**
+**5. Download File (Recommended for cross-device):**
+```bash
+# Download with auto-detected filename
+curl -OJ http://localhost:8000/api/v1/uploads/DOC12345/download/ \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Or specify output filename
+curl -o myfile.pdf http://localhost:8000/api/v1/uploads/DOC12345/download/ \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**6. Update File Name:**
 ```bash
 curl -X PATCH http://localhost:8000/api/v1/uploads/DOC12345/ \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -611,12 +819,18 @@ curl -X PATCH http://localhost:8000/api/v1/uploads/DOC12345/ \
   }'
 ```
 
-**6. Download File:**
+**7. Download File (Cross-Device Compatible):**
 ```bash
-curl -O -J http://localhost:8000/media/uploads/user-id/document.pdf
+# Download with auto-detected filename
+curl -OJ http://localhost:8000/api/v1/uploads/DOC12345/download/ \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Or specify output filename
+curl -o myfile.pdf http://localhost:8000/api/v1/uploads/DOC12345/download/ \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-**7. Delete File:**
+**8. Delete File:**
 ```bash
 curl -X DELETE http://localhost:8000/api/v1/uploads/DOC12345/ \
   -H "Authorization: Bearer YOUR_TOKEN"

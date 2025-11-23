@@ -9,6 +9,7 @@ class UploadSerializer(serializers.ModelSerializer):
     file_url = serializers.SerializerMethodField()
     file_type = serializers.CharField(read_only=True)  # Auto-detected, not user input
     file_size = serializers.IntegerField(read_only=True)  # Auto-detected from file, not user input
+    file_name = serializers.CharField(required=False, allow_blank=True)  # Optional, auto-detected from file if empty
     
     class Meta:
         model = Upload

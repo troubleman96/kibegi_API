@@ -182,3 +182,881 @@ django.db.utils.OperationalError: table uploads_upload has no column named file_
 2025-11-22 23:50:40,933 INFO kibegi POST /api/v1/uploads/ status=201 user=itslugenge96@gmail.com time_ms=40.9 body=
 2025-11-22 23:52:52,849 INFO kibegi GET /api/v1/uploads/search/?page=1&page_size=1 status=200 user=itslugenge96@gmail.com time_ms=17.0 body=
 2025-11-22 23:53:35,573 INFO kibegi GET /api/v1/uploads/trash/?page=1&page_size=1 status=200 user=itslugenge96@gmail.com time_ms=9.5 body=
+2025-11-23 00:20:26,377 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=37.7 body=
+2025-11-23 00:20:27,030 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=212.5 body=
+2025-11-23 00:21:55,593 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=18.7 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-23 00:21:55,612 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 00:22:45,789 INFO kibegi GET /api/v1/classes/?page=1&page_size=12 status=401 user=anon time_ms=26.8 body=
+2025-11-23 00:22:45,804 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 00:23:06,208 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1272.5 body=
+2025-11-23 04:12:09,577 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=29.5 body=
+2025-11-23 04:12:10,161 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=204.6 body=
+2025-11-23 04:12:51,293 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=1076.6 body=
+2025-11-23 04:12:51,302 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 04:13:03,484 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=993.0 body=
+2025-11-23 04:13:43,448 INFO kibegi GET /api/v1/friends/?page=1&page_size=12 status=200 user=itslugenge96@gmail.com time_ms=9.2 body=
+2025-11-23 05:14:18,760 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1609.6 body=
+2025-11-23 05:15:41,866 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=4.4 body=
+2025-11-23 05:15:41,892 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 05:15:42,014 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=6.2 body=
+2025-11-23 05:15:42,027 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:15:50,920 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1146.4 body=
+2025-11-23 05:16:45,092 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=2.5 body=
+2025-11-23 05:16:45,115 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 05:16:45,142 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=7.0 body=
+2025-11-23 05:16:45,175 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:17:16,867 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=990.2 body=
+2025-11-23 05:17:41,860 INFO kibegi POST /api/v1/auth/logout/ status=401 user=anon time_ms=2.2 body={"refresh": "*****"}
+2025-11-23 05:17:41,879 WARNING django.request Unauthorized: /api/v1/auth/logout/
+2025-11-23 05:17:41,930 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=1.0 body=
+2025-11-23 05:17:41,942 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:17:45,180 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=938.7 body=
+2025-11-23 05:18:46,461 INFO kibegi POST /api/v1/auth/change-password/ status=401 user=anon time_ms=2.2 body={"old_password": "userr1234", "new_password": "*****", "new_password_confirm": "user1234"}
+2025-11-23 05:18:46,481 WARNING django.request Unauthorized: /api/v1/auth/change-password/
+2025-11-23 05:18:46,542 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=4.5 body=
+2025-11-23 05:18:46,563 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:18:51,672 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1060.0 body=
+2025-11-23 05:22:03,204 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.1 body=
+2025-11-23 05:22:03,229 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 05:22:03,299 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=3.0 body=
+2025-11-23 05:22:03,327 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:22:06,271 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=931.4 body=
+2025-11-23 05:22:06,279 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 05:22:09,144 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=937.4 body=
+2025-11-23 05:22:09,157 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 05:22:31,648 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=918.7 body=
+2025-11-23 05:22:31,661 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 05:22:54,237 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=992.8 body=
+2025-11-23 05:52:38,762 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.2 body=
+2025-11-23 05:52:38,794 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 05:52:38,974 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=1.4 body=
+2025-11-23 05:52:38,983 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:52:42,298 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=990.5 body=
+2025-11-23 05:52:42,403 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=2.5 body=
+2025-11-23 05:52:42,418 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 05:52:42,468 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=1.5 body=
+2025-11-23 05:52:42,479 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:52:50,207 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=1118.0 body=
+2025-11-23 05:52:50,216 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 05:53:19,022 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1044.0 body=
+2025-11-23 05:53:19,150 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=0.9 body=
+2025-11-23 05:53:19,163 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 05:53:19,218 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=1.2 body=
+2025-11-23 05:53:19,234 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 05:53:40,899 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=947.0 body=
+2025-11-23 05:53:40,912 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 05:54:02,787 INFO kibegi POST /api/auth/login/ status=404 user=anon time_ms=36.3 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-23 05:54:02,804 WARNING django.request Not Found: /api/auth/login/
+2025-11-23 05:55:22,659 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1356.1 body=
+2025-11-23 05:57:39,562 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=1021.1 body=
+2025-11-23 05:57:39,572 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 05:57:59,301 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=996.3 body=
+2025-11-23 05:57:59,435 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=1.5 body=
+2025-11-23 05:57:59,443 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 05:57:59,563 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=3.0 body=
+2025-11-23 05:57:59,602 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 06:01:31,881 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=927.3 body=
+2025-11-23 06:01:31,898 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 06:01:53,798 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1004.5 body=
+2025-11-23 06:01:53,921 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=1.3 body=
+2025-11-23 06:01:53,932 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 06:03:31,580 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=954.2 body=
+2025-11-23 06:03:31,689 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=1.0 body=
+2025-11-23 06:03:31,700 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 06:05:14,796 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=928.6 body=
+2025-11-23 06:05:14,900 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=0.9 body=
+2025-11-23 06:05:14,913 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 06:05:23,548 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1019.7 body=
+2025-11-23 06:05:23,735 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=0.8 body=
+2025-11-23 06:05:23,785 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 06:05:36,124 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1027.0 body=
+2025-11-23 06:05:36,347 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=1.5 body=
+2025-11-23 06:05:36,358 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 06:05:51,193 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1036.7 body=
+2025-11-23 06:05:51,388 INFO kibegi GET /api/v1/classes/?page=1&page_size=6 status=401 user=anon time_ms=1.6 body=
+2025-11-23 06:05:51,410 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 06:08:20,419 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1055.8 body=
+2025-11-23 06:08:33,700 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=952.1 body=
+2025-11-23 06:09:52,154 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1167.9 body=
+2025-11-23 06:11:15,027 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1134.2 body=
+2025-11-23 06:12:31,131 INFO kibegi POST /api/v1/auth/logout/ status=200 user=itslugenge96@gmail.com time_ms=46.4 body=
+2025-11-23 06:12:36,439 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1573.1 body=
+2025-11-23 06:12:56,694 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=54.6 body=
+2025-11-23 06:13:21,024 INFO kibegi POST /api/v1/classes/ status=201 user=itslugenge96@gmail.com time_ms=47.7 body=
+2025-11-23 06:13:21,093 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=13.9 body=
+2025-11-23 06:13:37,686 INFO kibegi POST /api/v1/classes/join/ status=400 user=itslugenge96@gmail.com time_ms=21.9 body=
+2025-11-23 06:13:37,702 WARNING django.request Bad Request: /api/v1/classes/join/
+2025-11-23 06:29:54,279 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=158.1 body=
+2025-11-23 06:29:54,404 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=36.4 body=
+2025-11-23 06:30:34,018 INFO kibegi POST /api/v1/classes/ status=201 user=itslugenge96@gmail.com time_ms=47.0 body=
+2025-11-23 06:30:34,061 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=24.2 body=
+2025-11-23 06:30:39,280 INFO kibegi POST /api/v1/uploads/ status=400 user=itslugenge96@gmail.com time_ms=35.9 body=
+2025-11-23 06:30:39,296 WARNING django.request Bad Request: /api/v1/uploads/
+2025-11-23 06:34:11,389 INFO kibegi POST /api/v1/uploads/ status=201 user=itslugenge96@gmail.com time_ms=86.2 body=
+2025-11-23 06:36:29,539 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=10.5 body=
+2025-11-23 06:39:00,151 INFO kibegi POST /api/v1/uploads/ status=201 user=itslugenge96@gmail.com time_ms=38.6 body=
+2025-11-23 07:00:58,765 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=21.0 body=
+2025-11-23 07:03:59,065 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=6.2 body=
+2025-11-23 07:03:59,227 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=29.8 body=
+2025-11-23 07:03:59,232 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=31.8 body=
+2025-11-23 07:08:43,675 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=17.4 body=
+2025-11-23 07:08:43,679 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=16.5 body=
+2025-11-23 07:09:47,082 INFO kibegi GET /api/v1/friends/ status=401 user=anon time_ms=1.7 body=
+2025-11-23 07:09:47,119 WARNING django.request Unauthorized: /api/v1/friends/
+2025-11-23 07:10:12,823 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=49.1 body=
+2025-11-23 07:10:12,860 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=24.3 body=
+2025-11-23 07:10:49,756 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=13.3 body=
+2025-11-23 07:10:49,760 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=13.5 body=
+2025-11-23 07:14:18,573 INFO kibegi GET /api/v1/friends/?status=accepted status=401 user=anon time_ms=1.5 body=
+2025-11-23 07:14:18,594 WARNING django.request Unauthorized: /api/v1/friends/
+2025-11-23 07:14:18,672 INFO kibegi GET /api/v1/friends/?status=pending status=401 user=anon time_ms=18.3 body=
+2025-11-23 07:14:18,757 WARNING django.request Unauthorized: /api/v1/friends/
+2025-11-23 07:14:18,870 INFO kibegi POST /api/v1/auth/token/refresh/ status=200 user=anon time_ms=178.6 body=
+2025-11-23 07:14:18,885 INFO kibegi POST /api/v1/auth/token/refresh/ status=401 user=anon time_ms=52.4 body=
+2025-11-23 07:14:18,961 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2025-11-23 07:14:19,086 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=116.4 body=
+2025-11-23 07:14:56,914 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1303.9 body=
+2025-11-23 07:15:02,426 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=14.5 body=
+2025-11-23 07:15:02,460 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=33.9 body=
+2025-11-23 07:18:24,502 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=10.8 body=
+2025-11-23 07:18:27,847 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&is_read=false status=200 user=itslugenge96@gmail.com time_ms=6.6 body=
+2025-11-23 07:18:29,120 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=share_request status=200 user=itslugenge96@gmail.com time_ms=42.6 body=
+2025-11-23 07:18:30,025 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=friend_request status=200 user=itslugenge96@gmail.com time_ms=9.2 body=
+2025-11-23 07:18:31,769 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=9.2 body=
+2025-11-23 07:18:33,026 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=5.9 body=
+2025-11-23 07:19:01,773 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=8.8 body=
+2025-11-23 07:19:31,768 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=6.7 body=
+2025-11-23 07:20:01,767 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=6.9 body=
+2025-11-23 07:20:31,767 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=5.9 body=
+2025-11-23 07:21:01,778 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=14.0 body=
+2025-11-23 07:21:31,771 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=9.5 body=
+2025-11-23 07:22:01,771 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=8.0 body=
+2025-11-23 07:22:32,503 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=9.5 body=
+2025-11-23 07:23:02,503 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=itslugenge96@gmail.com time_ms=5.7 body=
+2025-11-23 07:23:16,880 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=19.8 body=
+2025-11-23 07:23:17,099 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=23.2 body=
+2025-11-23 07:23:32,411 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=itslugenge96@gmail.com time_ms=52.1 body=
+2025-11-23 07:23:32,473 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=itslugenge96@gmail.com time_ms=85.4 body=
+2025-11-23 07:23:32,475 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=73.7 body=
+2025-11-23 07:25:11,972 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=itslugenge96@gmail.com time_ms=24.9 body=
+2025-11-23 07:25:11,978 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=25.9 body=
+2025-11-23 07:25:11,982 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=itslugenge96@gmail.com time_ms=25.7 body=
+2025-11-23 07:27:55,701 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=itslugenge96@gmail.com time_ms=18.4 body=
+2025-11-23 07:27:55,703 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=itslugenge96@gmail.com time_ms=11.9 body=
+2025-11-23 07:27:55,717 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=28.8 body=
+2025-11-23 07:33:27,109 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=35.7 body=
+2025-11-23 07:33:27,861 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=320.2 body=
+2025-11-23 07:40:05,175 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=37.3 body=
+2025-11-23 07:40:05,179 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=itslugenge96@gmail.com time_ms=46.2 body=
+2025-11-23 07:40:05,183 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=itslugenge96@gmail.com time_ms=44.1 body=
+2025-11-23 07:43:02,390 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=67.8 body=
+2025-11-23 07:43:03,054 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=249.0 body=
+2025-11-23 07:46:20,888 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=9.3 body=
+2025-11-23 07:46:50,018 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=6.1 body=
+2025-11-23 07:47:37,405 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=49.0 body=
+2025-11-23 07:47:37,438 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=91.4 body=
+2025-11-23 07:47:37,495 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=169.4 body=
+2025-11-23 07:48:48,827 INFO kibegi GET /api/v1/uploads/01MD82MG/download/ status=200 user=itslugenge96@gmail.com time_ms=30.7 body=
+2025-11-23 07:48:59,062 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=17.5 body=
+2025-11-23 07:49:25,371 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=22.8 body=
+2025-11-23 07:49:57,180 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=30.9 body=
+2025-11-23 07:51:31,709 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=4.8 body=
+2025-11-23 07:51:35,544 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=19.4 body=
+2025-11-23 07:54:38,806 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=13.6 body=
+2025-11-23 07:54:38,955 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=33.9 body=
+2025-11-23 07:55:07,065 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=28.3 body=
+2025-11-23 07:55:11,443 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=4.5 body=
+2025-11-23 07:55:13,690 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=3.6 body=
+2025-11-23 07:58:51,642 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=15.0 body=
+2025-11-23 07:59:21,631 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=9.9 body=
+2025-11-23 07:59:52,562 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=79.8 body=
+2025-11-23 08:00:22,482 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=5.8 body=
+2025-11-23 08:00:52,487 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=8.7 body=
+2025-11-23 08:01:22,498 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=15.7 body=
+2025-11-23 08:01:52,499 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=20.0 body=
+2025-11-23 08:02:22,485 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=6.0 body=
+2025-11-23 08:02:52,492 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=14.6 body=
+2025-11-23 08:03:22,494 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=8.0 body=
+2025-11-23 08:03:52,508 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=25.5 body=
+2025-11-23 08:04:22,491 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=5.5 body=
+2025-11-23 08:04:52,506 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=24.0 body=
+2025-11-23 08:05:22,492 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=5.6 body=
+2025-11-23 08:05:52,530 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=18.4 body=
+2025-11-23 08:06:22,497 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=10.0 body=
+2025-11-23 08:06:52,533 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=48.5 body=
+2025-11-23 08:07:22,499 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=14.8 body=
+2025-11-23 08:07:52,516 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=33.0 body=
+2025-11-23 08:08:22,489 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=6.2 body=
+2025-11-23 08:08:52,504 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=21.5 body=
+2025-11-23 08:09:22,505 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=9.8 body=
+2025-11-23 08:09:52,507 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=22.8 body=
+2025-11-23 08:10:22,493 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=6.4 body=
+2025-11-23 08:10:52,508 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=23.6 body=
+2025-11-23 08:11:10,864 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=18.3 body=
+2025-11-23 08:18:22,793 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.1 body=
+2025-11-23 08:18:22,811 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 08:18:22,857 INFO kibegi POST /api/v1/auth/token/refresh/ status=200 user=anon time_ms=36.7 body=
+2025-11-23 08:18:22,913 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=2.8 body=
+2025-11-23 08:23:42,258 INFO kibegi POST /api/v1/auth/logout/ status=400 user=itslugenge96@gmail.com time_ms=7.1 body=
+2025-11-23 08:23:42,268 WARNING django.request Bad Request: /api/v1/auth/logout/
+2025-11-23 08:23:46,414 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1011.4 body=
+2025-11-23 08:33:32,273 INFO kibegi POST /api/v1/auth/logout/ status=200 user=itslugenge96@gmail.com time_ms=19.9 body=
+2025-11-23 08:33:37,186 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=948.2 body=
+2025-11-23 08:35:47,696 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=39.4 body=
+2025-11-23 08:35:47,701 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=42.4 body=
+2025-11-23 08:35:47,747 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=103.4 body=
+2025-11-23 08:35:50,651 INFO kibegi DELETE /api/v1/uploads/01MD82MG/ status=200 user=itslugenge96@gmail.com time_ms=24.3 body=
+2025-11-23 08:35:50,723 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=13.6 body=
+2025-11-23 08:35:53,763 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=54.5 body=
+2025-11-23 08:41:37,657 INFO kibegi GET /api/v1/uploads/ status=200 user=itslugenge96@gmail.com time_ms=25.6 body=
+2025-11-23 08:41:37,701 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=38.3 body=
+2025-11-23 08:41:37,706 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=31.4 body=
+2025-11-23 08:48:03,180 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1250.3 body=
+2025-11-23 08:48:12,196 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=60.0 body=
+2025-11-23 08:48:12,365 ERROR django.request Internal Server Error: /api/v1/files/my-uploads/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 109, in get
+    ).select_related('uploader').order_by('-uploaded_at')
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1727, in order_by
+    obj.query.add_ordering(*field_names)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 2305, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'uploaded_at' into field. Choices are: class_obj, class_obj_id, created_at, deleted_at, file, file_code, file_name, file_size, file_type, id, is_deleted, shares, updated_at, uploader, uploader_id
+2025-11-23 08:48:12,367 ERROR django.request Internal Server Error: /api/v1/files/shared-with-me/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 152, in get
+    shared_files = SharedFile.objects.filter(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'accepted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:48:12,377 INFO kibegi GET /api/v1/files/my-uploads/ status=500 user=itslugenge96@gmail.com time_ms=289.5 body=
+2025-11-23 08:48:12,379 INFO kibegi GET /api/v1/files/shared-with-me/ status=500 user=itslugenge96@gmail.com time_ms=276.8 body=
+2025-11-23 08:48:23,675 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=30.5 body=
+2025-11-23 08:48:34,705 INFO kibegi POST /api/v1/uploads/ status=201 user=itslugenge96@gmail.com time_ms=28.5 body=
+2025-11-23 08:48:34,808 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=34.6 body=
+2025-11-23 08:48:34,905 ERROR django.request Internal Server Error: /api/v1/files/shared-with-me/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 152, in get
+    shared_files = SharedFile.objects.filter(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'accepted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:48:34,915 ERROR django.request Internal Server Error: /api/v1/files/my-uploads/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 109, in get
+    ).select_related('uploader').order_by('-uploaded_at')
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1727, in order_by
+    obj.query.add_ordering(*field_names)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 2305, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'uploaded_at' into field. Choices are: class_obj, class_obj_id, created_at, deleted_at, file, file_code, file_name, file_size, file_type, id, is_deleted, shares, updated_at, uploader, uploader_id
+2025-11-23 08:48:34,918 INFO kibegi GET /api/v1/files/shared-with-me/ status=500 user=itslugenge96@gmail.com time_ms=149.1 body=
+2025-11-23 08:48:34,919 INFO kibegi GET /api/v1/files/my-uploads/ status=500 user=itslugenge96@gmail.com time_ms=155.3 body=
+2025-11-23 08:49:01,069 ERROR django.request Internal Server Error: /api/v1/files/deleted/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 230, in get
+    deleted_shared = SharedFile.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:49:01,071 INFO kibegi GET /api/v1/files/deleted/ status=500 user=itslugenge96@gmail.com time_ms=76.3 body=
+2025-11-23 08:49:20,757 ERROR django.request Internal Server Error: /api/v1/files/deleted/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 230, in get
+    deleted_shared = SharedFile.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:49:20,763 INFO kibegi GET /api/v1/files/deleted/ status=500 user=itslugenge96@gmail.com time_ms=114.7 body=
+2025-11-23 08:49:42,969 ERROR django.request Internal Server Error: /api/v1/files/deleted/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 230, in get
+    deleted_shared = SharedFile.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:49:42,973 INFO kibegi GET /api/v1/files/deleted/ status=500 user=itslugenge96@gmail.com time_ms=85.9 body=
+2025-11-23 08:50:06,340 ERROR django.request Internal Server Error: /api/v1/files/deleted/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 230, in get
+    deleted_shared = SharedFile.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:50:06,342 INFO kibegi GET /api/v1/files/deleted/ status=500 user=itslugenge96@gmail.com time_ms=77.1 body=
+2025-11-23 08:50:35,293 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=8.3 body=
+2025-11-23 08:50:35,474 ERROR django.request Internal Server Error: /api/v1/files/deleted/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 230, in get
+    deleted_shared = SharedFile.objects.filter(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_deleted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:50:35,476 INFO kibegi GET /api/v1/files/deleted/ status=500 user=itslugenge96@gmail.com time_ms=69.3 body=
+2025-11-23 08:50:39,719 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=34.7 body=
+2025-11-23 08:50:39,796 ERROR django.request Internal Server Error: /api/v1/files/my-uploads/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 109, in get
+    ).select_related('uploader').order_by('-uploaded_at')
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1727, in order_by
+    obj.query.add_ordering(*field_names)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 2305, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'uploaded_at' into field. Choices are: class_obj, class_obj_id, created_at, deleted_at, file, file_code, file_name, file_size, file_type, id, is_deleted, shares, updated_at, uploader, uploader_id
+2025-11-23 08:50:39,820 ERROR django.request Internal Server Error: /api/v1/files/shared-with-me/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 152, in get
+    shared_files = SharedFile.objects.filter(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1526, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1333, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1806, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'accepted' into field. Choices are: accepted_at, id, message, rejected_at, shared_at, shared_by, shared_by_id, shared_with, shared_with_id, status, upload, upload_id
+2025-11-23 08:50:39,821 INFO kibegi GET /api/v1/files/my-uploads/ status=500 user=itslugenge96@gmail.com time_ms=146.7 body=
+2025-11-23 08:50:39,823 INFO kibegi GET /api/v1/files/shared-with-me/ status=500 user=itslugenge96@gmail.com time_ms=142.3 body=
+2025-11-23 08:54:56,761 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=63.7 body=
+2025-11-23 08:54:56,784 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=72.0 body=
+2025-11-23 08:54:56,934 ERROR django.request Internal Server Error: /api/v1/files/my-uploads/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/files/views.py", line 132, in get
+    data=serializer.data,
+         ^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 797, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 251, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 716, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 540, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 525, in to_representation
+    for field in fields:
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 386, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 374, in fields
+    for key, value in self.get_fields().items():
+                      ^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 1105, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 1251, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 1369, in build_unknown_field
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Field name `username` is not valid for model `User` in `files.serializers.FileOwnerSerializer`.
+2025-11-23 08:54:56,939 INFO kibegi GET /api/v1/files/my-uploads/ status=500 user=itslugenge96@gmail.com time_ms=248.4 body=
+2025-11-23 08:56:52,008 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=29.7 body=
+2025-11-23 08:56:52,176 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=34.1 body=
+2025-11-23 08:56:52,181 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=45.7 body=
+2025-11-23 08:56:52,192 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=72.6 body=
+2025-11-23 08:57:17,910 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=10.5 body=
+2025-11-23 08:57:23,233 INFO kibegi DELETE /api/v1/uploads/01MD82MG/permanent/ status=404 user=anon time_ms=10.7 body=
+2025-11-23 08:57:23,247 WARNING django.request Not Found: /api/v1/uploads/01MD82MG/permanent/
+2025-11-23 08:59:03,402 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=12.6 body=
+2025-11-23 08:59:05,650 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=14.5 body=
+2025-11-23 08:59:07,677 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=10.0 body=
+2025-11-23 08:59:26,113 INFO kibegi DELETE /api/v1/files/01MD82MG/permanent-delete/ status=404 user=anon time_ms=7.8 body=
+2025-11-23 08:59:26,123 WARNING django.request Not Found: /api/v1/files/01MD82MG/permanent-delete/
+2025-11-23 08:59:31,045 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=5.0 body=
+2025-11-23 08:59:31,179 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=14.7 body=
+2025-11-23 08:59:36,083 INFO kibegi DELETE /api/v1/files/01MD82MG/permanent-delete/ status=404 user=anon time_ms=10.1 body=
+2025-11-23 08:59:36,097 WARNING django.request Not Found: /api/v1/files/01MD82MG/permanent-delete/
+2025-11-23 09:02:25,509 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=16.6 body=
+2025-11-23 09:02:27,671 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=15.1 body=
+2025-11-23 09:03:03,649 INFO kibegi DELETE /api/v1/uploads/1583b46b-c1cb-4ddf-ae75-d1b6b2a8ab3c/permanent-delete/ status=200 user=itslugenge96@gmail.com time_ms=17.4 body=
+2025-11-23 09:03:03,730 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=15.3 body=
+2025-11-23 09:12:31,476 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=90.9 body=
+2025-11-23 09:12:33,958 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=12.3 body=
+2025-11-23 09:13:52,939 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=20.2 body=
+2025-11-23 09:13:52,943 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=19.0 body=
+2025-11-23 09:13:52,969 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=36.4 body=
+2025-11-23 09:13:58,394 INFO kibegi DELETE /api/v1/uploads/3JWHVDJW/ status=200 user=itslugenge96@gmail.com time_ms=66.6 body=
+2025-11-23 09:13:58,522 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=46.1 body=
+2025-11-23 09:14:05,220 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=7.8 body=
+2025-11-23 09:14:08,706 INFO kibegi DELETE /api/v1/files/3JWHVDJW/permanent-delete/ status=200 user=itslugenge96@gmail.com time_ms=19.8 body=
+2025-11-23 09:14:08,777 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=13.4 body=
+2025-11-23 09:14:12,439 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=14.8 body=
+2025-11-23 09:14:12,465 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=32.2 body=
+2025-11-23 09:14:12,488 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=57.5 body=
+2025-11-23 09:14:17,401 INFO kibegi DELETE /api/v1/uploads/6C9XQ3LN/ status=200 user=itslugenge96@gmail.com time_ms=18.8 body=
+2025-11-23 09:14:17,468 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=9.5 body=
+2025-11-23 09:14:20,738 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=8.4 body=
+2025-11-23 09:14:23,407 INFO kibegi POST /api/v1/files/6C9XQ3LN/restore/ status=404 user=anon time_ms=13.0 body=
+2025-11-23 09:14:23,418 WARNING django.request Not Found: /api/v1/files/6C9XQ3LN/restore/
+2025-11-23 09:17:33,407 INFO kibegi POST /api/v1/files/6C9XQ3LN/restore/ status=200 user=itslugenge96@gmail.com time_ms=44.8 body=
+2025-11-23 09:17:33,439 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=12.0 body=
+2025-11-23 09:17:37,813 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=18.0 body=
+2025-11-23 09:17:37,832 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=40.8 body=
+2025-11-23 09:17:37,865 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=74.7 body=
+2025-11-23 09:17:41,912 INFO kibegi DELETE /api/v1/uploads/2Y0MDHT7/ status=200 user=itslugenge96@gmail.com time_ms=27.0 body=
+2025-11-23 09:17:41,978 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=8.8 body=
+2025-11-23 09:17:48,325 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=15.9 body=
+2025-11-23 09:17:51,398 INFO kibegi POST /api/v1/files/2Y0MDHT7/restore/ status=200 user=itslugenge96@gmail.com time_ms=31.4 body=
+2025-11-23 09:17:51,489 INFO kibegi GET /api/v1/files/deleted/ status=200 user=itslugenge96@gmail.com time_ms=24.7 body=
+2025-11-23 09:17:54,633 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=17.8 body=
+2025-11-23 09:17:54,648 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=35.0 body=
+2025-11-23 09:17:54,654 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=63.1 body=

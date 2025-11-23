@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'sharing',
     'friends',
     'notifications',
+    'files',
 ]
 
 MIDDLEWARE = [
