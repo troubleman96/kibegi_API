@@ -1,37 +1,87 @@
-# Kibegi Backend - Digital School API
+# Kibegi Digital School API
 
-Django REST API for Kibegi Digital School platform with JWT authentication, Swagger documentation, and bilingual support (English/Swahili).
+A comprehensive Django REST API for a digital school platform featuring JWT authentication, file management, class organization, and real-time request logging. Built with Django 5.2, DRF 3.16, and featuring interactive Swagger documentation.
+
+## 📋 Table of Contents
+
+- [Quick Start](#-quick-start)
+- [API Documentation](#-api-documentation)
+- [Core Features](#-core-features)
+- [Authentication System](#-authentication-system)
+- [Classes Management](#-classes-management)
+- [File Uploads System](#-file-uploads-system)
+- [Request Logging](#-request-logging)
+- [Testing Guide](#-testing-guide)
+- [Architecture](#-architecture)
+- [Security Features](#-security-features)
+
+---
 
 ## 🚀 Quick Start
 
-1. **Install dependencies:**
+### Prerequisites
+- Python 3.10+
+- SQLite (default) or PostgreSQL
+- Virtual environment tool (venv)
+
+### Installation
+
+1. **Clone and navigate to project:**
+   ```bash
+   cd Backend
+   ```
+
+2. **Create virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Configure environment:**
-   - Copy `.env.example` to `.env`
-   - Add your email credentials and secrets
+4. **Configure environment variables:**
+   Create a `.env` file in the root directory:
+   ```env
+   SECRET_KEY=your-secret-key-here
+   DEBUG=True
+   
+   # Email Configuration (for OTP)
+   EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+   EMAIL_HOST=smtp.gmail.com
+   EMAIL_PORT=587
+   EMAIL_USE_TLS=True
+   EMAIL_HOST_USER=your-email@gmail.com
+   EMAIL_HOST_PASSWORD=your-app-password
+   DEFAULT_FROM_EMAIL=your-email@gmail.com
+   
+   # OTP Settings
+   OTP_LENGTH=6
+   OTP_EXPIRY_SECONDS=300
+   ```
 
-3. **Run migrations:**
+5. **Run migrations:**
    ```bash
    python manage.py migrate
    ```
 
-4. **Create superuser:**
+6. **Create superuser (for admin access):**
    ```bash
    python manage.py createsuperuser
    ```
 
-5. **Start server:**
+7. **Start development server:**
    ```bash
    python manage.py runserver
    ```
 
-6. **Access API Documentation:**
-   - **Swagger UI:** http://localhost:8000/api/docs/
-   - **ReDoc:** http://localhost:8000/api/redoc/
-   - **OpenAPI Schema:** http://localhost:8000/api/schema/
+### Access Points
+- **API Base:** http://localhost:8000/api/v1/
+- **Swagger UI:** http://localhost:8000/api/docs/
+- **ReDoc:** http://localhost:8000/api/redoc/
+- **Admin Panel:** http://localhost:8000/admin/
 
 ## 📚 API Documentation
 

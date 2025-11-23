@@ -66,3 +66,119 @@ AttributeError: property 'member_count' of 'Class' object has no setter
 2025-11-22 23:26:01,578 INFO kibegi GET /api/v1/classes/search/?page=1&page_size=12 status=200 user=itslugenge96@gmail.com time_ms=5.0 body=
 2025-11-22 23:26:22,827 INFO kibegi POST /api/v1/classes/join/ status=400 user=itslugenge96@gmail.com time_ms=3.3 body=
 2025-11-22 23:26:22,829 WARNING django.request Bad Request: /api/v1/classes/join/
+2025-11-22 23:29:11,902 INFO kibegi GET /api/v1/uploads/?page=1&page_size=10 status=200 user=itslugenge96@gmail.com time_ms=27.2 body=
+2025-11-22 23:29:11,903 ERROR kibegi Failed to save request log to database: no such table: core_requestlog
+2025-11-22 23:35:09,512 INFO kibegi POST /api/v1/uploads/ status=400 user=itslugenge96@gmail.com time_ms=50.5 body=
+2025-11-22 23:35:09,523 WARNING django.request Bad Request: /api/v1/uploads/
+2025-11-22 23:35:54,826 INFO kibegi POST /api/v1/uploads/ status=400 user=itslugenge96@gmail.com time_ms=8.5 body=
+2025-11-22 23:35:54,840 WARNING django.request Bad Request: /api/v1/uploads/
+2025-11-22 23:36:36,999 INFO kibegi POST /api/v1/uploads/ status=201 user=itslugenge96@gmail.com time_ms=25.1 body=
+2025-11-22 23:37:28,793 INFO kibegi GET /api/v1/uploads/?page=1&page_size=10 status=200 user=itslugenge96@gmail.com time_ms=15.4 body=
+2025-11-22 23:38:02,387 INFO kibegi GET /api/v1/uploads/recent/?page=1&page_size=12 status=200 user=itslugenge96@gmail.com time_ms=11.4 body=
+2025-11-22 23:40:18,263 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=26.1 body=
+2025-11-22 23:40:18,859 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=150.1 body=
+2025-11-22 23:41:44,103 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=24.0 body=
+2025-11-22 23:41:44,943 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=325.9 body=
+2025-11-22 23:42:05,919 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=2.2 body=
+2025-11-22 23:42:06,354 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=118.0 body=
+2025-11-22 23:43:13,915 INFO kibegi GET /api/v1/classes/?page=1&page_size=12 status=200 user=itslugenge96@gmail.com time_ms=21.6 body=
+2025-11-22 23:43:33,973 ERROR django.request Internal Server Error: /api/v1/uploads/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table uploads_upload has no column named file_type
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/generics.py", line 246, in post
+    return self.create(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/uploads/views.py", line 44, in create
+    upload = serializer.save()
+             ^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/uploads/serializers.py", line 42, in create
+    return super().create(validated_data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 991, in create
+    instance = ModelClass._default_manager.create(**validated_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 665, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/home/troubleman/projects/Kibegi/Backend/uploads/models.py", line 108, in save
+    super().save(*args, **kwargs)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1873, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: table uploads_upload has no column named file_type
+2025-11-22 23:43:33,980 INFO kibegi POST /api/v1/uploads/ status=500 user=itslugenge96@gmail.com time_ms=53.5 body=
+2025-11-22 23:50:40,933 INFO kibegi POST /api/v1/uploads/ status=201 user=itslugenge96@gmail.com time_ms=40.9 body=
+2025-11-22 23:52:52,849 INFO kibegi GET /api/v1/uploads/search/?page=1&page_size=1 status=200 user=itslugenge96@gmail.com time_ms=17.0 body=
+2025-11-22 23:53:35,573 INFO kibegi GET /api/v1/uploads/trash/?page=1&page_size=1 status=200 user=itslugenge96@gmail.com time_ms=9.5 body=

@@ -15,6 +15,7 @@ class MembershipSerializer(serializers.ModelSerializer):
 
 class ClassSerializer(serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
+    creator_type = serializers.CharField(source='creator.user_type', read_only=True)
     member_count = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     user_role = serializers.SerializerMethodField()
@@ -22,11 +23,11 @@ class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = [
-            'id', 'name', 'description', 'class_code', 'is_public',
-            'creator', 'creator_name', 'member_count', 'is_member',
+            'id', 'name', 'description', 'class_code', 'is_public', 'is_verified',
+            'creator', 'creator_name', 'creator_type', 'member_count', 'is_member',
             'user_role', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'class_code', 'creator', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'class_code', 'is_verified', 'creator', 'created_at', 'updated_at']
     
     def get_member_count(self, obj):
         # Use annotation if available, otherwise count
@@ -50,13 +51,20 @@ class ClassSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         validated_data['creator'] = request.user
+        
+        # Auto-set is_verified based on creator's user_type
+        # Lecturers create verified classes, students create study groups
+        validated_data['is_verified'] = request.user.user_type == 'lecturer'
+        
         class_obj = super().create(validated_data)
         
-        # Automatically add creator as a member with lecturer role
+        # Add creator as member with role matching their user_type
+        # Lecturers get 'lecturer' role, students get 'student' role
+        creator_role = 'lecturer' if request.user.user_type == 'lecturer' else 'student'
         Membership.objects.create(
             user=request.user,
             class_obj=class_obj,
-            role='lecturer'
+            role=creator_role
         )
         
         return class_obj
@@ -65,11 +73,12 @@ class ClassSerializer(serializers.ModelSerializer):
 class ClassListSerializer(serializers.ModelSerializer):
     """Lightweight serializer for list views"""
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
+    creator_type = serializers.CharField(source='creator.user_type', read_only=True)
     member_count = serializers.IntegerField(source='total_members', read_only=True)
     
     class Meta:
         model = Class
-        fields = ['id', 'name', 'class_code', 'is_public', 'creator_name', 'member_count', 'created_at']
+        fields = ['id', 'name', 'class_code', 'is_public', 'is_verified', 'creator_name', 'creator_type', 'member_count', 'created_at']
 
 
 class JoinClassSerializer(serializers.Serializer):

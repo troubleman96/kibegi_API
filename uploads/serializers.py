@@ -7,18 +7,20 @@ class UploadSerializer(serializers.ModelSerializer):
     uploader_name = serializers.CharField(source='uploader.full_name', read_only=True)
     class_name = serializers.CharField(source='class_obj.name', read_only=True)
     file_url = serializers.SerializerMethodField()
+    file_type = serializers.CharField(read_only=True)  # Auto-detected, not user input
+    file_size = serializers.IntegerField(read_only=True)  # Auto-detected from file, not user input
     
     class Meta:
         model = Upload
         fields = [
-            'id', 'file', 'file_name', 'file_size', 'file_code',
+            'id', 'file', 'file_name', 'file_type', 'file_size', 'file_code',
             'uploader', 'uploader_name', 'class_obj', 'class_name',
             'is_deleted', 'deleted_at', 'created_at', 'updated_at',
             'file_url'
         ]
         read_only_fields = [
-            'id', 'file_code', 'uploader', 'uploader_name',
-            'is_deleted', 'deleted_at', 'created_at', 'updated_at',
+            'id', 'file_code', 'file_type', 'file_size', 'uploader', 'uploader_name',
+            'class_name', 'is_deleted', 'deleted_at', 'created_at', 'updated_at',
             'file_url'
         ]
     
@@ -48,6 +50,6 @@ class UploadListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Upload
         fields = [
-            'id', 'file_name', 'file_size', 'file_code',
+            'id', 'file_name', 'file_type', 'file_size', 'file_code',
             'uploader_name', 'class_name', 'created_at'
         ]

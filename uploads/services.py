@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 import os
+import mimetypes
 
 
 class FileHandler:
@@ -7,10 +8,20 @@ class FileHandler:
     MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
     
     ALLOWED_EXTENSIONS = {
-        'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx',
-        'txt', 'csv', 'zip', 'rar',
-        'jpg', 'jpeg', 'png', 'gif',
-        'mp4', 'mp3'
+        # Documents
+        'pdf', 'doc', 'docx', 'txt', 'rtf', 'odt',
+        # Spreadsheets
+        'xls', 'xlsx', 'csv', 'ods',
+        # Presentations
+        'ppt', 'pptx', 'odp', 'key',
+        # Images
+        'jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico',
+        # Videos
+        'mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm', 'm4v',
+        # Audio
+        'mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma',
+        # Archives
+        'zip', 'rar', 'tar', 'gz', '7z', 'bz2', 'xz'
     }
     
     @classmethod
@@ -35,3 +46,35 @@ class FileHandler:
             raise ValidationError(f"File type '.{ext}' not allowed")
         
         return True
+    
+    @classmethod
+    def detect_file_type(cls, filename):
+        """
+        Detect file type based on extension and MIME type.
+        
+        Args:
+            filename: The name of the file
+            
+        Returns:
+            str: File type category (document, image, video, etc.)
+        """
+        ext = os.path.splitext(filename)[1][1:].lower()
+        mime_type, _ = mimetypes.guess_type(filename)
+        
+        # Map extensions and MIME types to categories
+        if ext in ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt'] or (mime_type and 'text' in mime_type and ext not in ['csv']):
+            return 'document'
+        elif ext in ['xls', 'xlsx', 'csv', 'ods'] or (mime_type and 'spreadsheet' in mime_type):
+            return 'spreadsheet'
+        elif ext in ['ppt', 'pptx', 'odp', 'key'] or (mime_type and 'presentation' in mime_type):
+            return 'presentation'
+        elif ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico'] or (mime_type and 'image' in mime_type):
+            return 'image'
+        elif ext in ['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm', 'm4v'] or (mime_type and 'video' in mime_type):
+            return 'video'
+        elif ext in ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma'] or (mime_type and 'audio' in mime_type):
+            return 'audio'
+        elif ext in ['zip', 'rar', 'tar', 'gz', '7z', 'bz2', 'xz']:
+            return 'archive'
+        else:
+            return 'other'

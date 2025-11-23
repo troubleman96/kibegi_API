@@ -10,6 +10,7 @@ class Class(models.Model):
     description = models.TextField(blank=True)
     class_code = models.CharField(max_length=6, unique=True, editable=False, db_index=True)
     is_public = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False, help_text="True if created by a lecturer, False for student study groups")
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
