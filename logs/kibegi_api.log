@@ -1060,3 +1060,1145 @@ django.core.exceptions.ImproperlyConfigured: Field name `username` is not valid 
 2025-11-23 09:17:54,633 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=17.8 body=
 2025-11-23 09:17:54,648 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=35.0 body=
 2025-11-23 09:17:54,654 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=63.1 body=
+2025-11-23 09:19:52,097 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=20.0 body=
+2025-11-23 09:19:52,103 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=15.9 body=
+2025-11-23 09:19:56,826 INFO kibegi GET /api/v1/friends/search/?q=its status=200 user=itslugenge96@gmail.com time_ms=12.3 body=
+2025-11-23 09:20:06,265 INFO kibegi POST /api/v1/friends/add/ status=201 user=itslugenge96@gmail.com time_ms=18.9 body=
+2025-11-23 09:20:12,619 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=7.3 body=
+2025-11-23 09:20:14,538 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=itslugenge96@gmail.com time_ms=5.4 body=
+2025-11-23 09:21:19,272 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=17.5 body=
+2025-11-23 09:22:55,392 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=6.6 body=
+2025-11-23 09:23:08,264 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=5.4 body=
+2025-11-23 09:23:09,922 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=6.2 body=
+2025-11-23 09:23:10,024 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=20.3 body=
+2025-11-23 09:23:35,549 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=19.7 body=
+2025-11-23 09:23:35,552 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=15.4 body=
+2025-11-23 09:23:35,554 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=13.9 body=
+2025-11-23 09:23:38,852 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.0 body=
+2025-11-23 09:24:17,693 INFO kibegi POST /api/v1/auth/logout/ status=200 user=itslugenge96@gmail.com time_ms=26.1 body=
+2025-11-23 09:49:01,290 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1211.1 body=
+2025-11-23 09:49:01,602 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=11.0 body=
+2025-11-23 09:54:36,307 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=9.1 body=
+2025-11-23 09:54:36,377 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=84.4 body=
+2025-11-23 09:58:20,312 INFO kibegi POST /api/v1/auth/login/ status=400 user=anon time_ms=47.4 body={"email": "contact@kwepajua.africa", "password": "*****"}
+2025-11-23 10:00:07,173 INFO kibegi POST /api/v1/auth/login/ status=400 user=anon time_ms=24.5 body={"email": "contact@kwepajua.africa", "password": "*****"}
+2025-11-23 10:01:11,074 INFO kibegi POST /api/v1/auth/register/ status=400 user=anon time_ms=54.2 body={"email": "Contact@kwepajua.africa", "full_name": "Lugenge Emmanuel", "password": "*****", "password_confirm": "bedbUk-buqnur-5pavfe", "user_type": "lecturer"}
+2025-11-23 10:01:51,179 INFO kibegi POST /api/v1/auth/register/resend-otp/ status=400 user=anon time_ms=48.5 body={"email": "Contact@kwepajua.africa"}
+2025-11-23 10:02:14,356 INFO kibegi POST /api/v1/auth/login/ status=400 user=anon time_ms=22.1 body={"email": "contact@kwepajua.africa", "password": "*****"}
+2025-11-23 10:02:24,994 INFO kibegi GET /api/v1/auth/profile/ status=400 user=anon time_ms=52.7 body=
+2025-11-23 10:02:34,832 INFO kibegi POST /api/v1/auth/login/ status=400 user=anon time_ms=20.8 body={"email": "contact@kwepajua.africa", "password": "*****"}
+2025-11-23 10:04:00,652 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1329.3 body=
+2025-11-23 10:04:01,081 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=15.8 body=
+2025-11-23 10:04:31,041 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=13.6 body=
+2025-11-23 10:04:53,924 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=6.9 body=
+2025-11-23 10:05:04,421 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=10.1 body=
+2025-11-23 10:05:23,420 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=17.5 body=
+2025-11-23 10:05:23,451 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=41.1 body=
+2025-11-23 10:05:23,455 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=41.8 body=
+2025-11-23 10:05:25,198 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=12.4 body=
+2025-11-23 10:05:56,420 INFO kibegi POST /api/v1/auth/logout/ status=200 user=itslugenge96@gmail.com time_ms=22.6 body=
+2025-11-23 10:06:11,680 INFO kibegi POST /api/v1/auth/register/ status=400 user=anon time_ms=15.6 body=
+2025-11-23 10:06:11,696 WARNING django.request Bad Request: /api/v1/auth/register/
+2025-11-23 10:07:31,294 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=894.2 body=
+2025-11-23 10:07:31,576 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=9.7 body=
+2025-11-23 10:07:35,338 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=11.7 body=
+2025-11-23 10:07:51,513 INFO kibegi POST /api/v1/uploads/ status=201 user=itslugenge96@gmail.com time_ms=602.1 body=
+2025-11-23 10:07:51,643 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=8.7 body=
+2025-11-23 10:07:51,672 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=25.8 body=
+2025-11-23 10:07:51,674 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=17.6 body=
+2025-11-23 10:08:03,203 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=7.5 body=
+2025-11-23 10:08:36,245 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=7.3 body=
+2025-11-23 10:09:00,611 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=6.9 body=
+2025-11-23 10:11:16,800 INFO kibegi POST /api/v1/auth/logout/ status=200 user=itslugenge96@gmail.com time_ms=26.3 body=
+2025-11-23 10:12:20,060 INFO kibegi POST /api/v1/auth/register/ status=400 user=anon time_ms=4.5 body=
+2025-11-23 10:12:20,072 WARNING django.request Bad Request: /api/v1/auth/register/
+2025-11-23 10:13:27,527 INFO kibegi POST /api/v1/auth/register/ status=400 user=itslugenge96@gmail.com time_ms=8.9 body=
+2025-11-23 10:13:27,544 WARNING django.request Bad Request: /api/v1/auth/register/
+2025-11-23 10:14:20,174 INFO kibegi POST /api/v1/auth/register/resend-otp/ status=404 user=anon time_ms=11.0 body={"email": "contact@kwepajua.africa"}
+2025-11-23 10:14:20,185 WARNING django.request Not Found: /api/v1/auth/register/resend-otp/
+2025-11-23 10:16:09,997 INFO kibegi POST /api/v1/auth/register/ status=400 user=itslugenge96@gmail.com time_ms=6.6 body=
+2025-11-23 10:16:10,010 WARNING django.request Bad Request: /api/v1/auth/register/
+2025-11-23 10:17:33,340 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=28.4 body=
+2025-11-23 10:17:50,412 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=6.5 body=
+2025-11-23 10:18:10,732 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=7.1 body=
+2025-11-23 10:18:49,687 INFO kibegi POST /api/v1/auth/register/ status=201 user=itslugenge96@gmail.com time_ms=6432.7 body=
+2025-11-23 10:19:05,133 INFO kibegi POST /api/v1/auth/register/verify/ status=200 user=itslugenge96@gmail.com time_ms=69.4 body=
+2025-11-23 10:19:05,672 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.6 body=
+2025-11-23 10:19:05,692 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:19:22,700 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=1.3 body={"email": "contact@kwepajua.africa", "password": "*****"}
+2025-11-23 10:19:22,714 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 10:19:23,362 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=0.9 body=
+2025-11-23 10:19:23,386 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:20:28,026 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=913.9 body=
+2025-11-23 10:20:29,068 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=9.0 body=
+2025-11-23 10:20:56,088 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=10.9 body=
+2025-11-23 10:21:12,676 INFO kibegi POST /api/v1/classes/ status=201 user=contact@kwepajua.africa time_ms=35.2 body=
+2025-11-23 10:21:12,722 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=11.9 body=
+2025-11-23 10:21:19,226 INFO kibegi POST /api/v1/uploads/ status=201 user=contact@kwepajua.africa time_ms=434.1 body=
+2025-11-23 10:21:19,322 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=11.0 body=
+2025-11-23 10:21:19,350 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=21.4 body=
+2025-11-23 10:21:19,374 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=50.0 body=
+2025-11-23 10:21:25,102 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=19.8 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-23 10:21:25,132 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 10:21:25,706 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.4 body=
+2025-11-23 10:21:25,738 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:21:33,818 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=0.9 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-23 10:21:33,834 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 10:21:34,399 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=0.9 body=
+2025-11-23 10:21:34,419 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:21:53,985 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=1.1 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-23 10:21:54,010 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 10:21:54,673 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.5 body=
+2025-11-23 10:21:54,692 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:22:51,552 INFO kibegi GET /api/v1/uploads/Y9T8J8KF/download/ status=200 user=contact@kwepajua.africa time_ms=25.0 body=
+2025-11-23 10:23:02,154 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=15.0 body=
+2025-11-23 10:23:02,182 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=24.1 body=
+2025-11-23 10:23:06,834 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=46.8 body=
+2025-11-23 10:23:47,382 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=1.7 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-23 10:23:47,551 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 10:23:47,774 INFO kibegi GET /api/v1/files/all/ status=401 user=anon time_ms=2.1 body=
+2025-11-23 10:23:47,838 WARNING django.request Unauthorized: /api/v1/files/all/
+2025-11-23 10:23:53,410 INFO kibegi POST /api/v1/friends/add/ status=201 user=contact@kwepajua.africa time_ms=24.9 body=
+2025-11-23 10:24:00,479 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=401 user=anon time_ms=1.1 body=
+2025-11-23 10:24:00,512 WARNING django.request Unauthorized: /api/v1/notifications/
+2025-11-23 10:24:03,156 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=401 user=anon time_ms=1.3 body=
+2025-11-23 10:24:03,167 WARNING django.request Unauthorized: /api/v1/notifications/
+2025-11-23 10:24:04,828 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=401 user=anon time_ms=1.3 body=
+2025-11-23 10:24:04,841 WARNING django.request Unauthorized: /api/v1/notifications/
+2025-11-23 10:24:09,487 INFO kibegi POST /api/v1/friends/add/ status=201 user=contact@kwepajua.africa time_ms=14.5 body=
+2025-11-23 10:24:13,072 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=401 user=anon time_ms=1.2 body=
+2025-11-23 10:24:13,089 WARNING django.request Unauthorized: /api/v1/notifications/
+2025-11-23 10:24:14,173 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=friend_request status=401 user=anon time_ms=1.0 body=
+2025-11-23 10:24:14,184 WARNING django.request Unauthorized: /api/v1/notifications/
+2025-11-23 10:24:20,397 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=friend_request status=401 user=anon time_ms=1.2 body=
+2025-11-23 10:24:20,408 WARNING django.request Unauthorized: /api/v1/notifications/
+2025-11-23 10:24:21,567 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=friend_request status=401 user=anon time_ms=1.1 body=
+2025-11-23 10:24:21,587 WARNING django.request Unauthorized: /api/v1/notifications/
+2025-11-23 10:24:32,173 INFO kibegi GET /api/v1/files/all/ status=401 user=anon time_ms=0.7 body=
+2025-11-23 10:24:32,192 WARNING django.request Unauthorized: /api/v1/files/all/
+2025-11-23 10:24:36,313 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=401 user=anon time_ms=0.8 body=
+2025-11-23 10:24:36,322 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 10:24:44,180 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=6.6 body=
+2025-11-23 10:25:03,859 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=6.7 body=
+2025-11-23 10:25:03,890 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:25:56,379 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=8.0 body=
+2025-11-23 10:25:59,432 INFO kibegi POST /api/v1/auth/logout/ status=200 user=contact@kwepajua.africa time_ms=21.9 body=
+2025-11-23 10:26:18,082 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=873.9 body=
+2025-11-23 10:26:18,472 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=9.3 body=
+2025-11-23 10:28:50,650 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=3.5 body=
+2025-11-23 10:28:50,709 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=13.0 body=
+2025-11-23 10:28:55,726 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=11.3 body=
+2025-11-23 10:29:35,199 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=16.7 body=
+2025-11-23 10:30:02,393 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=17.0 body=
+2025-11-23 10:30:02,460 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=18.4 body=
+2025-11-23 10:30:09,445 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=7.9 body=
+2025-11-23 10:30:10,885 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=10.2 body=
+2025-11-23 10:30:36,045 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=6.0 body=
+2025-11-23 10:30:43,233 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=11.9 body=
+2025-11-23 10:30:43,249 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=14.9 body=
+2025-11-23 10:30:43,251 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=23.8 body=
+2025-11-23 10:30:45,565 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=5.7 body=
+2025-11-23 10:31:13,867 INFO kibegi POST /api/v1/classes/ status=201 user=contact@kwepajua.africa time_ms=34.2 body=
+2025-11-23 10:31:13,911 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=17.4 body=
+2025-11-23 10:31:25,708 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=11.8 body=
+2025-11-23 10:31:27,960 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=6.4 body=
+2025-11-23 10:31:37,109 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=4.7 body=
+2025-11-23 10:31:37,226 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=7.9 body=
+2025-11-23 10:31:37,227 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=10.4 body=
+2025-11-23 10:31:42,261 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=12.4 body=
+2025-11-23 10:33:09,821 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.2 body=
+2025-11-23 10:33:09,840 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:33:12,002 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.1 body=
+2025-11-23 10:33:12,042 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:33:35,972 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.2 body=
+2025-11-23 10:33:35,988 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:33:54,369 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.2 body=
+2025-11-23 10:33:54,466 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:34:39,469 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=4.9 body=
+2025-11-23 10:34:39,534 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=5.1 body=
+2025-11-23 10:34:39,609 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=39.6 body=
+2025-11-23 10:34:39,611 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=50.0 body=
+2025-11-23 10:34:42,367 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=8.8 body=
+2025-11-23 10:35:13,201 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=22.5 body=
+2025-11-23 10:35:23,338 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=3.0 body=
+2025-11-23 10:35:23,390 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=16.4 body=
+2025-11-23 10:36:56,226 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=9.2 body=
+2025-11-23 10:37:27,453 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=9.6 body=
+2025-11-23 10:37:31,868 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=4.7 body=
+2025-11-23 10:37:31,993 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=6.3 body=
+2025-11-23 10:38:03,473 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=7.3 body=
+2025-11-23 10:38:05,922 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=5.1 body=
+2025-11-23 10:38:05,946 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=21.3 body=
+2025-11-23 10:38:05,948 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=20.4 body=
+2025-11-23 10:38:07,266 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=11.0 body=
+2025-11-23 10:39:59,217 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=14.4 body=
+2025-11-23 10:41:40,194 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=5.1 body=
+2025-11-23 10:41:40,217 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=20.2 body=
+2025-11-23 10:41:40,220 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=24.2 body=
+2025-11-23 10:42:04,791 INFO kibegi GET /api/v1/uploads/Y9T8J8KF/download/ status=200 user=contact@kwepajua.africa time_ms=6.1 body=
+2025-11-23 10:44:45,092 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=12.1 body=
+2025-11-23 10:44:54,154 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=15.8 body=
+2025-11-23 10:45:03,588 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=5.2 body=
+2025-11-23 10:45:03,612 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=17.5 body=
+2025-11-23 10:45:03,615 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=23.5 body=
+2025-11-23 10:46:19,739 INFO kibegi DELETE /api/v1/uploads/Y9T8J8KF/ status=200 user=contact@kwepajua.africa time_ms=30.7 body=
+2025-11-23 10:46:19,806 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=8.2 body=
+2025-11-23 10:46:28,281 INFO kibegi GET /api/v1/files/deleted/ status=200 user=contact@kwepajua.africa time_ms=15.7 body=
+2025-11-23 10:46:40,068 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=14.7 body=
+2025-11-23 10:46:40,204 INFO kibegi GET /api/v1/files/deleted/ status=200 user=contact@kwepajua.africa time_ms=68.0 body=
+2025-11-23 10:46:40,936 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.3 body=
+2025-11-23 10:46:40,999 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:46:43,611 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=6.7 body=
+2025-11-23 10:46:43,655 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=38.2 body=
+2025-11-23 10:46:43,659 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=45.5 body=
+2025-11-23 10:48:17,503 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=7.5 body=
+2025-11-23 10:48:17,641 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=14.2 body=
+2025-11-23 10:48:17,677 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=22.2 body=
+2025-11-23 10:48:17,706 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=57.8 body=
+2025-11-23 10:48:40,020 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=69.6 body=
+2025-11-23 10:48:40,072 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=88.0 body=
+2025-11-23 10:48:40,078 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=133.6 body=
+2025-11-23 10:48:57,722 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=7.8 body=
+2025-11-23 10:49:00,017 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=16.0 body=
+2025-11-23 10:49:00,018 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=19.5 body=
+2025-11-23 10:49:00,027 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=24.0 body=
+2025-11-23 10:49:10,737 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=40.7 body=
+2025-11-23 10:49:10,746 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=58.6 body=
+2025-11-23 10:49:10,752 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=23.9 body=
+2025-11-23 10:49:11,671 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=26.7 body=
+2025-11-23 10:49:12,156 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=312.4 body=
+2025-11-23 10:49:12,160 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=330.0 body=
+2025-11-23 10:49:12,164 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=342.2 body=
+2025-11-23 10:49:12,746 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.4 body=
+2025-11-23 10:49:12,765 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:49:45,500 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=8.6 body=
+2025-11-23 10:52:17,460 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=38.1 body=
+2025-11-23 10:53:47,763 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=28.5 body=
+2025-11-23 10:54:05,724 INFO kibegi POST /api/v1/classes/ status=201 user=contact@kwepajua.africa time_ms=39.4 body=
+2025-11-23 10:54:05,822 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=11.7 body=
+2025-11-23 10:55:24,121 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=59.4 body=
+2025-11-23 10:56:51,986 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=contact@kwepajua.africa time_ms=14.2 body=
+2025-11-23 10:56:53,609 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&is_read=false status=200 user=contact@kwepajua.africa time_ms=7.7 body=
+2025-11-23 10:56:54,285 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=share_request status=200 user=contact@kwepajua.africa time_ms=12.3 body=
+2025-11-23 10:56:55,003 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=friend_request status=200 user=contact@kwepajua.africa time_ms=11.3 body=
+2025-11-23 10:56:55,588 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=contact@kwepajua.africa time_ms=8.2 body=
+2025-11-23 10:56:58,822 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=contact@kwepajua.africa time_ms=28.7 body=
+2025-11-23 10:56:58,833 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=contact@kwepajua.africa time_ms=31.1 body=
+2025-11-23 10:56:58,838 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=contact@kwepajua.africa time_ms=30.8 body=
+2025-11-23 10:57:11,513 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=contact@kwepajua.africa time_ms=15.5 body=
+2025-11-23 10:57:11,516 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=contact@kwepajua.africa time_ms=15.2 body=
+2025-11-23 10:57:11,526 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=contact@kwepajua.africa time_ms=20.2 body=
+2025-11-23 10:57:28,076 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=7.1 body=
+2025-11-23 10:57:28,190 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=contact@kwepajua.africa time_ms=9.8 body=
+2025-11-23 10:57:28,224 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=contact@kwepajua.africa time_ms=39.7 body=
+2025-11-23 10:57:28,243 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=contact@kwepajua.africa time_ms=57.4 body=
+2025-11-23 10:57:28,421 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=8.5 body=
+2025-11-23 10:57:28,455 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 10:57:37,433 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=29.5 body=
+2025-11-23 10:58:37,441 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=12.5 body=
+2025-11-23 10:59:39,635 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=4.4 body=
+2025-11-23 10:59:39,660 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=21.1 body=
+2025-11-23 10:59:39,664 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=23.3 body=
+2025-11-23 10:59:41,203 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=9.3 body=
+2025-11-23 11:00:41,109 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=7.1 body=
+2025-11-23 11:00:41,128 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=16.6 body=
+2025-11-23 11:00:41,148 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=33.2 body=
+2025-11-23 11:00:43,828 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=12.2 body=
+2025-11-23 11:01:20,562 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=3.1 body=
+2025-11-23 11:01:20,614 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=11.1 body=
+2025-11-23 11:01:28,089 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=11.6 body=
+2025-11-23 11:01:44,021 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=5.2 body=
+2025-11-23 11:01:44,075 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=7.5 body=
+2025-11-23 11:03:00,097 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=8.8 body=
+2025-11-23 11:03:00,182 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=11.1 body=
+2025-11-23 11:05:05,522 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=4.3 body=
+2025-11-23 11:05:05,621 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=34.1 body=
+2025-11-23 11:05:57,860 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=8.5 body=
+2025-11-23 11:05:57,883 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=22.3 body=
+2025-11-23 11:06:04,018 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=3.3 body=
+2025-11-23 11:06:04,065 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=11.6 body=
+2025-11-23 11:06:05,481 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=9.7 body=
+2025-11-23 11:06:05,484 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=10.2 body=
+2025-11-23 11:06:23,280 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=4.4 body=
+2025-11-23 11:06:23,339 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=15.9 body=
+2025-11-23 11:06:23,342 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=23.6 body=
+2025-11-23 11:07:50,891 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=31.9 body=
+2025-11-23 11:07:50,957 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=10.8 body=
+2025-11-23 11:07:51,009 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=56.2 body=
+2025-11-23 11:08:17,326 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=22.9 body=
+2025-11-23 11:08:17,408 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=17.2 body=
+2025-11-23 11:08:17,409 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=15.2 body=
+2025-11-23 11:08:17,411 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=17.9 body=
+2025-11-23 11:08:25,556 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=contact@kwepajua.africa time_ms=39.4 body=
+2025-11-23 11:08:25,559 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=contact@kwepajua.africa time_ms=30.6 body=
+2025-11-23 11:08:25,561 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=contact@kwepajua.africa time_ms=29.1 body=
+2025-11-23 11:08:29,242 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=8.9 body=
+2025-11-23 11:08:29,247 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=12.2 body=
+2025-11-23 11:09:08,899 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1130.9 body=
+2025-11-23 11:09:11,524 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=61.2 body=
+2025-11-23 11:09:17,968 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=20.1 body=
+2025-11-23 11:09:17,983 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=32.9 body=
+2025-11-23 11:09:39,886 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=14.7 body=
+2025-11-23 11:09:39,959 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=contact@kwepajua.africa time_ms=26.9 body=
+2025-11-23 11:09:39,972 INFO kibegi GET /api/v1/sharing/shared-with-me/?status=accepted status=200 user=contact@kwepajua.africa time_ms=28.5 body=
+2025-11-23 11:09:40,001 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=contact@kwepajua.africa time_ms=52.5 body=
+2025-11-23 11:09:41,456 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=11.6 body=
+2025-11-23 11:10:05,888 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=36.1 body=
+2025-11-23 11:10:06,088 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=10.7 body=
+2025-11-23 11:10:06,146 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=53.9 body=
+2025-11-23 11:10:33,588 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=24.2 body=
+2025-11-23 11:10:33,850 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=13.9 body=
+2025-11-23 11:10:57,906 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=28.4 body=
+2025-11-23 11:10:57,912 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=49.1 body=
+2025-11-23 11:11:18,771 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=36.3 body=
+2025-11-23 11:11:19,402 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=21.8 body=
+2025-11-23 11:11:19,410 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=31.4 body=
+2025-11-23 11:11:29,209 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=312.9 body=
+2025-11-23 11:11:50,543 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=13.7 body=
+2025-11-23 11:11:50,575 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=34.8 body=
+2025-11-23 11:11:50,595 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=48.6 body=
+2025-11-23 11:11:54,015 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=40.1 body=
+2025-11-23 11:11:57,187 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=33.6 body=
+2025-11-23 11:11:57,204 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=15.7 body=
+2025-11-23 11:11:57,232 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=26.3 body=
+2025-11-23 11:12:18,245 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=14.1 body=
+2025-11-23 11:12:18,250 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=16.6 body=
+2025-11-23 11:12:21,254 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=3.1 body=
+2025-11-23 11:12:21,313 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=18.4 body=
+2025-11-23 11:12:21,316 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=16.4 body=
+2025-11-23 11:12:27,663 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=13.1 body=
+2025-11-23 11:12:27,685 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=32.8 body=
+2025-11-23 11:12:42,591 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=2.9 body=
+2025-11-23 11:12:42,648 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=15.0 body=
+2025-11-23 11:12:42,652 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=16.0 body=
+2025-11-23 11:13:28,769 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=5.1 body=
+2025-11-23 11:13:28,814 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=9.1 body=
+2025-11-23 11:13:28,843 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=26.7 body=
+2025-11-23 11:13:48,188 INFO kibegi GET /api/v1/friends/search/?q=Co status=200 user=contact@kwepajua.africa time_ms=6.7 body=
+2025-11-23 11:13:57,775 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=24.4 body=
+2025-11-23 11:13:57,822 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=62.4 body=
+2025-11-23 11:14:08,080 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=40.6 body=
+2025-11-23 11:14:08,087 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=40.5 body=
+2025-11-23 11:14:16,895 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=5.4 body=
+2025-11-23 11:14:16,964 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=27.1 body=
+2025-11-23 11:14:16,967 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=25.0 body=
+2025-11-23 11:14:23,475 INFO kibegi GET /api/v1/auth/profile/ status=200 user=itslugenge96@gmail.com time_ms=5.0 body=
+2025-11-23 11:14:23,676 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=18.5 body=
+2025-11-23 11:14:23,679 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=15.0 body=
+2025-11-23 11:14:31,698 INFO kibegi GET /api/v1/friends/search/?q=contact status=200 user=itslugenge96@gmail.com time_ms=6.9 body=
+2025-11-23 11:14:34,356 INFO kibegi POST /api/v1/friends/add/ status=400 user=itslugenge96@gmail.com time_ms=23.3 body=
+2025-11-23 11:14:34,374 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:14:37,137 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=10.4 body=
+2025-11-23 11:14:37,140 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=16.1 body=
+2025-11-23 11:14:37,194 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=5.8 body=
+2025-11-23 11:14:40,891 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=contact@kwepajua.africa time_ms=6.8 body=
+2025-11-23 11:14:42,332 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=friend_request status=200 user=contact@kwepajua.africa time_ms=11.7 body=
+2025-11-23 11:14:49,956 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&is_read=false status=200 user=contact@kwepajua.africa time_ms=9.5 body=
+2025-11-23 11:14:50,642 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=share_request status=200 user=contact@kwepajua.africa time_ms=10.5 body=
+2025-11-23 11:14:51,505 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20 status=200 user=contact@kwepajua.africa time_ms=8.5 body=
+2025-11-23 11:14:52,436 INFO kibegi GET /api/v1/notifications/?page=1&page_size=20&type=file_shared status=200 user=contact@kwepajua.africa time_ms=4.6 body=
+2025-11-23 11:14:53,357 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=11.9 body=
+2025-11-23 11:14:53,360 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=17.4 body=
+2025-11-23 11:14:53,362 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=13.7 body=
+2025-11-23 11:15:16,564 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=9.4 body=
+2025-11-23 11:15:16,573 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=16.5 body=
+2025-11-23 11:15:29,029 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=4.2 body=
+2025-11-23 11:16:58,066 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=10.7 body=
+2025-11-23 11:16:58,084 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:17:01,160 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=37.4 body=
+2025-11-23 11:17:01,174 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=43.3 body=
+2025-11-23 11:17:21,099 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=5.2 body=
+2025-11-23 11:17:21,166 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=10.2 body=
+2025-11-23 11:17:21,193 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=29.5 body=
+2025-11-23 11:17:24,416 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=4.2 body=
+2025-11-23 11:20:32,694 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=8.4 body=
+2025-11-23 11:20:35,999 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=5.0 body=
+2025-11-23 11:20:36,015 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:20:37,539 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=8.4 body=
+2025-11-23 11:20:37,549 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:22:25,946 INFO kibegi GET /api/v1/friends/search/?q=Conta status=200 user=contact@kwepajua.africa time_ms=7.3 body=
+2025-11-23 11:22:27,800 INFO kibegi GET /api/v1/friends/search/?q=Contact status=200 user=contact@kwepajua.africa time_ms=7.8 body=
+2025-11-23 11:22:32,383 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=8.7 body=
+2025-11-23 11:22:38,553 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=57.3 body=
+2025-11-23 11:22:38,557 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=52.1 body=
+2025-11-23 11:22:53,910 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=4.7 body=
+2025-11-23 11:22:53,928 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:23:06,963 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=8.9 body=
+2025-11-23 11:23:06,977 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:23:10,057 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=21.1 body=
+2025-11-23 11:23:10,120 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=70.1 body=
+2025-11-23 11:23:28,925 INFO kibegi GET /api/v1/auth/profile/ status=200 user=contact@kwepajua.africa time_ms=13.7 body=
+2025-11-23 11:23:28,982 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=9.6 body=
+2025-11-23 11:23:29,000 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=22.7 body=
+2025-11-23 11:23:54,389 INFO kibegi GET /api/v1/friends/search/?q=contact status=200 user=itslugenge96@gmail.com time_ms=10.7 body=
+2025-11-23 11:23:56,541 INFO kibegi POST /api/v1/friends/add/ status=400 user=itslugenge96@gmail.com time_ms=12.8 body=
+2025-11-23 11:23:56,558 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:24:07,670 INFO kibegi GET /api/v1/friends/search/?q=Itsluge status=200 user=contact@kwepajua.africa time_ms=8.5 body=
+2025-11-23 11:24:13,491 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=4.8 body=
+2025-11-23 11:24:13,504 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:25:55,493 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=19.8 body=
+2025-11-23 11:25:55,506 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=29.2 body=
+2025-11-23 11:25:56,100 INFO kibegi GET /api/v1/friends/search/?q=Itsluge status=200 user=contact@kwepajua.africa time_ms=11.9 body=
+2025-11-23 11:25:56,359 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=30.4 body=
+2025-11-23 11:25:56,438 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=95.0 body=
+2025-11-23 11:25:57,328 INFO kibegi GET /api/v1/friends/search/?q=contact status=200 user=itslugenge96@gmail.com time_ms=9.4 body=
+2025-11-23 11:26:10,621 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=20.7 body=
+2025-11-23 11:26:10,624 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=19.9 body=
+2025-11-23 11:26:11,118 INFO kibegi GET /api/v1/friends/search/?q=Itsluge status=200 user=contact@kwepajua.africa time_ms=7.5 body=
+2025-11-23 11:26:11,253 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=9.8 body=
+2025-11-23 11:26:11,255 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=itslugenge96@gmail.com time_ms=14.0 body=
+2025-11-23 11:26:12,331 INFO kibegi GET /api/v1/friends/search/?q=contact status=200 user=itslugenge96@gmail.com time_ms=11.7 body=
+2025-11-23 11:26:24,287 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.1 body=
+2025-11-23 11:26:24,309 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 11:26:46,793 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=2.1 body={"email": "contact@kwepajua.africa", "password": "*****"}
+2025-11-23 11:26:46,817 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-23 11:26:46,949 INFO kibegi GET /api/v1/friends/?status=accepted status=401 user=anon time_ms=1.1 body=
+2025-11-23 11:26:46,955 INFO kibegi GET /api/v1/friends/?status=pending status=401 user=anon time_ms=1.3 body=
+2025-11-23 11:26:46,965 WARNING django.request Unauthorized: /api/v1/friends/
+2025-11-23 11:26:46,981 WARNING django.request Unauthorized: /api/v1/friends/
+2025-11-23 11:26:53,645 INFO kibegi POST /api/v1/friends/add/ status=400 user=itslugenge96@gmail.com time_ms=5.8 body=
+2025-11-23 11:26:53,654 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 11:27:34,848 INFO kibegi GET /api/v1/files/my-uploads/ status=401 user=anon time_ms=1.8 body=
+2025-11-23 11:27:34,858 WARNING django.request Unauthorized: /api/v1/files/my-uploads/
+2025-11-23 11:27:34,865 INFO kibegi GET /api/v1/friends/?status=accepted status=401 user=anon time_ms=3.2 body=
+2025-11-23 11:27:34,869 INFO kibegi GET /api/v1/files/shared-with-me/ status=401 user=anon time_ms=1.9 body=
+2025-11-23 11:27:34,886 WARNING django.request Unauthorized: /api/v1/friends/
+2025-11-23 11:27:34,901 WARNING django.request Unauthorized: /api/v1/files/shared-with-me/
+2025-11-23 11:27:38,781 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=401 user=anon time_ms=1.1 body=
+2025-11-23 11:27:38,795 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 11:27:43,277 INFO kibegi GET /api/v1/auth/profile/ status=401 user=anon time_ms=1.2 body=
+2025-11-23 11:27:43,287 WARNING django.request Unauthorized: /api/v1/auth/profile/
+2025-11-23 12:16:25,045 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1088.8 body=
+2025-11-23 12:18:47,098 INFO kibegi POST /api/v1/auth/logout/ status=401 user=anon time_ms=4.3 body={"refresh": "*****"}
+2025-11-23 12:18:47,115 WARNING django.request Unauthorized: /api/v1/auth/logout/
+2025-11-23 12:23:30,957 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=930.5 body=
+2025-11-23 12:32:15,241 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1269.3 body=
+2025-11-23 12:32:47,785 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=10.4 body=
+2025-11-23 12:32:47,791 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=16.0 body=
+2025-11-23 12:32:47,797 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=32.7 body=
+2025-11-23 12:32:47,813 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 12:32:47,832 WARNING django.request Not Found: /api/uploads/
+2025-11-23 12:32:47,849 WARNING django.request Not Found: /api/friends/
+2025-11-23 12:33:11,752 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1043.9 body=
+2025-11-23 12:33:55,317 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=16.2 body=
+2025-11-23 12:33:55,351 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=27.1 body=
+2025-11-23 12:33:55,359 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=37.7 body=
+2025-11-23 12:33:55,384 WARNING django.request Not Found: /api/uploads/
+2025-11-23 12:33:55,400 WARNING django.request Not Found: /api/friends/
+2025-11-23 12:33:55,428 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 12:34:22,606 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=895.7 body=
+2025-11-23 12:35:50,509 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=935.2 body=
+2025-11-23 12:36:42,101 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1483.8 body=
+2025-11-23 12:37:02,195 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1622.5 body=
+2025-11-23 12:40:31,572 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=16.1 body=
+2025-11-23 12:40:31,578 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=19.7 body=
+2025-11-23 12:40:31,588 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=27.5 body=
+2025-11-23 12:40:31,620 WARNING django.request Not Found: /api/uploads/
+2025-11-23 12:40:31,632 WARNING django.request Not Found: /api/friends/
+2025-11-23 12:40:31,663 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 12:40:33,248 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=11.0 body=
+2025-11-23 12:40:33,252 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=16.3 body=
+2025-11-23 12:40:33,267 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=23.7 body=
+2025-11-23 12:40:33,285 WARNING django.request Not Found: /api/uploads/
+2025-11-23 12:40:33,311 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 12:40:33,338 WARNING django.request Not Found: /api/friends/
+2025-11-23 12:40:38,312 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=9.0 body=
+2025-11-23 12:40:38,334 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=31.6 body=
+2025-11-23 12:40:38,334 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=24.3 body=
+2025-11-23 12:40:38,351 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 12:40:38,379 WARNING django.request Not Found: /api/friends/
+2025-11-23 12:40:38,415 WARNING django.request Not Found: /api/uploads/
+2025-11-23 12:45:13,794 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=917.9 body=
+2025-11-23 12:45:24,811 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=894.3 body=
+2025-11-23 12:46:37,684 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1116.0 body=
+2025-11-23 12:46:49,856 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1104.4 body=
+2025-11-23 12:47:14,484 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1084.6 body=
+2025-11-23 12:47:24,086 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1261.9 body=
+2025-11-23 12:47:45,265 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1402.6 body=
+2025-11-23 12:48:25,803 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=898.2 body=
+2025-11-23 12:48:42,724 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=10.6 body=
+2025-11-23 12:48:42,742 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=6.1 body=
+2025-11-23 12:48:42,744 WARNING django.request Not Found: /api/uploads/
+2025-11-23 12:48:42,754 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=9.8 body=
+2025-11-23 12:48:42,769 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 12:48:42,788 WARNING django.request Not Found: /api/friends/
+2025-11-23 12:48:45,483 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=6.0 body=
+2025-11-23 12:48:45,495 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=18.8 body=
+2025-11-23 12:48:45,510 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=32.1 body=
+2025-11-23 12:48:45,522 WARNING django.request Not Found: /api/uploads/
+2025-11-23 12:48:45,541 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 12:48:45,554 WARNING django.request Not Found: /api/friends/
+2025-11-23 12:49:40,124 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1050.1 body=
+2025-11-23 12:50:30,461 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1896.6 body=
+2025-11-23 12:50:43,393 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=942.2 body=
+2025-11-23 12:51:32,178 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=922.6 body=
+2025-11-23 12:52:26,865 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1053.0 body=
+2025-11-23 12:52:45,680 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=930.0 body=
+2025-11-23 12:52:52,359 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1058.5 body=
+2025-11-23 12:56:25,636 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1064.7 body=
+2025-11-23 12:57:20,142 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1018.3 body=
+2025-11-23 12:58:06,588 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1599.6 body=
+2025-11-23 13:00:40,441 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1256.1 body=
+2025-11-23 13:01:07,854 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=994.6 body=
+2025-11-23 13:01:50,821 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1268.5 body=
+2025-11-23 13:04:45,017 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1287.2 body=
+2025-11-23 13:05:26,043 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1163.3 body=
+2025-11-23 13:08:16,014 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1155.8 body=
+2025-11-23 13:10:03,937 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=925.0 body=
+2025-11-23 13:10:51,689 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=50.0 body=
+2025-11-23 13:10:51,714 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=59.7 body=
+2025-11-23 13:10:51,697 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=42.0 body=
+2025-11-23 13:10:51,737 WARNING django.request Not Found: /api/uploads/
+2025-11-23 13:10:51,759 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 13:10:51,774 WARNING django.request Not Found: /api/friends/
+2025-11-23 13:11:24,758 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=5.2 body=
+2025-11-23 13:11:24,780 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=5.6 body=
+2025-11-23 13:11:24,783 WARNING django.request Not Found: /api/uploads/
+2025-11-23 13:11:24,792 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 13:11:24,813 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=7.7 body=
+2025-11-23 13:11:24,827 WARNING django.request Not Found: /api/friends/
+2025-11-23 13:11:40,965 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=6.1 body=
+2025-11-23 13:11:40,970 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=9.7 body=
+2025-11-23 13:11:40,981 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=21.2 body=
+2025-11-23 13:11:41,001 WARNING django.request Not Found: /api/uploads/
+2025-11-23 13:11:41,014 WARNING django.request Not Found: /api/friends/
+2025-11-23 13:11:41,038 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 13:11:42,499 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=5.0 body=
+2025-11-23 13:11:42,507 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=4.9 body=
+2025-11-23 13:11:42,512 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=10.9 body=
+2025-11-23 13:11:42,524 WARNING django.request Not Found: /api/uploads/
+2025-11-23 13:11:42,541 WARNING django.request Not Found: /api/friends/
+2025-11-23 13:11:42,559 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 13:16:32,622 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=19.7 body=
+2025-11-23 13:16:32,640 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=10.0 body=
+2025-11-23 13:16:32,652 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=10.4 body=
+2025-11-23 13:16:32,677 WARNING django.request Not Found: /api/friends/
+2025-11-23 13:16:32,707 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 13:16:32,746 WARNING django.request Not Found: /api/uploads/
+2025-11-23 13:19:28,576 INFO kibegi GET /api/classes/ status=404 user=anon time_ms=9.7 body=
+2025-11-23 13:19:28,628 WARNING django.request Not Found: /api/classes/
+2025-11-23 13:20:18,986 INFO kibegi GET /api/classes/ status=404 user=anon time_ms=45.5 body=
+2025-11-23 13:20:19,151 WARNING django.request Not Found: /api/classes/
+2025-11-23 13:21:00,551 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=90.2 body=
+2025-11-23 14:07:36,985 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=33.9 body=
+2025-11-23 14:07:36,990 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=38.1 body=
+2025-11-23 14:07:36,992 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=34.6 body=
+2025-11-23 14:07:37,080 WARNING django.request Not Found: /api/uploads/
+2025-11-23 14:07:37,117 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 14:07:37,137 WARNING django.request Not Found: /api/friends/
+2025-11-23 14:07:43,017 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=40.0 body=
+2025-11-23 14:07:56,307 INFO kibegi POST /api/v1/classes/leave/ status=404 user=anon time_ms=11.3 body={"class_code": "XWV5NU"}
+2025-11-23 14:07:56,326 WARNING django.request Not Found: /api/v1/classes/leave/
+2025-11-23 14:08:55,959 INFO kibegi POST /api/v1/classes/ status=401 user=anon time_ms=1.7 body={"name": "python", "description": "java abiyt\n"}
+2025-11-23 14:08:55,974 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 14:10:55,345 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=63.1 body=
+2025-11-23 14:10:55,997 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=331.1 body=
+2025-11-23 14:11:47,087 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1238.0 body=
+2025-11-23 14:11:50,200 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=14.5 body=
+2025-11-23 14:11:56,515 INFO kibegi GET /api/v1/classes/XWV5NU/members/ status=404 user=anon time_ms=5.0 body=
+2025-11-23 14:11:56,531 WARNING django.request Not Found: /api/v1/classes/XWV5NU/members/
+2025-11-23 14:14:59,435 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=31.5 body=
+2025-11-23 14:15:04,255 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1178.0 body=
+2025-11-23 14:15:07,805 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=15.7 body=
+2025-11-23 14:15:13,271 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=54.7 body=
+2025-11-23 14:15:14,108 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=18.7 body=
+2025-11-23 14:15:26,830 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=33.3 body=
+2025-11-23 14:15:27,802 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=28.5 body=
+2025-11-23 14:15:38,457 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=33.3 body=
+2025-11-23 14:15:39,395 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=23.4 body=
+2025-11-23 14:16:12,134 INFO kibegi GET /api/v1/classes/4JL5FJ/members/ status=404 user=anon time_ms=9.8 body=
+2025-11-23 14:16:12,150 WARNING django.request Not Found: /api/v1/classes/4JL5FJ/members/
+2025-11-23 14:16:17,357 INFO kibegi POST /api/v1/classes/leave/ status=404 user=anon time_ms=5.0 body={"class_code": "4JL5FJ"}
+2025-11-23 14:16:17,373 WARNING django.request Not Found: /api/v1/classes/leave/
+2025-11-23 14:16:38,045 INFO kibegi POST /api/v1/classes/ status=201 user=contact@kwepajua.africa time_ms=40.2 body=
+2025-11-23 14:16:38,135 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=7.7 body=
+2025-11-23 14:17:40,123 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=15.7 body=
+2025-11-23 14:17:40,130 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=20.1 body=
+2025-11-23 14:17:40,133 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=21.3 body=
+2025-11-23 14:17:40,149 WARNING django.request Not Found: /api/uploads/
+2025-11-23 14:17:40,170 WARNING django.request Not Found: /api/friends/
+2025-11-23 14:17:40,181 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 14:18:30,771 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=9.4 body=
+2025-11-23 14:18:49,066 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=18.7 body=
+2025-11-23 14:18:50,217 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=35.9 body=
+2025-11-23 14:19:39,340 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=7.4 body=
+2025-11-23 14:23:04,437 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=14.1 body=
+2025-11-23 14:23:20,818 INFO kibegi POST /api/v1/classes/ status=201 user=itslugenge96@gmail.com time_ms=37.4 body=
+2025-11-23 14:23:20,933 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=11.6 body=
+2025-11-23 14:23:30,493 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=18.7 body=
+2025-11-23 14:23:30,860 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=19.3 body=
+2025-11-23 14:24:36,752 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=14.8 body=
+2025-11-23 14:24:51,825 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=58.9 body=
+2025-11-23 14:24:51,882 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=27.4 body=
+2025-11-23 14:25:29,495 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=8.8 body=
+2025-11-23 14:25:33,595 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=26.6 body=
+2025-11-23 14:26:07,294 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=7.8 body=
+2025-11-23 14:27:58,269 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=15.9 body=
+2025-11-23 14:28:14,944 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=8.7 body=
+2025-11-23 14:30:41,288 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=15.5 body=
+2025-11-23 14:30:55,224 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=19.5 body=
+2025-11-23 14:30:55,592 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=15.9 body=
+2025-11-23 14:30:55,720 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=14.1 body=
+2025-11-23 14:35:21,817 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=26.4 body=
+2025-11-23 14:35:22,719 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=15.6 body=
+2025-11-23 14:35:23,104 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=17.4 body=
+2025-11-23 14:38:36,014 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=9.3 body=
+2025-11-23 14:38:42,667 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=33.1 body=
+2025-11-23 14:38:42,836 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=23.7 body=
+2025-11-23 14:38:43,121 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=14.4 body=
+2025-11-23 14:39:21,173 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=7.6 body=
+2025-11-23 14:39:22,712 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=5.2 body=
+2025-11-23 14:39:22,718 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=5.6 body=
+2025-11-23 14:39:22,729 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=9.5 body=
+2025-11-23 14:39:22,743 WARNING django.request Not Found: /api/friends/
+2025-11-23 14:39:22,762 WARNING django.request Not Found: /api/uploads/
+2025-11-23 14:39:22,780 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 14:39:25,369 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=8.6 body=
+2025-11-23 14:39:39,701 INFO kibegi POST /api/v1/classes/ status=201 user=contact@kwepajua.africa time_ms=36.5 body=
+2025-11-23 14:39:39,734 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=9.7 body=
+2025-11-23 14:40:41,808 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=35.3 body=
+2025-11-23 14:40:41,893 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=57.4 body=
+2025-11-23 14:40:42,442 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=20.2 body=
+2025-11-23 14:40:42,736 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=49.8 body=
+2025-11-23 14:40:42,884 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=13.1 body=
+2025-11-23 14:42:17,971 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=12.5 body=
+2025-11-23 14:42:18,162 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=24.6 body=
+2025-11-23 14:42:18,397 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=29.8 body=
+2025-11-23 14:42:25,212 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=18.0 body=
+2025-11-23 14:42:26,190 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=22.6 body=
+2025-11-23 14:42:26,293 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=27.2 body=
+2025-11-23 14:43:51,678 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=53.5 body=
+2025-11-23 14:43:52,467 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=20.9 body=
+2025-11-23 14:43:52,736 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=33.0 body=
+2025-11-23 14:47:07,841 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=45.9 body=
+2025-11-23 14:47:08,497 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=19.8 body=
+2025-11-23 14:47:08,546 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=18.7 body=
+2025-11-23 14:48:05,106 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=31.8 body=
+2025-11-23 14:48:06,067 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=15.5 body=
+2025-11-23 14:48:06,127 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=17.7 body=
+2025-11-23 14:49:25,371 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=32.2 body=
+2025-11-23 14:49:25,491 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=16.4 body=
+2025-11-23 14:49:26,286 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=10.4 body=
+2025-11-23 14:51:03,958 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=18.1 body=
+2025-11-23 14:51:04,927 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=16.3 body=
+2025-11-23 14:51:04,970 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=22.7 body=
+2025-11-23 14:51:25,957 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=10.1 body=
+2025-11-23 14:51:26,872 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=28.0 body=
+2025-11-23 14:51:26,894 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=36.6 body=
+2025-11-23 14:51:47,174 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=13.9 body=
+2025-11-23 14:51:47,197 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=22.0 body=
+2025-11-23 14:51:47,199 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=30.7 body=
+2025-11-23 14:51:47,219 WARNING django.request Not Found: /api/uploads/
+2025-11-23 14:51:47,237 WARNING django.request Not Found: /api/friends/
+2025-11-23 14:51:47,255 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 14:51:59,657 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=10.3 body=
+2025-11-23 14:52:06,076 INFO kibegi GET /api/shares/shared-with-me/ status=404 user=anon time_ms=5.1 body=
+2025-11-23 14:52:06,135 INFO kibegi GET /api/uploads/ status=404 user=anon time_ms=65.0 body=
+2025-11-23 14:52:06,141 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=63.3 body=
+2025-11-23 14:52:06,153 WARNING django.request Not Found: /api/shares/shared-with-me/
+2025-11-23 14:52:06,167 WARNING django.request Not Found: /api/uploads/
+2025-11-23 14:52:06,187 WARNING django.request Not Found: /api/friends/
+2025-11-23 14:54:24,164 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=12.9 body=
+2025-11-23 14:55:35,232 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=54.4 body=
+2025-11-23 14:55:35,327 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=57.8 body=
+2025-11-23 14:56:15,150 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=16.8 body=
+2025-11-23 14:56:15,294 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=17.0 body=
+2025-11-23 14:56:44,117 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=11.3 body=
+2025-11-23 14:56:45,130 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=19.3 body=
+2025-11-23 14:56:45,135 INFO kibegi GET /api/files/my-uploads/ status=404 user=anon time_ms=22.8 body=
+2025-11-23 14:56:45,152 INFO kibegi GET /api/files/shared-with-me/ status=404 user=anon time_ms=25.9 body=
+2025-11-23 14:56:45,177 WARNING django.request Not Found: /api/friends/
+2025-11-23 14:56:45,190 WARNING django.request Not Found: /api/files/my-uploads/
+2025-11-23 14:56:45,217 WARNING django.request Not Found: /api/files/shared-with-me/
+2025-11-23 14:57:38,971 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=11.0 body=
+2025-11-23 14:57:42,228 INFO kibegi GET /api/files/my-uploads/ status=404 user=anon time_ms=4.9 body=
+2025-11-23 14:57:42,244 WARNING django.request Not Found: /api/files/my-uploads/
+2025-11-23 14:57:42,245 INFO kibegi GET /api/files/shared-with-me/ status=404 user=anon time_ms=13.7 body=
+2025-11-23 14:57:42,247 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=15.2 body=
+2025-11-23 14:57:42,263 WARNING django.request Not Found: /api/files/shared-with-me/
+2025-11-23 14:57:42,282 WARNING django.request Not Found: /api/friends/
+2025-11-23 14:59:33,001 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=17.7 body=
+2025-11-23 15:02:00,567 INFO kibegi GET /api/files/my-uploads/ status=404 user=anon time_ms=16.3 body=
+2025-11-23 15:02:00,592 INFO kibegi GET /api/files/shared-with-me/ status=404 user=anon time_ms=19.8 body=
+2025-11-23 15:02:00,602 INFO kibegi GET /api/friends/ status=404 user=anon time_ms=14.1 body=
+2025-11-23 15:02:00,608 WARNING django.request Not Found: /api/files/my-uploads/
+2025-11-23 15:02:00,622 WARNING django.request Not Found: /api/friends/
+2025-11-23 15:02:00,650 WARNING django.request Not Found: /api/files/shared-with-me/
+2025-11-23 15:04:31,672 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=39.8 body=
+2025-11-23 15:04:31,701 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:04:41,954 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=14.4 body=
+2025-11-23 15:04:41,973 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:05:33,585 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=40.8 body=
+2025-11-23 15:05:33,614 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:06:15,072 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=7.3 body=
+2025-11-23 15:06:15,092 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:06:15,844 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=14.9 body=
+2025-11-23 15:07:40,014 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=11.1 body=
+2025-11-23 15:07:40,032 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:07:54,536 INFO kibegi GET /api/files/my-uploads/ status=404 user=anon time_ms=15.8 body=
+2025-11-23 15:07:54,569 WARNING django.request Not Found: /api/files/my-uploads/
+2025-11-23 15:07:55,301 INFO kibegi GET /api/files/shared-with-me/ status=404 user=anon time_ms=41.9 body=
+2025-11-23 15:07:55,324 WARNING django.request Not Found: /api/files/shared-with-me/
+2025-11-23 15:07:56,252 INFO kibegi GET /api/files/deleted/ status=404 user=anon time_ms=10.0 body=
+2025-11-23 15:07:56,272 WARNING django.request Not Found: /api/files/deleted/
+2025-11-23 15:09:46,339 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=4.5 body=
+2025-11-23 15:09:46,352 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:09:52,484 INFO kibegi GET /api/files/my-uploads/ status=404 user=anon time_ms=9.4 body=
+2025-11-23 15:09:52,499 WARNING django.request Not Found: /api/files/my-uploads/
+2025-11-23 15:09:53,942 INFO kibegi GET /api/files/shared-with-me/ status=404 user=anon time_ms=4.6 body=
+2025-11-23 15:09:53,953 WARNING django.request Not Found: /api/files/shared-with-me/
+2025-11-23 15:09:57,688 INFO kibegi GET /api/files/deleted/ status=404 user=anon time_ms=4.6 body=
+2025-11-23 15:09:57,704 WARNING django.request Not Found: /api/files/deleted/
+2025-11-23 15:19:44,440 INFO kibegi POST /api/v1/classes/leave/ status=404 user=anon time_ms=8.1 body={"class_code": "PZ45EC"}
+2025-11-23 15:19:44,455 WARNING django.request Not Found: /api/v1/classes/leave/
+2025-11-23 15:19:51,237 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=4.5 body=
+2025-11-23 15:19:51,249 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:20:04,398 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=10.8 body=
+2025-11-23 15:20:04,417 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:22:27,620 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=16.9 body=
+2025-11-23 15:22:27,638 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:22:28,761 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=65.9 body=
+2025-11-23 15:22:28,797 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:22:57,128 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=63.2 body=
+2025-11-23 15:22:57,210 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=67.2 body=
+2025-11-23 15:22:57,222 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:22:57,262 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:27:10,253 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=25.5 body=
+2025-11-23 15:27:10,276 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:27:11,178 INFO kibegi GET /api/files/all/ status=404 user=anon time_ms=21.0 body=
+2025-11-23 15:27:11,210 WARNING django.request Not Found: /api/files/all/
+2025-11-23 15:28:14,469 INFO kibegi GET /api/api/v1/files/all/ status=404 user=anon time_ms=6.2 body=
+2025-11-23 15:28:14,487 WARNING django.request Not Found: /api/api/v1/files/all/
+2025-11-23 15:28:15,436 INFO kibegi GET /api/api/v1/files/all/ status=404 user=anon time_ms=11.3 body=
+2025-11-23 15:28:15,450 WARNING django.request Not Found: /api/api/v1/files/all/
+2025-11-23 15:29:49,987 INFO kibegi GET /api/v1/files/all/ status=401 user=anon time_ms=1.4 body=
+2025-11-23 15:29:50,008 WARNING django.request Unauthorized: /api/v1/files/all/
+2025-11-23 15:29:50,947 INFO kibegi GET /api/v1/files/all/ status=401 user=anon time_ms=3.3 body=
+2025-11-23 15:29:50,963 WARNING django.request Unauthorized: /api/v1/files/all/
+2025-11-23 15:30:03,182 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1153.7 body=
+2025-11-23 15:30:05,044 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=8.8 body=
+2025-11-23 15:30:07,270 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=5.0 body=
+2025-11-23 15:30:08,074 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=6.9 body=
+2025-11-23 15:30:25,768 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=3.6 body=
+2025-11-23 15:30:27,467 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=4.7 body=
+2025-11-23 15:30:56,886 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=970.9 body=
+2025-11-23 15:30:59,224 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=15.1 body=
+2025-11-23 15:31:29,135 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=11.9 body=
+2025-11-23 15:31:34,786 INFO kibegi DELETE /api/v1/files/FPM0PAP6/permanent-delete/ status=404 user=itslugenge96@gmail.com time_ms=10.7 body=
+2025-11-23 15:31:34,801 WARNING django.request Not Found: /api/v1/files/FPM0PAP6/permanent-delete/
+2025-11-23 15:31:46,114 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=7.5 body=
+2025-11-23 15:31:48,064 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=10.4 body=
+2025-11-23 15:31:59,435 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=5.6 body=
+2025-11-23 15:32:02,546 INFO kibegi POST /api/v1/auth/logout/ status=200 user=contact@kwepajua.africa time_ms=18.0 body=
+2025-11-23 15:32:18,757 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=858.8 body=
+2025-11-23 15:32:20,530 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=6.8 body=
+2025-11-23 15:33:18,389 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=5.1 body=
+2025-11-23 15:35:59,422 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=47.4 body=
+2025-11-23 15:35:59,509 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=37.9 body=
+2025-11-23 15:36:00,286 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.6 body=
+2025-11-23 15:38:01,907 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.1 body=
+2025-11-23 15:38:02,883 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=9.8 body=
+2025-11-23 15:39:48,804 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=17.7 body=
+2025-11-23 15:39:49,783 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=20.4 body=
+2025-11-23 15:40:01,305 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=19.2 body=
+2025-11-23 15:40:02,299 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=23.8 body=
+2025-11-23 15:40:06,590 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=21.6 body=
+2025-11-23 15:40:14,074 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=7.9 body=
+2025-11-23 15:41:41,820 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=5.7 body=
+2025-11-23 15:43:29,495 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=6.7 body=
+2025-11-23 15:43:45,991 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=19.1 body=
+2025-11-23 15:44:39,458 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=31.4 body=
+2025-11-23 15:44:39,694 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=46.6 body=
+2025-11-23 15:44:39,702 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=28.5 body=
+2025-11-23 15:44:40,661 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=18.2 body=
+2025-11-23 15:45:59,838 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=5.0 body=
+2025-11-23 15:46:01,628 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=4.4 body=
+2025-11-23 15:46:51,590 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=6.9 body=
+2025-11-23 15:46:52,523 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=9.3 body=
+2025-11-23 15:46:52,545 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=15.9 body=
+2025-11-23 15:50:11,861 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=23.1 body=
+2025-11-23 15:50:12,885 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=94.2 body=
+2025-11-23 15:50:12,934 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=99.4 body=
+2025-11-23 15:51:20,817 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=24.7 body=
+2025-11-23 15:51:21,796 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=12.5 body=
+2025-11-23 15:51:21,843 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=33.6 body=
+2025-11-23 15:53:45,048 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=13.6 body=
+2025-11-23 15:53:45,953 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=32.5 body=
+2025-11-23 15:53:46,012 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=37.1 body=
+2025-11-23 15:55:47,103 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=11.9 body=
+2025-11-23 15:55:47,977 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=16.7 body=
+2025-11-23 15:55:48,007 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=17.9 body=
+2025-11-23 15:57:07,845 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=19.6 body=
+2025-11-23 15:57:07,911 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=34.8 body=
+2025-11-23 15:57:08,826 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.9 body=
+2025-11-23 15:58:13,743 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=7.6 body=
+2025-11-23 15:58:14,514 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=13.6 body=
+2025-11-23 15:58:14,574 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=45.9 body=
+2025-11-23 15:59:09,390 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=10.6 body=
+2025-11-23 15:59:10,377 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=32.5 body=
+2025-11-23 15:59:10,448 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=57.5 body=
+2025-11-23 16:00:37,354 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=15.2 body=
+2025-11-23 16:00:37,823 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=9.7 body=
+2025-11-23 16:00:37,857 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=27.0 body=
+2025-11-23 16:01:43,548 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=7.3 body=
+2025-11-23 16:01:44,467 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=23.4 body=
+2025-11-23 16:01:44,505 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=42.5 body=
+2025-11-23 16:03:25,423 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.9 body=
+2025-11-23 16:03:26,319 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=18.9 body=
+2025-11-23 16:03:26,367 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=32.1 body=
+2025-11-23 16:06:25,618 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=11.3 body=
+2025-11-23 16:06:25,651 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=25.1 body=
+2025-11-23 16:08:26,540 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=7.1 body=
+2025-11-23 16:08:56,373 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=5.6 body=
+2025-11-23 16:08:59,229 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=5.4 body=
+2025-11-23 16:09:19,364 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=22.6 body=
+2025-11-23 16:09:29,532 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=7.1 body=
+2025-11-23 16:09:55,664 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=13.9 body=
+2025-11-23 16:09:57,183 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=6.7 body=
+2025-11-23 16:10:59,442 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=7.9 body=
+2025-11-23 16:11:00,782 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=11.5 body=
+2025-11-23 16:12:58,949 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=5.0 body=
+2025-11-23 16:13:00,889 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=4.4 body=
+2025-11-23 16:13:43,661 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=11.2 body=
+2025-11-23 16:13:55,102 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=16.1 body=
+2025-11-23 16:13:56,295 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=21.5 body=
+2025-11-23 16:13:57,412 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=44.7 body=
+2025-11-23 16:13:57,502 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=53.4 body=
+2025-11-23 16:16:52,054 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=8.0 body=
+2025-11-23 16:16:52,945 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.3 body=
+2025-11-23 16:16:53,009 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=24.5 body=
+2025-11-23 16:17:03,676 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=12.3 body=
+2025-11-23 16:18:16,146 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=13.0 body=
+2025-11-23 16:18:17,166 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=29.0 body=
+2025-11-23 16:18:17,231 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=36.0 body=
+2025-11-23 16:19:16,544 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=9.3 body=
+2025-11-23 16:19:17,433 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=46.6 body=
+2025-11-23 16:19:17,456 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=35.0 body=
+2025-11-23 16:20:21,453 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=19.6 body=
+2025-11-23 16:20:21,612 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=18.2 body=
+2025-11-23 16:20:22,550 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=25.4 body=
+2025-11-23 16:21:57,036 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=8.2 body=
+2025-11-23 16:21:57,929 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=17.1 body=
+2025-11-23 16:21:57,963 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=17.3 body=
+2025-11-23 16:22:57,017 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=27.5 body=
+2025-11-23 16:22:57,795 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.3 body=
+2025-11-23 16:22:57,835 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=36.8 body=
+2025-11-23 16:23:03,688 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=itslugenge96@gmail.com time_ms=39.5 body=
+2025-11-23 16:23:04,803 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=itslugenge96@gmail.com time_ms=9.9 body=
+2025-11-23 16:23:17,232 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=25.5 body=
+2025-11-23 16:23:26,892 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=7.6 body=
+2025-11-23 16:24:42,073 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=23.7 body=
+2025-11-23 16:24:42,114 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=11.4 body=
+2025-11-23 16:24:43,163 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=18.4 body=
+2025-11-23 16:27:54,608 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=13.4 body=
+2025-11-23 16:27:54,846 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.7 body=
+2025-11-23 16:28:31,640 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=113.5 body=
+2025-11-23 16:28:32,008 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=77.0 body=
+2025-11-23 16:28:52,891 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=85.8 body=
+2025-11-23 16:28:52,923 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=57.6 body=
+2025-11-23 16:29:06,449 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=37.3 body=
+2025-11-23 16:29:06,569 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=37.2 body=
+2025-11-23 16:29:31,246 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=9.9 body=
+2025-11-23 16:29:32,127 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=14.9 body=
+2025-11-23 16:29:32,153 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:30:18,024 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=7.1 body=
+2025-11-23 16:30:18,036 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:31:37,541 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=28.6 body=
+2025-11-23 16:31:38,677 INFO kibegi GET /api/v1/files/all/ status=401 user=anon time_ms=1.5 body=
+2025-11-23 16:31:38,723 WARNING django.request Unauthorized: /api/v1/files/all/
+2025-11-23 16:31:38,991 INFO kibegi GET /api/v1/files/all/ status=401 user=anon time_ms=1.3 body=
+2025-11-23 16:31:39,023 WARNING django.request Unauthorized: /api/v1/files/all/
+2025-11-23 16:32:01,541 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=4.8 body=
+2025-11-23 16:32:01,558 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:32:08,954 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=7.5 body=
+2025-11-23 16:32:08,966 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:37:36,758 INFO kibegi GET /api/v1/files/all/ status=401 user=anon time_ms=1.2 body=
+2025-11-23 16:37:36,773 WARNING django.request Unauthorized: /api/v1/files/all/
+2025-11-23 16:37:43,486 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1024.3 body=
+2025-11-23 16:37:50,769 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=5.7 body=
+2025-11-23 16:37:52,834 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=3.7 body=
+2025-11-23 16:37:53,072 INFO kibegi GET /api/v1/files/shared-with-me/ status=200 user=contact@kwepajua.africa time_ms=4.6 body=
+2025-11-23 16:37:54,613 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=16.6 body=
+2025-11-23 16:39:43,161 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=6.3 body=
+2025-11-23 16:39:44,652 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=8.9 body=
+2025-11-23 16:43:43,628 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=5.3 body=
+2025-11-23 16:43:45,268 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=15.9 body=
+2025-11-23 16:45:22,590 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=5.6 body=
+2025-11-23 16:46:32,574 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=981.3 body=
+2025-11-23 16:46:35,602 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=14.3 body=
+2025-11-23 16:46:37,494 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=8.2 body=
+2025-11-23 16:46:37,514 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:48:12,984 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=6.5 body=
+2025-11-23 16:48:13,922 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=12.1 body=
+2025-11-23 16:48:16,034 INFO kibegi POST /api/v1/auth/logout/ status=200 user=contact@kwepajua.africa time_ms=25.0 body=
+2025-11-23 16:48:16,249 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=16.3 body=
+2025-11-23 16:48:21,370 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=8.1 body=
+2025-11-23 16:48:21,392 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:48:40,590 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=29.5 body=
+2025-11-23 16:48:47,750 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=886.1 body=
+2025-11-23 16:48:49,617 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=6.7 body=
+2025-11-23 16:48:51,185 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=8.5 body=
+2025-11-23 16:48:51,201 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:50:47,790 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=89.2 body=
+2025-11-23 16:50:48,762 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=70.0 body=
+2025-11-23 16:51:40,779 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=114.7 body=
+2025-11-23 16:51:42,002 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=18.6 body=
+2025-11-23 16:51:49,282 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=9.5 body=
+2025-11-23 16:51:49,299 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:53:27,444 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=81.1 body=
+2025-11-23 16:53:27,623 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=31.8 body=
+2025-11-23 16:53:29,677 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=8.0 body=
+2025-11-23 16:53:29,694 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:53:40,532 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=7.8 body=
+2025-11-23 16:53:40,547 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:54:00,260 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=11.7 body=
+2025-11-23 16:54:00,461 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:55:02,547 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=5.1 body=
+2025-11-23 16:55:02,564 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:55:06,266 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=34.6 body=
+2025-11-23 16:55:07,367 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=108.7 body=
+2025-11-23 16:55:10,581 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=7.2 body=
+2025-11-23 16:55:10,593 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:55:55,888 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=4.6 body=
+2025-11-23 16:55:55,903 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:56:45,217 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=20.0 body=
+2025-11-23 16:56:46,257 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=42.1 body=
+2025-11-23 16:56:53,422 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=6.1 body=
+2025-11-23 16:56:53,436 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:57:39,324 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=17.3 body=
+2025-11-23 16:57:40,353 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=63.0 body=
+2025-11-23 16:57:43,706 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=6.0 body=
+2025-11-23 16:57:43,727 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:58:04,272 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=10.1 body=
+2025-11-23 16:58:05,517 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=10.6 body=
+2025-11-23 16:58:05,532 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 16:59:24,199 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=41.6 body=
+2025-11-23 16:59:25,383 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=45.5 body=
+2025-11-23 17:00:12,840 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=58.5 body=
+2025-11-23 17:00:14,045 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=56.0 body=
+2025-11-23 17:01:15,852 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=31.9 body=
+2025-11-23 17:01:16,853 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=34.1 body=
+2025-11-23 17:03:25,166 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=72.2 body=
+2025-11-23 17:03:26,137 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=69.8 body=
+2025-11-23 17:06:05,736 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=6.1 body=
+2025-11-23 17:06:05,745 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 17:06:18,619 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=5.0 body=
+2025-11-23 17:06:18,629 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 17:06:32,188 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=21.5 body=
+2025-11-23 17:06:32,619 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=22.2 body=
+2025-11-23 17:06:32,878 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=19.4 body=
+2025-11-23 17:06:45,910 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=4.7 body=
+2025-11-23 17:06:45,921 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 17:07:18,215 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=10.0 body=
+2025-11-23 17:07:18,284 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 17:08:10,539 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=28.6 body=
+2025-11-23 17:08:11,560 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=111.2 body=
+2025-11-23 17:08:12,609 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=11.4 body=
+2025-11-23 17:08:12,632 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 17:08:53,034 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=4.5 body=
+2025-11-23 17:08:53,043 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 17:10:23,724 INFO kibegi GET /api/v1/classmates/ status=404 user=anon time_ms=5.2 body=
+2025-11-23 17:10:23,735 WARNING django.request Not Found: /api/v1/classmates/
+2025-11-23 17:12:21,756 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=35.5 body=
+2025-11-23 17:15:30,342 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=45.9 body=
+2025-11-23 17:15:30,708 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=11.6 body=
+2025-11-23 17:15:47,218 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=60.8 body=
+2025-11-23 17:15:47,320 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=23.9 body=
+2025-11-23 17:15:54,139 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=6.7 body=
+2025-11-23 17:16:03,251 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=34.1 body=
+2025-11-23 17:16:03,339 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=56.9 body=
+2025-11-23 17:16:04,904 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=25.6 body=
+2025-11-23 17:23:06,522 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=12.0 body=
+2025-11-23 17:23:12,605 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=6.8 body=
+2025-11-23 17:23:21,449 INFO kibegi POST /api/v1/auth/logout/ status=200 user=itslugenge96@gmail.com time_ms=13.7 body=
+2025-11-23 17:25:16,494 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=910.8 body=
+2025-11-23 17:25:19,171 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=11.2 body=
+2025-11-23 17:25:47,964 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=6.2 body=
+2025-11-23 17:28:56,760 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=8.6 body=
+2025-11-23 17:36:38,099 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=13.4 body=
+2025-11-23 17:37:07,181 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=17.0 body=
+2025-11-23 17:37:20,304 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=6.9 body=
+2025-11-23 17:37:48,670 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=7.6 body=
+2025-11-23 17:39:07,179 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=25.6 body=
+2025-11-23 17:39:07,832 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=20.2 body=
+2025-11-23 17:39:46,872 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=25.2 body=
+2025-11-23 17:39:58,274 INFO kibegi POST /api/v1/auth/logout/ status=200 user=itslugenge96@gmail.com time_ms=22.5 body=
+2025-11-23 17:40:21,618 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=935.8 body=
+2025-11-23 17:40:27,315 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=4.4 body=
+2025-11-23 17:40:40,121 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=10.6 body=
+2025-11-23 17:40:52,405 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=7.4 body=
+2025-11-23 17:40:55,248 INFO kibegi GET /api/v1/files/my-uploads/ status=200 user=contact@kwepajua.africa time_ms=8.0 body=
+2025-11-23 17:41:20,170 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=9.4 body=
+2025-11-23 17:42:06,335 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=7.9 body=
+2025-11-23 17:42:21,301 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=11.2 body=
+2025-11-23 17:42:30,305 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=15.8 body=
+2025-11-23 17:42:30,332 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=13.9 body=
+2025-11-23 17:42:30,517 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=7.6 body=
+2025-11-23 17:42:42,654 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=15.4 body=
+2025-11-23 17:42:42,711 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=19.8 body=
+2025-11-23 17:42:43,705 INFO kibegi GET /api/v1/friends/search/?q=its status=200 user=contact@kwepajua.africa time_ms=13.1 body=
+2025-11-23 17:42:51,894 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=13.9 body=
+2025-11-23 17:42:51,898 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=34.8 body=
+2025-11-23 17:43:06,647 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=14.3 body=
+2025-11-23 17:43:07,124 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=8.9 body=
+2025-11-23 17:43:19,998 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=6.8 body=
+2025-11-23 17:43:23,677 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=24.3 body=
+2025-11-23 17:43:23,717 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=16.6 body=
+2025-11-23 17:43:25,246 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=14.0 body=
+2025-11-23 17:43:30,417 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=8.6 body=
+2025-11-23 17:43:41,775 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=8.0 body=
+2025-11-23 17:43:42,215 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=16.1 body=
+2025-11-23 17:43:42,251 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=42.8 body=
+2025-11-23 17:44:03,044 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=104.9 body=
+2025-11-23 17:44:03,219 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=10.3 body=
+2025-11-23 17:44:22,951 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=10.6 body=
+2025-11-23 17:44:23,330 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=9.5 body=
+2025-11-23 17:44:35,797 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=8.4 body=
+2025-11-23 17:44:35,829 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=16.6 body=
+2025-11-23 17:44:53,520 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=27.1 body=
+2025-11-23 17:44:53,630 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=68.7 body=
+2025-11-23 17:46:06,088 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=28.5 body=
+2025-11-23 17:46:06,251 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=18.8 body=
+2025-11-23 17:50:09,509 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=47.9 body=
+2025-11-23 17:50:09,564 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=76.1 body=
+2025-11-23 17:50:28,718 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=18.8 body=
+2025-11-23 17:50:36,896 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=43.9 body=
+2025-11-23 17:50:36,969 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=27.7 body=
+2025-11-23 17:50:37,776 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=13.5 body=
+2025-11-23 17:50:54,611 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=16.9 body=
+2025-11-23 17:50:55,700 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=36.5 body=
+2025-11-23 17:51:17,688 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=8.3 body=
+2025-11-23 17:51:22,391 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=34.0 body=
+2025-11-23 17:51:23,667 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=45.0 body=
+2025-11-23 17:51:40,958 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=8.7 body=
+2025-11-23 17:51:42,088 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=37.4 body=
+2025-11-23 17:52:16,545 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=6.4 body=
+2025-11-23 17:52:30,962 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=20.7 body=
+2025-11-23 17:52:30,964 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=16.5 body=
+2025-11-23 17:52:31,912 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=37.1 body=
+2025-11-23 17:52:45,988 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=6.7 body=
+2025-11-23 17:52:52,640 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=11.8 body=
+2025-11-23 17:52:53,868 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=35.3 body=
+2025-11-23 17:52:54,001 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=25.6 body=
+2025-11-23 17:53:19,521 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=4.1 body=
+2025-11-23 17:53:20,925 INFO kibegi GET /api/v1/friends/search/?q=It status=200 user=contact@kwepajua.africa time_ms=4.4 body=
+2025-11-23 17:53:22,734 INFO kibegi GET /api/v1/friends/search/?q=Itd status=200 user=contact@kwepajua.africa time_ms=3.6 body=
+2025-11-23 17:53:23,731 INFO kibegi GET /api/v1/friends/search/?q=It status=200 user=contact@kwepajua.africa time_ms=4.1 body=
+2025-11-23 17:53:37,439 INFO kibegi GET /api/v1/friends/search/?q=Itnn status=200 user=contact@kwepajua.africa time_ms=4.5 body=
+2025-11-23 17:53:38,295 INFO kibegi GET /api/v1/friends/search/?q=Itnnnn status=200 user=contact@kwepajua.africa time_ms=7.1 body=
+2025-11-23 17:53:42,524 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=5.1 body=
+2025-11-23 17:54:33,078 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=20.6 body=
+2025-11-23 17:55:42,103 INFO kibegi GET /api/v1/friends/search/?q=Con status=200 user=contact@kwepajua.africa time_ms=7.4 body=
+2025-11-23 17:55:44,410 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=21.6 body=
+2025-11-23 17:55:44,413 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=74.3 body=
+2025-11-23 17:55:44,935 INFO kibegi GET /api/v1/friends/search/?q=Con status=200 user=contact@kwepajua.africa time_ms=49.2 body=
+2025-11-23 17:55:57,680 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=9.6 body=
+2025-11-23 17:56:01,490 INFO kibegi GET /api/v1/friends/search/?q=Itsl status=200 user=contact@kwepajua.africa time_ms=11.6 body=
+2025-11-23 17:56:03,508 INFO kibegi GET /api/v1/friends/search/?q=Itslugenge status=200 user=contact@kwepajua.africa time_ms=4.3 body=
+2025-11-23 17:57:25,483 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=13.8 body=
+2025-11-23 17:57:26,009 INFO kibegi GET /api/v1/friends/search/?q=Itslugenge status=200 user=contact@kwepajua.africa time_ms=35.1 body=
+2025-11-23 17:57:26,385 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=31.8 body=
+2025-11-23 17:57:37,171 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=22.7 body=
+2025-11-23 17:57:37,694 INFO kibegi GET /api/v1/friends/search/?q=Itslugenge status=200 user=contact@kwepajua.africa time_ms=31.4 body=
+2025-11-23 17:57:38,156 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=11.1 body=
+2025-11-23 17:57:38,273 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=20.2 body=
+2025-11-23 17:57:57,553 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=49.1 body=
+2025-11-23 17:57:58,118 INFO kibegi GET /api/v1/friends/search/?q=Itslugenge status=200 user=contact@kwepajua.africa time_ms=43.6 body=
+2025-11-23 17:57:58,533 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=29.4 body=
+2025-11-23 17:58:14,989 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=9.7 body=
+2025-11-23 17:58:20,975 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=4.2 body=
+2025-11-23 17:58:26,133 INFO kibegi GET /api/v1/friends/search/?q=Itslugenge status=200 user=contact@kwepajua.africa time_ms=5.4 body=
+2025-11-23 17:58:31,994 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=5.6 body=
+2025-11-23 17:58:39,412 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=6.3 body=
+2025-11-23 17:58:39,424 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 17:58:45,030 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=6.5 body=
+2025-11-23 17:58:45,047 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 17:59:20,907 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=7.6 body=
+2025-11-23 18:00:30,501 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=4.0 body=
+2025-11-23 18:00:30,515 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:02:19,910 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=40.6 body=
+2025-11-23 18:02:20,632 INFO kibegi GET /api/v1/friends/search/?q=Itslugenge status=200 user=contact@kwepajua.africa time_ms=34.1 body=
+2025-11-23 18:02:21,146 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=24.1 body=
+2025-11-23 18:02:21,264 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=16.2 body=
+2025-11-23 18:02:30,125 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=9.3 body=
+2025-11-23 18:02:30,140 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:02:32,102 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=4.5 body=
+2025-11-23 18:02:32,119 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:04:01,731 INFO kibegi GET /api/v1/friends/search/?q=its status=200 user=contact@kwepajua.africa time_ms=8.7 body=
+2025-11-23 18:04:05,254 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=7.9 body=
+2025-11-23 18:04:05,265 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:06:53,999 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=13.1 body=
+2025-11-23 18:06:56,772 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=10.6 body=
+2025-11-23 18:06:57,031 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=15.3 body=
+2025-11-23 18:07:04,662 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=11.7 body=
+2025-11-23 18:07:06,516 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=11.5 body=
+2025-11-23 18:07:06,897 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=19.7 body=
+2025-11-23 18:07:09,695 INFO kibegi GET /api/v1/friends/search/?q=Cont status=200 user=contact@kwepajua.africa time_ms=6.6 body=
+2025-11-23 18:07:22,231 INFO kibegi GET /api/v1/friends/search/?q=Its status=200 user=contact@kwepajua.africa time_ms=7.3 body=
+2025-11-23 18:07:31,893 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=3.9 body=
+2025-11-23 18:07:31,927 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:08:04,950 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=4.2 body=
+2025-11-23 18:08:04,964 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:08:13,497 INFO kibegi GET /api/v1/friends/search/?q=its status=200 user=contact@kwepajua.africa time_ms=6.1 body=
+2025-11-23 18:08:30,026 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=12.8 body=
+2025-11-23 18:08:30,038 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:10:42,927 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=8.2 body=
+2025-11-23 18:10:43,191 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:16:34,204 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=44.4 body=
+2025-11-23 18:16:40,107 INFO kibegi GET /api/v1/friends/search/?q=its status=200 user=contact@kwepajua.africa time_ms=5.9 body=
+2025-11-23 18:16:46,730 INFO kibegi POST /api/v1/friends/add/ status=400 user=contact@kwepajua.africa time_ms=6.1 body=
+2025-11-23 18:16:46,745 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-23 18:17:48,320 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=29.4 body=
+2025-11-23 18:17:49,515 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=7.7 body=
+2025-11-23 18:17:49,644 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=6.3 body=
+2025-11-23 18:21:07,203 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=16.8 body=
+2025-11-23 18:21:07,638 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=15.1 body=
+2025-11-23 18:21:07,780 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=18.9 body=
+2025-11-23 18:21:12,978 INFO kibegi GET /api/v1/friends/?status=pending status=200 user=contact@kwepajua.africa time_ms=5.5 body=
+2025-11-23 18:23:53,978 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=8.6 body=
+2025-11-23 18:23:54,976 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=contact@kwepajua.africa time_ms=20.7 body=
+2025-11-23 18:24:14,158 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=6.7 body=
+2025-11-23 18:24:19,506 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=contact@kwepajua.africa time_ms=24.1 body=
+2025-11-23 18:29:13,849 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=401 user=anon time_ms=1.7 body=
+2025-11-23 18:29:13,867 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 18:29:14,958 INFO kibegi GET /api/v1/files/all/ status=200 user=contact@kwepajua.africa time_ms=15.5 body=
+2025-11-23 18:30:00,822 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=19.1 body=
+2025-11-23 18:30:10,678 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=49.6 body=
+2025-11-23 18:31:02,301 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=13.2 body=
+2025-11-23 18:35:00,120 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=16.6 body=
+2025-11-23 18:35:28,186 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=13.0 body=
+2025-11-23 18:35:40,766 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=12.8 body=
+2025-11-23 18:36:55,686 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=19.6 body=
+2025-11-23 18:37:33,489 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=47.6 body=
+2025-11-23 18:38:32,340 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=61.5 body=
+2025-11-23 18:39:58,552 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=contact@kwepajua.africa time_ms=17.5 body=
+2025-11-23 18:43:24,128 INFO kibegi GET /api/v1/classes/?page_size=100 status=401 user=anon time_ms=2.3 body=
+2025-11-23 18:43:24,148 WARNING django.request Unauthorized: /api/v1/classes/
+2025-11-23 18:44:31,720 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=963.0 body=
+2025-11-23 18:44:33,447 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=itslugenge96@gmail.com time_ms=13.1 body=
+2025-11-23 18:57:20,263 INFO kibegi GET /api/v1/classes/?page_size=100 status=200 user=itslugenge96@gmail.com time_ms=12.5 body=
+2025-11-23 18:57:31,471 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=37.7 body=
+2025-11-23 19:14:05,395 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=16.8 body=
+2025-11-23 19:15:40,796 INFO kibegi GET /api/notifications/ status=404 user=anon time_ms=16.2 body=
+2025-11-23 19:15:40,805 WARNING django.request Not Found: /api/notifications/
+2025-11-23 19:15:41,550 INFO kibegi GET /api/notifications/ status=404 user=anon time_ms=8.2 body=
+2025-11-23 19:15:41,570 WARNING django.request Not Found: /api/notifications/
+2025-11-23 19:17:13,656 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=10.3 body=
+2025-11-23 19:17:38,444 INFO kibegi GET /api/v1/classes/?page=1&page_size=100 status=200 user=itslugenge96@gmail.com time_ms=13.7 body=
+2025-11-23 19:17:51,592 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=12.5 body=
+2025-11-23 19:17:59,122 INFO kibegi DELETE /api/v1/files/FPM0PAP6/permanent-delete/ status=404 user=itslugenge96@gmail.com time_ms=8.8 body=
+2025-11-23 19:17:59,135 WARNING django.request Not Found: /api/v1/files/FPM0PAP6/permanent-delete/
+2025-11-23 19:18:38,814 INFO kibegi GET /api/v1/files/all/ status=200 user=itslugenge96@gmail.com time_ms=28.1 body=
+2025-11-23 19:23:01,694 INFO kibegi GET /api/notifications/ status=404 user=anon time_ms=16.9 body=
+2025-11-23 19:23:01,710 WARNING django.request Not Found: /api/notifications/
+2025-11-23 19:27:54,623 INFO kibegi GET /api/api/v1/uploads/ status=404 user=anon time_ms=34.8 body=
+2025-11-23 19:27:54,649 WARNING django.request Not Found: /api/api/v1/uploads/
+2025-11-23 19:27:55,424 INFO kibegi GET /api/api/v1/uploads/ status=404 user=anon time_ms=9.1 body=
+2025-11-23 19:27:55,440 WARNING django.request Not Found: /api/api/v1/uploads/
+2025-11-23 19:28:07,173 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=7.5 body=
+2025-11-23 19:28:29,793 INFO kibegi GET /api/notifications/ status=404 user=anon time_ms=7.1 body=
+2025-11-23 19:28:29,814 WARNING django.request Not Found: /api/notifications/
+2025-11-23 19:42:55,271 INFO kibegi GET /api/v1/friends/?status=accepted status=200 user=itslugenge96@gmail.com time_ms=9.7 body=
+2025-11-23 19:43:00,139 INFO kibegi GET /api/v1/friends/search/?q=its status=200 user=itslugenge96@gmail.com time_ms=8.1 body=
+2025-11-23 19:43:30,376 INFO kibegi GET /api/notifications/ status=404 user=anon time_ms=7.7 body=
+2025-11-23 19:43:30,392 WARNING django.request Not Found: /api/notifications/

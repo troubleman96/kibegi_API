@@ -8,7 +8,19 @@ Complete file management system with automatic type detection, class-based organ
 - [Models](#models)
 - [API Endpoints](#api-endpoints)
 - [File Upload Flow](#file-upload-flow)
-- [Testing Guide](#testing-guide)
+- [Testing Guide](#tes🛡️ ProtectedRoute check: 
+Object { isAuthenticated: true, isLoading: false, hasUser: true, userEmail: "contact@kwepajua.africa", currentPath: "/upload" }
+ProtectedRoute.tsx:11:11
+✅ ProtectedRoute: Authenticated, rendering protected content... ProtectedRoute.tsx:36:11
+DEBUG: Upload page mounted Upload.tsx:16:11
+🔵 API Request: 
+Object { method: "GET", url: "/v1/classes/", baseURL: "http://192.168.10.144:8000/api", fullURL: "http://192.168.10.144:8000/api/v1/classes/", headers: {…}, data: undefined, params: {…} }
+api.ts:20:13
+🟢 API Response: 
+Object { status: 200, statusText: "OK", url: "/v1/classes/", data: {…} }
+api.ts:41:13
+
+​ting-guide)
 - [File Types & Validation](#file-types--validation)
 
 ---
