@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/v1/friends/', include('friends.urls')),
     path('api/v1/notifications/', include('notifications.urls')),
     path('api/v1/files/', include('files.urls')),
+    path('api/v1/storage/', include('storage.urls')),
     
     # Compatibility shortcuts (deprecated - use /api/v1/auth/ instead)
     path('register/', RegisterAPIView.as_view()),

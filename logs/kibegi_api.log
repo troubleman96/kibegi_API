@@ -2202,3 +2202,191 @@ django.core.exceptions.ImproperlyConfigured: Field name `username` is not valid 
 2025-11-23 19:43:00,139 INFO kibegi GET /api/v1/friends/search/?q=its status=200 user=itslugenge96@gmail.com time_ms=8.1 body=
 2025-11-23 19:43:30,376 INFO kibegi GET /api/notifications/ status=404 user=anon time_ms=7.7 body=
 2025-11-23 19:43:30,392 WARNING django.request Not Found: /api/notifications/
+2025-11-25 05:03:56,605 INFO kibegi GET / status=404 user=anon time_ms=24.3 body=
+2025-11-25 05:03:56,621 WARNING django.request Not Found: /
+2025-11-25 05:03:56,721 INFO kibegi GET /favicon.ico status=404 user=anon time_ms=26.1 body=
+2025-11-25 05:03:56,743 WARNING django.request Not Found: /favicon.ico
+2025-11-25 05:04:06,851 INFO kibegi GET /swagger/ status=404 user=anon time_ms=11.1 body=
+2025-11-25 05:04:06,874 WARNING django.request Not Found: /swagger/
+2025-11-25 05:04:15,280 INFO kibegi GET /swagger/docs status=404 user=anon time_ms=6.0 body=
+2025-11-25 05:04:15,291 WARNING django.request Not Found: /swagger/docs
+2025-11-25 05:04:33,427 INFO kibegi GET /docs status=404 user=anon time_ms=19.7 body=
+2025-11-25 05:04:33,442 WARNING django.request Not Found: /docs
+2025-11-25 05:04:44,183 INFO kibegi GET /docs/ status=404 user=anon time_ms=5.0 body=
+2025-11-25 05:04:44,199 WARNING django.request Not Found: /docs/
+2025-11-25 05:05:01,462 INFO kibegi GET /api/docs status=301 user=anon time_ms=14.1 body=
+2025-11-25 05:05:01,539 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=50.4 body=
+2025-11-25 05:05:03,423 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=239.7 body=
+2025-11-25 05:05:59,530 INFO kibegi POST /api/v1/timetable/upload/ status=401 user=anon time_ms=1.0 body=
+2025-11-25 05:05:59,543 WARNING django.request Unauthorized: /api/v1/timetable/upload/
+2025-11-25 05:06:43,058 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1053.3 body=
+2025-11-25 05:07:10,595 INFO kibegi POST /api/v1/timetable/upload/ status=400 user=itslugenge96@gmail.com time_ms=12.7 body=
+2025-11-25 05:07:10,612 WARNING django.request Bad Request: /api/v1/timetable/upload/
+2025-11-25 05:12:30,914 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=36.2 body=
+2025-11-25 05:12:31,734 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=239.3 body=
+2025-11-25 05:13:15,969 ERROR kibegi Error in timetable processing: No PDF library found. Please install pdfplumber or PyPDF2: pip install pdfplumber
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 22, in _initialize_pdf_library
+    import pdfplumber
+ModuleNotFoundError: No module named 'pdfplumber'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 27, in _initialize_pdf_library
+    import PyPDF2
+ModuleNotFoundError: No module named 'PyPDF2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 384, in process_timetable_upload
+    pdf_processor = PDFProcessor()
+                    ^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 17, in __init__
+    self._initialize_pdf_library()
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 31, in _initialize_pdf_library
+    raise ImportError(
+ImportError: No PDF library found. Please install pdfplumber or PyPDF2: pip install pdfplumber
+2025-11-25 05:13:15,975 ERROR kibegi Error processing timetable: No PDF library found. Please install pdfplumber or PyPDF2: pip install pdfplumber
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 22, in _initialize_pdf_library
+    import pdfplumber
+ModuleNotFoundError: No module named 'pdfplumber'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 27, in _initialize_pdf_library
+    import PyPDF2
+ModuleNotFoundError: No module named 'PyPDF2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/views.py", line 89, in post
+    process_timetable_upload(upload)
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 384, in process_timetable_upload
+    pdf_processor = PDFProcessor()
+                    ^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 17, in __init__
+    self._initialize_pdf_library()
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 31, in _initialize_pdf_library
+    raise ImportError(
+ImportError: No PDF library found. Please install pdfplumber or PyPDF2: pip install pdfplumber
+2025-11-25 05:13:15,980 INFO kibegi POST /api/v1/timetable/upload/ status=500 user=itslugenge96@gmail.com time_ms=79.6 body=
+2025-11-25 05:13:16,000 ERROR django.request Internal Server Error: /api/v1/timetable/upload/
+2025-11-25 05:14:25,989 INFO kibegi Using pdfplumber for PDF processing
+2025-11-25 05:14:41,211 INFO kibegi Using pdfplumber for PDF processing
+2025-11-25 05:15:26,400 INFO kibegi POST /api/v1/timetable/upload/ status=201 user=itslugenge96@gmail.com time_ms=45303.8 body=
+2025-11-25 05:28:55,225 INFO kibegi Using pdfplumber for PDF processing
+2025-11-25 05:29:38,688 INFO kibegi POST /api/v1/timetable/upload/ status=201 user=itslugenge96@gmail.com time_ms=43629.7 body=
+2025-11-25 05:30:35,464 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=31.4 body=
+2025-11-25 05:30:36,592 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=421.4 body=
+2025-11-25 05:31:04,274 INFO kibegi Using pdfplumber for PDF processing
+2025-11-25 05:31:54,829 INFO kibegi POST /api/v1/timetable/upload/ status=201 user=itslugenge96@gmail.com time_ms=50593.3 body=
+2025-11-25 05:41:10,829 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=44.1 body=
+2025-11-25 05:41:11,988 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=375.0 body=
+2025-11-25 05:41:49,840 INFO kibegi Using pdfplumber for PDF processing
+2025-11-25 05:42:13,392 INFO kibegi Processing timetable for class: OD23IT
+2025-11-25 05:42:33,674 INFO kibegi Narrowing search to class: OD23IT
+2025-11-25 05:42:33,675 INFO kibegi Found class 'OD23IT' on page 113
+2025-11-25 05:42:33,681 INFO kibegi Successfully extracted 14 entries for class 'OD23IT'
+2025-11-25 05:42:33,886 INFO kibegi POST /api/v1/timetable/upload/ status=201 user=itslugenge96@gmail.com time_ms=44247.8 body=
+2025-11-25 06:19:18,330 INFO kibegi POST /api/v1/timetable/upload/ status=401 user=anon time_ms=54.5 body=
+2025-11-25 06:19:18,344 WARNING django.request Unauthorized: /api/v1/timetable/upload/
+2025-11-25 06:19:50,021 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=2.0 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-25 06:19:50,038 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-25 06:20:07,888 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1049.5 body=
+2025-11-25 06:20:37,308 INFO kibegi Using pdfplumber for PDF processing
+2025-11-25 06:21:00,587 INFO kibegi Processing timetable for class: OD23IT
+2025-11-25 06:21:25,462 INFO kibegi Narrowing search to class: OD23IT (base: OD23IT)
+2025-11-25 06:21:25,463 WARNING kibegi Class 'OD23IT' or its variations not found in any page
+2025-11-25 06:21:25,463 ERROR kibegi Error in timetable processing: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 966, in process_timetable_upload
+    raise ValueError(
+ValueError: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+2025-11-25 06:21:25,489 ERROR kibegi Error processing timetable: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/views.py", line 89, in post
+    process_timetable_upload(upload)
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 966, in process_timetable_upload
+    raise ValueError(
+ValueError: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+2025-11-25 06:21:25,493 INFO kibegi POST /api/v1/timetable/upload/ status=500 user=itslugenge96@gmail.com time_ms=48342.3 body=
+2025-11-25 06:21:25,506 ERROR django.request Internal Server Error: /api/v1/timetable/upload/
+2025-11-25 06:21:36,708 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=42.7 body=
+2025-11-25 06:21:37,522 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=298.2 body=
+2025-11-25 06:22:07,025 INFO kibegi POST /api/v1/timetable/upload/ status=400 user=itslugenge96@gmail.com time_ms=13.0 body=
+2025-11-25 06:22:07,044 WARNING django.request Bad Request: /api/v1/timetable/upload/
+2025-11-25 06:22:18,861 INFO kibegi Using pdfplumber for PDF processing
+2025-11-25 06:22:41,463 INFO kibegi Processing timetable for class: OD23IT
+2025-11-25 06:23:03,625 INFO kibegi Narrowing search to class: OD23IT (base: OD23IT)
+2025-11-25 06:23:03,626 WARNING kibegi Class 'OD23IT' or its variations not found in any page
+2025-11-25 06:23:03,627 ERROR kibegi Error in timetable processing: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 966, in process_timetable_upload
+    raise ValueError(
+ValueError: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+2025-11-25 06:23:03,646 ERROR kibegi Error processing timetable: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/views.py", line 89, in post
+    process_timetable_upload(upload)
+  File "/home/troubleman/projects/Kibegi/Backend/timetable/services.py", line 966, in process_timetable_upload
+    raise ValueError(
+ValueError: Class 'OD23IT' not found in the PDF. Please verify the class name and try again.
+2025-11-25 06:23:03,649 INFO kibegi POST /api/v1/timetable/upload/ status=500 user=itslugenge96@gmail.com time_ms=44824.5 body=
+2025-11-25 06:23:03,664 ERROR django.request Internal Server Error: /api/v1/timetable/upload/
+2025-11-25 10:01:43,920 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=49.3 body=
+2025-11-25 10:01:44,775 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=312.9 body=
+2025-11-25 10:02:26,411 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1106.5 body=
+2025-11-25 10:03:07,099 INFO kibegi Created storage record for user itslugenge96@gmail.com with 50.0MB quota
+2025-11-25 10:03:07,115 INFO kibegi Updated storage for itslugenge96@gmail.com: 2.81MB / 50.0MB (5.62%)
+2025-11-25 10:03:07,177 ERROR django.request Internal Server Error: /api/v1/storage/
+Traceback (most recent call last):
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/renderers.py", line 100, in render
+    ret = json.dumps(
+          ^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/utils/json.py", line 25, in dumps
+    return json.dumps(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/troubleman/projects/Kibegi/Backend/venv/lib/python3.12/site-packages/rest_framework/utils/encoders.py", line 67, in default
+    return super().default(obj)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type Response is not JSON serializable
+2025-11-25 10:03:07,185 INFO kibegi GET /api/v1/storage/ status=500 user=itslugenge96@gmail.com time_ms=106.5 body=
+2025-11-25 10:05:17,097 INFO kibegi Updated storage for itslugenge96@gmail.com: 2.81MB / 50.00MB (5.62%)
+2025-11-25 10:05:17,109 INFO kibegi GET /api/v1/storage/ status=500 user=itslugenge96@gmail.com time_ms=113.4 body=
+2025-11-25 10:05:17,191 ERROR django.request Internal Server Error: /api/v1/storage/
+2025-11-25 10:05:17,884 INFO kibegi Updated storage for itslugenge96@gmail.com: 2.81MB / 50.00MB (5.62%)
+2025-11-25 10:05:17,912 INFO kibegi GET /api/v1/storage/ status=500 user=itslugenge96@gmail.com time_ms=58.3 body=
+2025-11-25 10:05:18,054 ERROR django.request Internal Server Error: /api/v1/storage/
+2025-11-25 10:08:33,251 INFO kibegi Created storage record for user itslugenge96@icloud.com with 50.0MB quota
+2025-11-25 10:08:51,121 INFO kibegi Created storage record for user itslgenge01@gmail.com with 50.0MB quota
+2025-11-25 10:08:51,132 INFO kibegi Created storage record for user contact@kwepajua.africa with 50.0MB quota
+2025-11-25 10:09:16,891 INFO kibegi Updated storage for itslugenge96@gmail.com: 2.81MB / 50.00MB (5.62%)
+2025-11-25 10:09:16,896 INFO kibegi GET /api/v1/storage/ status=200 user=itslugenge96@gmail.com time_ms=110.1 body=
