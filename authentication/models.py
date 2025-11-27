@@ -1,7 +1,19 @@
+import os
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+
+def profile_image_path(instance, filename):
+    """
+    Generate upload path for user profile images.
+    
+    Format: profiles/{user_id}/{filename}
+    """
+    ext = filename.split('.')[-1]
+    filename = f"profile.{ext}"
+    return f'profiles/{instance.id}/{filename}'
 
 
 class UserManager(BaseUserManager):
@@ -38,6 +50,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     full_name = models.CharField(_('full name'), max_length=255)
     user_type = models.CharField(_('user type'), max_length=10, choices=USER_TYPE_CHOICES, default='student')
+    profile_image = models.ImageField(
+        _('profile image'),
+        upload_to=profile_image_path,
+        null=True,
+        blank=True,
+        help_text="User profile picture. Upload an image file."
+    )
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff status'), default=False)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)

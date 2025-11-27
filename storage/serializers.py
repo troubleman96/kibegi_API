@@ -106,3 +106,4 @@ class StorageUsageHistorySerializer(serializers.ModelSerializer):
         """Convert bytes to megabytes"""
         return round(obj.used_storage_bytes / (1024 * 1024), 2)
 
+

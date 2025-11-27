@@ -234,11 +234,11 @@ All endpoints require authentication (JWT token).
 
 ### 2. Get Class Details
 
-**Endpoint:** `GET /api/v1/classes/{class_code}/`
+**Endpoint:** `GET /api/v1/classes/{id}/`
 
 **Authentication:** Required
 
-**Description:** Get detailed information about a specific class.
+**Description:** Get detailed information about a specific class, including comprehensive upload statistics and recent files. This endpoint provides rich data for building class dashboard UIs that show upload activity and help students see which lecturers are actively sharing materials.
 
 **Success Response (200):**
 ```json
@@ -249,6 +249,7 @@ All endpoints require authentication (JWT token).
     "name": "Advanced Django Development",
     "description": "Learn advanced Django patterns",
     "class_code": "XYZ78901",
+    "is_public": false,
     "is_verified": true,
     "creator": "uuid",
     "creator_name": "John Lecturer",
@@ -256,22 +257,113 @@ All endpoints require authentication (JWT token).
     "member_count": 25,
     "is_member": true,
     "user_role": "student",
-    "is_deleted": false,
     "created_at": "2025-11-23T10:00:00Z",
-    "updated_at": "2025-11-23T10:00:00Z"
+    "updated_at": "2025-11-23T10:00:00Z",
+    
+    "uploads_summary": {
+      "total_uploads": 15,
+      "uploads_by_type": {
+        "document": 8,
+        "presentation": 4,
+        "image": 2,
+        "spreadsheet": 1
+      },
+      "total_size_bytes": 52428800,
+      "total_size_mb": 50.0,
+      "lecturers_with_uploads": 2,
+      "active_contributors": 3
+    },
+    
+    "recent_uploads": [
+      {
+        "id": "uuid",
+        "file_name": "Week5_Lecture_Notes.pdf",
+        "file_type": "document",
+        "file_size": 2048576,
+        "file_code": "ABC12345",
+        "uploader_id": "uuid",
+        "uploader_name": "John Lecturer",
+        "uploader_type": "lecturer",
+        "created_at": "2025-11-25T14:30:00Z"
+      },
+      {
+        "id": "uuid",
+        "file_name": "Assignment3_Solution.pptx",
+        "file_type": "presentation",
+        "file_size": 5242880,
+        "file_code": "DEF67890",
+        "uploader_id": "uuid",
+        "uploader_name": "Jane Lecturer",
+        "uploader_type": "lecturer",
+        "created_at": "2025-11-24T10:15:00Z"
+      }
+    ],
+    
+    "uploader_stats": [
+      {
+        "uploader_id": "uuid",
+        "uploader_name": "John Lecturer",
+        "uploader_type": "lecturer",
+        "upload_count": 8,
+        "is_active_contributor": true
+      },
+      {
+        "uploader_id": "uuid",
+        "uploader_name": "Jane Lecturer",
+        "uploader_type": "lecturer",
+        "upload_count": 5,
+        "is_active_contributor": true
+      },
+      {
+        "uploader_id": "uuid",
+        "uploader_name": "Student One",
+        "uploader_type": "student",
+        "upload_count": 2,
+        "is_active_contributor": false
+      }
+    ]
   }
 }
 ```
 
 **Error Responses:**
-- `404` - Class not found or deleted
+- `403` - User doesn't have access to this class
+- `404` - Class not found
 
-**Computed Fields:**
+**Response Fields:**
+
+*Basic Class Info:*
 - `is_verified` - True for official lecturer classes, False for student study groups
 - `creator_type` - 'lecturer' or 'student' - who created the class
 - `member_count` - Total members in class
 - `is_member` - Whether current user is a member
 - `user_role` - Current user's role ('lecturer' or 'student') or null
+
+*Uploads Summary (`uploads_summary`):*
+- `total_uploads` - Total number of non-deleted uploads in the class
+- `uploads_by_type` - Dictionary of upload counts by file type (document, image, video, etc.)
+- `total_size_bytes` - Total size of all uploads in bytes
+- `total_size_mb` - Total size in megabytes (rounded to 2 decimal places)
+- `lecturers_with_uploads` - Number of lecturers who have uploaded at least one file
+- `active_contributors` - Number of members with more than 2 uploads
+
+*Recent Uploads (`recent_uploads`):*
+- Returns the 10 most recent non-deleted uploads
+- Each upload includes: file info, uploader details, and upload timestamp
+- Sorted by `created_at` descending (newest first)
+
+*Uploader Statistics (`uploader_stats`):*
+- List of all members who have uploaded files to this class
+- Sorted by `upload_count` descending (most uploads first)
+- `is_active_contributor` - True if the user has uploaded more than 2 files
+- Useful for showing students which lecturers are actively sharing materials
+
+**UI Usage Tips:**
+1. Use `uploads_summary.lecturers_with_uploads` to show how many instructors are actively contributing
+2. Use `uploader_stats` to display a leaderboard of contributors
+3. Use `is_active_contributor` to highlight members who consistently share materials
+4. Use `recent_uploads` to show a quick preview of latest class materials
+5. Use `uploads_by_type` to show a breakdown chart of file types
 
 ---
 

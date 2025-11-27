@@ -77,6 +77,23 @@ def display_name() -> str:
 
 All endpoints require authentication. Base path: `/api/v1/friends/`
 
+### Endpoints Overview
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | List all friends |
+| GET | `/search/?q=` | Search users |
+| GET | `/requests/incoming/` | List incoming friend requests |
+| GET | `/requests/sent/` | List sent friend requests |
+| POST | `/add/` | Send friend request |
+| POST | `/{id}/accept/` | Accept friend request |
+| POST | `/{id}/decline/` | Decline friend request |
+| POST | `/{id}/cancel/` | Cancel sent request |
+| PATCH | `/{id}/nickname/` | Update friend nickname |
+| DELETE | `/{id}/` | Remove friend |
+
+---
+
 ### 1. List Friends
 
 **GET** `/api/v1/friends/`
@@ -146,7 +163,71 @@ GET /api/v1/friends/?status=all
 
 ---
 
-### 2. Send Friend Request
+### 2. List Incoming Friend Requests
+
+**GET** `/api/v1/friends/requests/incoming/`
+
+Get all pending friend requests sent TO you (waiting for your response).
+
+#### Success Response (200)
+
+```json
+{
+    "success": true,
+    "message": "Found 3 incoming friend request(s)",
+    "data": [
+        {
+            "id": 15,
+            "sender_id": "uuid-of-sender",
+            "sender_email": "alice@example.com",
+            "sender_name": "Alice Wonder",
+            "sender_type": "student",
+            "recipient_id": "uuid-of-you",
+            "recipient_email": "you@example.com",
+            "recipient_name": "Your Name",
+            "recipient_type": "lecturer",
+            "status": "pending",
+            "created_at": "2025-11-25T10:00:00Z"
+        }
+    ]
+}
+```
+
+---
+
+### 3. List Sent Friend Requests
+
+**GET** `/api/v1/friends/requests/sent/`
+
+Get all pending friend requests you have sent (waiting for others to accept).
+
+#### Success Response (200)
+
+```json
+{
+    "success": true,
+    "message": "Found 2 sent friend request(s)",
+    "data": [
+        {
+            "id": 20,
+            "sender_id": "uuid-of-you",
+            "sender_email": "you@example.com",
+            "sender_name": "Your Name",
+            "sender_type": "lecturer",
+            "recipient_id": "uuid-of-recipient",
+            "recipient_email": "bob@example.com",
+            "recipient_name": "Bob Builder",
+            "recipient_type": "student",
+            "status": "pending",
+            "created_at": "2025-11-24T15:30:00Z"
+        }
+    ]
+}
+```
+
+---
+
+### 4. Send Friend Request
 
 **POST** `/api/v1/friends/add/`
 
@@ -207,7 +288,7 @@ Provide either `user_id` OR `email`:
 
 ---
 
-### 3. Search Users
+### 5. Search Users
 
 **GET** `/api/v1/friends/search/`
 
@@ -260,7 +341,7 @@ GET /api/v1/friends/search/?q=john
 
 ---
 
-### 4. Accept Friend Request
+### 6. Accept Friend Request
 
 **POST** `/api/v1/friends/{friendship_id}/accept/`
 
@@ -307,7 +388,73 @@ Empty (no body required)
 
 ---
 
-### 5. Update Friend Nickname
+### 7. Decline Friend Request
+
+**POST** `/api/v1/friends/{friendship_id}/decline/`
+
+Decline (reject) a pending friend request sent to you. The request will be permanently deleted.
+
+#### URL Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `friendship_id` | integer | ID of the friend request to decline |
+
+#### Request Body
+
+Empty (no body required)
+
+#### Success Response (200)
+
+```json
+{
+    "success": true,
+    "message": "Friend request declined successfully"
+}
+```
+
+#### Error Responses
+
+- `400`: Cannot decline an already accepted friend request
+- `403`: You can only decline requests sent to you
+- `404`: Friend request not found
+
+---
+
+### 8. Cancel Sent Friend Request
+
+**POST** `/api/v1/friends/{friendship_id}/cancel/`
+
+Cancel a pending friend request that you sent. Use this to withdraw a request before the recipient responds.
+
+#### URL Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `friendship_id` | integer | ID of the friend request to cancel |
+
+#### Request Body
+
+Empty (no body required)
+
+#### Success Response (200)
+
+```json
+{
+    "success": true,
+    "message": "Friend request cancelled successfully"
+}
+```
+
+#### Error Responses
+
+- `400`: Cannot cancel an already accepted friend request
+- `403`: You can only cancel requests you sent
+- `404`: Friend request not found
+
+---
+
+### 9. Update Friend Nickname
 
 **PATCH** `/api/v1/friends/{friendship_id}/nickname/`
 
@@ -365,11 +512,11 @@ Set or update a custom nickname for your friend.
 
 ---
 
-### 6. Remove Friend
+### 10. Remove Friend
 
 **DELETE** `/api/v1/friends/{friendship_id}/`
 
-Remove a friend or cancel a friend request.
+Remove a friend (unfriend) or delete any friendship.
 
 #### URL Parameters
 
@@ -616,8 +763,30 @@ Business logic is in `FriendService` class:
 
 - **Search**: `search_users()` - Find users by query
 - **Validation**: `can_send_request()` - Check permissions
-- **Queries**: `get_friends_list()`, `get_friend_requests()`
+- **Queries**: `get_friends_list()`, `get_friend_requests()`, `get_sent_requests()`
 - **Creation**: `create_friend_request()` - Create with validation
+
+### Logging
+
+All friend operations are logged using the `kibegi` logger:
+
+```python
+import logging
+logger = logging.getLogger('kibegi')
+```
+
+**Log Levels:**
+- **DEBUG**: Request attempts and query filters
+- **INFO**: Successful operations (requests sent, accepted, declined)
+- **WARNING**: Failed operations (not found, permission denied)
+
+**Example Log Messages:**
+```
+INFO  Friend request sent: alice@example.com -> bob@example.com (ID: 15)
+INFO  Friend request accepted: alice@example.com <-> bob@example.com (ID: 15)
+INFO  Friend request declined: alice@example.com -> bob@example.com (Request ID: 15)
+WARN  Decline friend request denied: User charlie@example.com is not the recipient of request 15
+```
 
 ### Bi-directional Friendships
 
@@ -658,6 +827,6 @@ Potential features for future development:
 
 ---
 
-**Last Updated**: November 2024  
-**Version**: 1.0  
+**Last Updated**: November 2025  
+**Version**: 1.1  
 **Maintainer**: Kibegi Development Team

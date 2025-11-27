@@ -5,6 +5,7 @@ A comprehensive Django REST API for a digital school platform featuring JWT auth
 ## 📋 Table of Contents
 
 - [Quick Start](#-quick-start)
+- [Database Setup](#-database-setup)
 - [API Documentation](#-api-documentation)
 - [Core Features](#-core-features)
 - [Authentication System](#-authentication-system)
@@ -21,7 +22,7 @@ A comprehensive Django REST API for a digital school platform featuring JWT auth
 
 ### Prerequisites
 - Python 3.10+
-- SQLite (default) or PostgreSQL
+- **PostgreSQL 12+** (recommended for production) or SQLite (development)
 - Virtual environment tool (venv)
 
 ### Installation
@@ -48,6 +49,15 @@ A comprehensive Django REST API for a digital school platform featuring JWT auth
    SECRET_KEY=your-secret-key-here
    DEBUG=True
    
+   # Database Configuration (PostgreSQL for production)
+   # Leave unset to use SQLite for development
+   DB_ENGINE=django.db.backends.postgresql
+   DB_NAME=kibegi_db
+   DB_USER=kibegi_user
+   DB_PASSWORD=your_secure_password
+   DB_HOST=localhost
+   DB_PORT=5432
+   
    # Email Configuration (for OTP)
    EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
    EMAIL_HOST=smtp.gmail.com
@@ -61,18 +71,42 @@ A comprehensive Django REST API for a digital school platform featuring JWT auth
    OTP_LENGTH=6
    OTP_EXPIRY_SECONDS=300
    ```
+   
+   **Quick PostgreSQL Setup:**
+   ```bash
+   # Run automated setup script
+   ./setup_postgres.sh
+   
+   # Or see detailed guide
+   cat DATABASE_MIGRATION.md
+   ```
 
-5. **Run migrations:**
+5. **Set up database:**
+   
+   **Option A: PostgreSQL (Production)**
+   ```bash
+   # Run setup script
+   ./setup_postgres.sh
+   
+   # Or manually: See DATABASE_MIGRATION.md
+   ```
+   
+   **Option B: SQLite (Development - Default)**
+   ```bash
+   # No setup needed, SQLite is used by default
+   ```
+
+6. **Run migrations:**
    ```bash
    python manage.py migrate
    ```
 
-6. **Create superuser (for admin access):**
+7. **Create superuser (for admin access):**
    ```bash
    python manage.py createsuperuser
    ```
 
-7. **Start development server:**
+8. **Start development server:**
    ```bash
    python manage.py runserver
    ```

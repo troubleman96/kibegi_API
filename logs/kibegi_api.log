@@ -2390,3 +2390,39 @@ TypeError: Object of type Response is not JSON serializable
 2025-11-25 10:08:51,132 INFO kibegi Created storage record for user contact@kwepajua.africa with 50.0MB quota
 2025-11-25 10:09:16,891 INFO kibegi Updated storage for itslugenge96@gmail.com: 2.81MB / 50.00MB (5.62%)
 2025-11-25 10:09:16,896 INFO kibegi GET /api/v1/storage/ status=200 user=itslugenge96@gmail.com time_ms=110.1 body=
+2025-11-27 18:52:49,879 INFO kibegi GET / status=404 user=anon time_ms=25.0 body=
+2025-11-27 18:52:49,907 WARNING django.request Not Found: /
+2025-11-27 18:52:58,391 INFO kibegi GET /swagger/ status=404 user=anon time_ms=10.0 body=
+2025-11-27 18:52:58,414 WARNING django.request Not Found: /swagger/
+2025-11-27 18:53:05,032 INFO kibegi GET /docs/ status=404 user=anon time_ms=17.4 body=
+2025-11-27 18:53:05,058 WARNING django.request Not Found: /docs/
+2025-11-27 18:53:14,277 INFO kibegi GET /swagger/docs status=404 user=anon time_ms=11.7 body=
+2025-11-27 18:53:14,301 WARNING django.request Not Found: /swagger/docs
+2025-11-27 18:53:25,330 INFO kibegi GET /api/swagger status=404 user=anon time_ms=14.5 body=
+2025-11-27 18:53:25,338 WARNING django.request Not Found: /api/swagger
+2025-11-27 18:53:39,491 INFO kibegi GET /api/schema status=301 user=anon time_ms=16.6 body=
+2025-11-27 18:53:39,909 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=394.8 body=
+2025-11-27 18:54:03,168 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=30.6 body=
+2025-11-27 18:54:04,350 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=254.5 body=
+2025-11-27 18:54:29,055 INFO kibegi POST /api/v1/auth/login/ status=401 user=anon time_ms=92.1 body={"email": "itslugenge96@gmail.com", "password": "*****"}
+2025-11-27 18:54:29,070 WARNING django.request Unauthorized: /api/v1/auth/login/
+2025-11-27 18:54:45,329 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=1099.6 body=
+2025-11-27 18:55:37,972 INFO kibegi GET /api/v1/classes/?page=1&page_size=12 status=200 user=itslugenge96@gmail.com time_ms=19.0 body=
+2025-11-27 18:56:08,692 INFO kibegi GET /api/v1/classes/665f6af4-b52f-415f-ab30-6f0ba182db70/ status=200 user=itslugenge96@gmail.com time_ms=26.8 body=
+2025-11-27 19:03:56,836 INFO kibegi POST /api/v1/classes/410dbfbf-d171-47ac-939d-9a317ce98e5d/leave/ status=400 user=itslugenge96@gmail.com time_ms=6.7 body=
+2025-11-27 19:03:56,856 WARNING django.request Bad Request: /api/v1/classes/410dbfbf-d171-47ac-939d-9a317ce98e5d/leave/
+2025-11-27 19:04:52,768 INFO kibegi DELETE /api/v1/classes/410dbfbf-d171-47ac-939d-9a317ce98e5d/ status=200 user=itslugenge96@gmail.com time_ms=18.5 body=
+2025-11-27 19:05:19,315 INFO kibegi GET /api/v1/friends/?page=1&page_size=12 status=200 user=itslugenge96@gmail.com time_ms=6.4 body=
+2025-11-27 19:06:31,257 INFO kibegi POST /api/v1/friends/add/ status=400 user=itslugenge96@gmail.com time_ms=7.5 body=
+2025-11-27 19:06:31,275 WARNING django.request Bad Request: /api/v1/friends/add/
+2025-11-27 19:09:05,660 INFO kibegi GET /api/v1/notifications/ status=200 user=itslugenge96@gmail.com time_ms=10.3 body=
+2025-11-27 19:13:46,349 INFO kibegi GET /api/docs/ status=200 user=anon time_ms=37.6 body=
+2025-11-27 19:13:47,119 INFO kibegi GET /api/schema/ status=200 user=anon time_ms=333.0 body=
+2025-11-27 19:14:18,418 INFO kibegi User itslugenge96@gmail.com has 1 incoming friend requests
+2025-11-27 19:14:18,423 INFO kibegi GET /api/v1/friends/requests/incoming/?page=1&page_size=2 status=200 user=itslugenge96@gmail.com time_ms=59.5 body=
+2025-11-27 19:15:48,119 INFO kibegi User itslugenge96@gmail.com has 1 sent friend requests
+2025-11-27 19:15:48,125 INFO kibegi GET /api/v1/friends/requests/sent/?page=1&page_size=2 status=200 user=itslugenge96@gmail.com time_ms=10.9 body=
+2025-11-27 19:16:06,980 INFO kibegi Friend request accepted: contact@kwepajua.africa <-> itslugenge96@gmail.com (ID: 3)
+2025-11-27 19:16:06,982 INFO kibegi POST /api/v1/friends/3/accept/ status=200 user=itslugenge96@gmail.com time_ms=27.0 body=
+2025-11-27 20:29:34,648 INFO kibegi Created storage record for user itslugenge96@icloud.com with 50.0MB quota
+2025-11-27 20:29:34,650 INFO kibegi Created storage record for new user: itslugenge96@icloud.com

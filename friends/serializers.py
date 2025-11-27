@@ -140,3 +140,40 @@ class AcceptFriendSerializer(serializers.Serializer):
     Used for Swagger schema generation.
     """
     pass
+
+
+class DeclineFriendSerializer(serializers.Serializer):
+    """
+    Empty serializer for decline action.
+    
+    No input needed - friend request ID comes from URL.
+    Used for Swagger schema generation.
+    """
+    pass
+
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    """
+    Serializer for friend request details.
+    
+    Shows who sent the request and when, with additional context
+    for the UI to display properly.
+    """
+    sender_id = serializers.UUIDField(source='user.id', read_only=True)
+    sender_email = serializers.CharField(source='user.email', read_only=True)
+    sender_name = serializers.CharField(source='user.full_name', read_only=True)
+    sender_type = serializers.CharField(source='user.user_type', read_only=True)
+    recipient_id = serializers.UUIDField(source='friend.id', read_only=True)
+    recipient_email = serializers.CharField(source='friend.email', read_only=True)
+    recipient_name = serializers.CharField(source='friend.full_name', read_only=True)
+    recipient_type = serializers.CharField(source='friend.user_type', read_only=True)
+    
+    class Meta:
+        model = Friendship
+        fields = [
+            'id', 
+            'sender_id', 'sender_email', 'sender_name', 'sender_type',
+            'recipient_id', 'recipient_email', 'recipient_name', 'recipient_type',
+            'status', 'created_at'
+        ]
+        read_only_fields = fields

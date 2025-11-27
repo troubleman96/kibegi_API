@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,12 +92,41 @@ WSGI_APPLICATION = 'kibegi_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Load database configuration from environment variables
+# Defaults to SQLite for development if PostgreSQL not configured
+# To use PostgreSQL, set DB_ENGINE=django.db.backends.postgresql in .env
+DB_ENGINE = config('DB_ENGINE', default='django.db.backends.sqlite3')
+DB_NAME = config('DB_NAME', default='kibegi_db')
+DB_USER = config('DB_USER', default='kibegi_user')
+DB_PASSWORD = config('DB_PASSWORD', default='')
+DB_HOST = config('DB_HOST', default='localhost')
+DB_PORT = config('DB_PORT', default='5432', cast=int)
+
+if DB_ENGINE == 'django.db.backends.postgresql':
+    # PostgreSQL configuration
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': DB_PORT,
+            'OPTIONS': {
+                'connect_timeout': 10,
+            },
+            # Connection pooling settings (optional, for production)
+            'CONN_MAX_AGE': 600,  # 10 minutes
+        }
     }
-}
+else:
+    # SQLite configuration (default for development)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -198,9 +228,11 @@ SPECTACULAR_SETTINGS = {
     
     # API grouping
     'TAGS': [
+        {'name': 'Search', 'description': 'Global search across all apps'},
         {'name': 'Authentication', 'description': 'User authentication and profile management'},
         {'name': 'Classes', 'description': 'Class management and membership'},
         {'name': 'Uploads', 'description': 'File upload and management'},
+        {'name': 'Friends', 'description': 'Friend management and requests'},
         {'name': 'Storage', 'description': 'User storage usage tracking and management'},
     ],
 }
@@ -219,8 +251,6 @@ SIMPLE_JWT = {
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Load email and other secrets from environment (.env) using python-decouple
-from decouple import config
-
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)

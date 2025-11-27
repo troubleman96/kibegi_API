@@ -10,6 +10,7 @@ Complete JWT-based authentication system with email verification, password reset
 - [Authentication Flow](#authentication-flow)
 - [Testing Guide](#testing-guide)
 - [Security Features](#security-features)
+- [Email Templates](#email-templates)
 
 ---
 
@@ -20,6 +21,7 @@ The authentication app provides a secure, production-ready authentication system
 - Email verification with OTP
 - Password reset functionality
 - User profile management
+- **Beautiful HTML email templates** with clear OTP display
 - Bilingual support (English/Swahili)
 - Rate limiting and security measures
 
@@ -750,6 +752,163 @@ In production with real SMTP configured, OTPs are sent to actual email addresses
 - **CORS Headers:** Configured for specific origins
 - **CSRF Tokens:** DRF uses token authentication instead
 - **Same-Site Cookies:** Secure cookie configuration
+
+---
+
+## Email Templates
+
+All authentication emails are sent using beautifully formatted HTML templates with fallback plain text versions.
+
+### Email Types
+
+#### 1. Registration Verification Email
+**Subject:** 🔐 Your Kibegi Registration Code
+**Sent when:** User registers a new account
+
+**Example:**
+```
+📚 Kibegi
+────────────────────────────────
+
+Welcome to Kibegi!
+
+Hello Thomas Moe! 👋
+
+Thank you for registering with Kibegi. To complete your 
+account verification, please use the following One-Time 
+Password (OTP):
+
+        ┌─────────────────────┐
+        │      379924         │
+        └─────────────────────┘
+
+⚠️ Important:
+• This OTP is valid for 10 minutes only
+• Do not share this code with anyone
+• If you didn't request this verification, please ignore this email
+
+Once verified, you'll be able to access all Kibegi features 
+including class management, file uploads, and collaborative learning!
+
+────────────────────────────────
+This is an automated message from Kibegi.
+Please do not reply to this email.
+
+© 2025 Kibegi. All rights reserved.
+```
+
+#### 2. Password Reset Email
+**Subject:** 🔑 Kibegi Password Reset Code
+**Sent when:** User requests password reset
+
+**Example:**
+```
+📚 Kibegi
+────────────────────────────────
+
+Password Reset Request
+
+Hello Thomas Moe! 👋
+
+We received a request to reset your password. Use the 
+following One-Time Password (OTP) to proceed:
+
+        ┌─────────────────────┐
+        │      482617         │
+        └─────────────────────┘
+
+⚠️ Important:
+• This OTP is valid for 10 minutes only
+• Do not share this code with anyone
+• If you didn't request this verification, please ignore this email
+
+After verification, you'll be able to set a new password 
+for your account.
+
+────────────────────────────────
+© 2025 Kibegi. All rights reserved.
+```
+
+#### 3. Resend OTP Email
+**Subject:** 🔐 Your New Kibegi Registration Code / 🔑 Your New Kibegi Password Reset Code
+**Sent when:** User requests a new OTP code
+
+**Additional message included:**
+> "This is a new code. Your previous code has been invalidated."
+
+### Email Features
+
+| Feature | Description |
+|---------|-------------|
+| **HTML + Plain Text** | Both versions sent for maximum compatibility |
+| **Responsive Design** | Looks great on desktop and mobile |
+| **Preview Text** | Shows OTP code in email client preview |
+| **Clear OTP Display** | Large, prominent OTP code with monospace font |
+| **Security Notices** | Important warnings about OTP validity and security |
+| **Branding** | Consistent Kibegi branding with logo and colors |
+| **Accessibility** | Proper semantic HTML for screen readers |
+
+### Email Configuration
+
+Add these to your `.env` file:
+
+```env
+# Email Configuration
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+DEFAULT_FROM_EMAIL=Kibegi <your-email@gmail.com>
+```
+
+**For Gmail:**
+1. Enable 2-Factor Authentication
+2. Generate an App Password at https://myaccount.google.com/apppasswords
+3. Use the App Password as `EMAIL_HOST_PASSWORD`
+
+### EmailService Class
+
+The `EmailService` class in `services.py` handles all email sending:
+
+```python
+from authentication.services import EmailService
+
+# Send registration OTP
+EmailService.send_registration_otp(
+    email="user@example.com",
+    user_name="Thomas Moe",
+    otp_code="379924",
+    expiry_minutes=10
+)
+
+# Send password reset OTP
+EmailService.send_password_reset_otp(
+    email="user@example.com",
+    user_name="Thomas Moe",
+    otp_code="482617",
+    expiry_minutes=10
+)
+
+# Send resend OTP (for registration or password reset)
+EmailService.send_resend_otp(
+    email="user@example.com",
+    user_name="Thomas Moe",
+    otp_code="159753",
+    expiry_minutes=10,
+    purpose="registration"  # or "password_reset"
+)
+```
+
+### Customizing Email Templates
+
+Edit the `EmailService` class in `authentication/services.py` to customize:
+
+- **Brand Colors:** Modify `PRIMARY_COLOR`, `PRIMARY_DARK`, etc.
+- **Logo/Brand:** Update the header section in `get_base_template()`
+- **OTP Display:** Modify `get_otp_content()` for different layouts
+- **Footer:** Update copyright and contact information
 
 ---
 

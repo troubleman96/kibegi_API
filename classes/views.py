@@ -5,8 +5,8 @@ from django.db.models import Count
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from .models import Class, Membership
 from .serializers import (
-    ClassSerializer, ClassListSerializer, JoinClassSerializer,
-    MemberSerializer, MembershipSerializer
+    ClassSerializer, ClassListSerializer, ClassDetailSerializer,
+    JoinClassSerializer, MemberSerializer, MembershipSerializer
 )
 from .services import ClassService
 from core.utils.responses import success_response, error_response
@@ -59,10 +59,30 @@ class ClassListCreateAPIView(generics.ListCreateAPIView):
 
 @extend_schema(tags=["Classes"])
 class ClassDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    """Retrieve, update or delete a class"""
-    serializer_class = ClassSerializer
+    """
+    Retrieve, update or delete a class.
+    
+    GET: Returns detailed class information including:
+    - Basic class details (name, code, creator, etc.)
+    - Upload statistics (total uploads, by type, size)
+    - Recent uploads (last 10 files)
+    - Uploader statistics (who uploaded what, active contributors)
+    
+    This endpoint is designed to provide rich data for class dashboard UI,
+    showing upload activity and making it easy for students to see
+    which lecturers are actively sharing materials.
+    """
     permission_classes = [IsAuthenticated]
     queryset = Class.objects.all()
+    
+    def get_serializer_class(self):
+        """
+        Use ClassDetailSerializer for retrieve (GET) to include uploads info.
+        Use ClassSerializer for update (PUT/PATCH) operations.
+        """
+        if self.request.method == 'GET':
+            return ClassDetailSerializer
+        return ClassSerializer
     
     def get_object(self):
         obj = super().get_object()
@@ -73,8 +93,16 @@ class ClassDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return obj
     
     def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve class details with uploads information.
+        
+        Returns comprehensive class data including:
+        - uploads_summary: Statistics about all uploads in the class
+        - recent_uploads: List of 10 most recent uploads
+        - uploader_stats: Per-uploader statistics with active contributor flag
+        """
         instance = self.get_object()
-        serializer = self.get_serializer(instance)
+        serializer = self.get_serializer(instance, context={'request': request})
         return success_response(
             message="Class retrieved successfully",
             data=serializer.data

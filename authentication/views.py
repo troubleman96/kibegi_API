@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
@@ -19,11 +18,13 @@ from .serializers import (
     PasswordResetRequestSerializer,
     PasswordResetConfirmSerializer,
     UserProfileSerializer,
+    ProfileImageUploadSerializer,
     OTPVerifySerializer,
     ResendOTPSerializer,
     LogoutSerializer,
     ChangePasswordSerializer,
 )
+from .services import EmailService
 from core.utils.responses import success_response, error_response
 
 User = get_user_model()
@@ -71,14 +72,15 @@ class RegisterAPIView(APIView):
 
         otp = PasswordResetOTP.objects.create(email=email, code=otp_code, expires_at=expires_at)
 
-        subject = _('Your Kibegi registration code')
-        message = _('Your registration verification code is: {code}. It will expire in {mins} minutes.').format(code=otp_code, mins=int(expiry_seconds / 60))
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
-        try:
-            if from_email:
-                send_mail(subject, message, from_email, [email])
-        except Exception:
-            pass
+        # Send beautiful HTML email with OTP
+        expiry_minutes = int(expiry_seconds / 60)
+        user_name = user.full_name or email.split('@')[0]
+        EmailService.send_registration_otp(
+            email=email,
+            user_name=user_name,
+            otp_code=otp_code,
+            expiry_minutes=expiry_minutes
+        )
 
         return success_response(message=_('Registration initiated. Check your email for the verification code.'), status_code=status.HTTP_201_CREATED)
 
@@ -146,18 +148,21 @@ class PasswordResetRequestAPIView(APIView):
             expires_at=expires_at,
         )
 
-        # attempt to send email; fail silently but log in response if needed
-        subject = _('Your Kibegi password reset code')
-        message = _(
-            'Your password reset code is: {code}. It will expire in {mins} minutes.'
-        ).format(code=otp_code, mins=int(expiry_seconds / 60))
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+        # Send beautiful HTML email with OTP
+        # Get user name if user exists
+        expiry_minutes = int(expiry_seconds / 60)
         try:
-            if from_email:
-                send_mail(subject, message, from_email, [email])
-        except Exception:
-            # don't expose email errors directly; return generic message
-            pass
+            user = User.objects.get(email=email)
+            user_name = user.full_name or email.split('@')[0]
+        except User.DoesNotExist:
+            user_name = email.split('@')[0]
+        
+        EmailService.send_password_reset_otp(
+            email=email,
+            user_name=user_name,
+            otp_code=otp_code,
+            expiry_minutes=expiry_minutes
+        )
 
         return success_response(message=_('Password reset token has been sent to your email'))
 
@@ -272,16 +277,21 @@ class PasswordResetResendAPIView(APIView):
 
         otp = PasswordResetOTP.objects.create(email=email, code=otp_code, expires_at=expires_at)
 
-        subject = _('Your Kibegi password reset code')
-        message = _(
-            'Your password reset code is: {code}. It will expire in {mins} minutes.'
-        ).format(code=otp_code, mins=int(expiry_seconds / 60))
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+        # Send beautiful HTML email with OTP
+        expiry_minutes = int(expiry_seconds / 60)
         try:
-            if from_email:
-                send_mail(subject, message, from_email, [email])
-        except Exception:
-            pass
+            user = User.objects.get(email=email)
+            user_name = user.full_name or email.split('@')[0]
+        except User.DoesNotExist:
+            user_name = email.split('@')[0]
+        
+        EmailService.send_resend_otp(
+            email=email,
+            user_name=user_name,
+            otp_code=otp_code,
+            expiry_minutes=expiry_minutes,
+            purpose="password_reset"
+        )
 
         return success_response(message=_('Password reset code resent'))
 
@@ -322,14 +332,21 @@ class RegisterResendAPIView(APIView):
 
         otp = PasswordResetOTP.objects.create(email=email, code=otp_code, expires_at=expires_at, purpose='registration')
 
-        subject = _('Your Kibegi registration code')
-        message = _('Your registration verification code is: {code}. It will expire in {mins} minutes.').format(code=otp_code, mins=int(expiry_seconds / 60))
-        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None)
+        # Send beautiful HTML email with OTP
+        expiry_minutes = int(expiry_seconds / 60)
         try:
-            if from_email:
-                send_mail(subject, message, from_email, [email])
-        except Exception:
-            pass
+            user = User.objects.get(email=email)
+            user_name = user.full_name or email.split('@')[0]
+        except User.DoesNotExist:
+            user_name = email.split('@')[0]
+        
+        EmailService.send_resend_otp(
+            email=email,
+            user_name=user_name,
+            otp_code=otp_code,
+            expiry_minutes=expiry_minutes,
+            purpose="registration"
+        )
 
         return success_response(message=_('Registration code resent'))
 
@@ -451,7 +468,7 @@ class UserProfileAPIView(APIView):
         responses={200: UserProfileSerializer}
     )
     def get(self, request):
-        serializer = UserProfileSerializer(request.user)
+        serializer = UserProfileSerializer(request.user, context={'request': request})
         return success_response(data=serializer.data)
 
     @extend_schema(
@@ -461,7 +478,7 @@ class UserProfileAPIView(APIView):
         responses={200: UserProfileSerializer}
     )
     def put(self, request):
-        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return success_response(data=serializer.data, message=_('Profile updated'))
@@ -475,3 +492,90 @@ class UserProfileAPIView(APIView):
     def patch(self, request):
         # Allow partial updates via PATCH as well as PUT
         return self.put(request)
+
+
+@extend_schema(tags=["Authentication"])
+class ProfileImageUploadAPIView(APIView):
+    """
+    Upload or update user profile image.
+    
+    POST: Upload/update profile image
+    DELETE: Remove profile image
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProfileImageUploadSerializer
+    
+    @extend_schema(
+        summary="Upload/Update profile image",
+        description="""
+Upload or update the authenticated user's profile image.
+
+**Supported Formats:**
+- JPEG/JPG
+- PNG
+- GIF
+- WebP
+
+**Constraints:**
+- Maximum file size: 5MB
+- Minimum dimensions: 50x50 pixels
+- Maximum dimensions: 2000x2000 pixels
+
+**Note:** If a profile image already exists, it will be replaced with the new one.
+        """,
+        request=ProfileImageUploadSerializer,
+        responses={200: UserProfileSerializer}
+    )
+    def post(self, request):
+        """Upload or update profile image"""
+        serializer = ProfileImageUploadSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        user = request.user
+        
+        # Delete old profile image if it exists
+        if user.profile_image:
+            try:
+                user.profile_image.delete(save=False)
+            except Exception:
+                pass  # Ignore errors if file doesn't exist
+        
+        # Set new profile image
+        user.profile_image = serializer.validated_data['profile_image']
+        user.save()
+        
+        # Return updated profile
+        profile_serializer = UserProfileSerializer(user, context={'request': request})
+        return success_response(
+            message=_('Profile image uploaded successfully'),
+            data=profile_serializer.data
+        )
+    
+    @extend_schema(
+        summary="Remove profile image",
+        description="Remove the authenticated user's profile image.",
+        responses={200: dict}
+    )
+    def delete(self, request):
+        """Remove profile image"""
+        user = request.user
+        
+        if not user.profile_image:
+            return error_response(
+                message=_('No profile image to remove'),
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Delete the image file
+        try:
+            user.profile_image.delete(save=False)
+        except Exception:
+            pass  # Ignore errors if file doesn't exist
+        
+        # Clear the field
+        user.profile_image = None
+        user.save()
+        
+        return success_response(
+            message=_('Profile image removed successfully')
+        )
