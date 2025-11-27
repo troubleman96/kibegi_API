@@ -30,6 +30,7 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
     
     permission_classes = [IsAuthenticated]
     serializer_class = UserStorageSerializer
+    pagination_class = None  # Disable pagination for list endpoint
     
     def get_queryset(self):
         """
@@ -59,14 +60,18 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
             # Serialize the storage data
             serializer = self.get_serializer(storage)
             
-            # success_response already returns a Response object, so return it directly
+            # Get the serialized data as a plain dict
+            data = dict(serializer.data)
+            
+            # Return response directly - success_response returns a Response object
+            # Make sure data is a plain dict/list, not a Response object
             return success_response(
                 message="Storage information retrieved successfully",
-                data=serializer.data
+                data=data
             )
         
         except Exception as e:
-            # error_response already returns a Response object, so return it directly
+            # Return error response directly
             return error_response(
                 message="Failed to retrieve storage information",
                 errors={"detail": str(e)},
