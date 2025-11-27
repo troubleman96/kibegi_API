@@ -20,6 +20,9 @@ admin.site.site_header = "📚 Kibegi Administration"
 admin.site.site_title = "Kibegi Admin"
 admin.site.index_title = "Welcome to Kibegi Control Panel"
 
+# Customize admin site to improve organization
+admin.site.empty_value_display = '—'  # Show em dash for empty values
+
 
 # =============================================================================
 # User Admin Configuration
