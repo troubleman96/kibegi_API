@@ -2426,3 +2426,18 @@ TypeError: Object of type Response is not JSON serializable
 2025-11-27 19:16:06,982 INFO kibegi POST /api/v1/friends/3/accept/ status=200 user=itslugenge96@gmail.com time_ms=27.0 body=
 2025-11-27 20:29:34,648 INFO kibegi Created storage record for user itslugenge96@icloud.com with 50.0MB quota
 2025-11-27 20:29:34,650 INFO kibegi Created storage record for new user: itslugenge96@icloud.com
+2025-11-27 21:17:03,982 INFO kibegi GET / status=404 user=anon time_ms=71.8 body=
+2025-11-27 21:17:07,935 WARNING django.request Not Found: /
+2025-11-27 21:17:13,428 INFO kibegi GET /admin/ status=302 user=anon time_ms=56.2 body=
+2025-11-27 21:17:13,862 INFO kibegi GET /admin/login/?next=/admin/ status=200 user=anon time_ms=58.1 body=
+2025-11-27 21:17:18,340 INFO kibegi POST /admin/login/?next=/admin/ status=200 user=anon time_ms=1534.7 body=
+2025-11-27 21:17:37,862 INFO kibegi POST /admin/login/?next=/admin/ status=200 user=anon time_ms=1680.9 body=
+2025-11-27 21:17:49,059 INFO kibegi POST /admin/login/?next=/admin/ status=200 user=anon time_ms=1529.6 body=
+2025-11-27 21:18:20,565 INFO kibegi POST /admin/login/?next=/admin/ status=302 user=itslugenge96@icloud.com time_ms=4372.1 body=
+2025-11-27 21:18:22,083 INFO kibegi GET /admin/ status=200 user=itslugenge96@icloud.com time_ms=1147.6 body=
+2025-11-27 21:18:31,718 INFO kibegi GET /admin/authentication/user/ status=200 user=itslugenge96@icloud.com time_ms=4100.6 body=
+2025-11-27 21:18:35,921 INFO kibegi GET /admin/jsi18n/ status=200 user=itslugenge96@icloud.com time_ms=3744.6 body=
+2025-11-27 21:19:26,196 INFO kibegi POST /admin/authentication/user/ status=200 user=itslugenge96@icloud.com time_ms=10389.7 body=
+2025-11-27 21:19:50,937 INFO kibegi POST /admin/authentication/user/ status=302 user=itslugenge96@icloud.com time_ms=19996.3 body=
+2025-11-27 21:19:55,028 INFO kibegi GET /admin/authentication/user/ status=200 user=itslugenge96@icloud.com time_ms=3464.4 body=
+2025-11-27 21:20:00,162 INFO kibegi GET /admin/jsi18n/ status=200 user=itslugenge96@icloud.com time_ms=4711.3 body=

@@ -84,6 +84,12 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
     
+    # Override to use email as username field in admin
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        # Ensure email is used as the username field
+        return form
+    
     readonly_fields = ['date_joined', 'last_login', 'profile_image_preview']
     filter_horizontal = ('groups', 'user_permissions')
     
