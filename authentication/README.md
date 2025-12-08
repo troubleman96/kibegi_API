@@ -454,25 +454,25 @@ Base URL: `/api/v1/auth/`
 
 ### 11. Confirm New Password
 
-**Endpoint:** `POST /api/v1/auth/password-reset/confirm/`
+  **Endpoint:** `POST /api/v1/auth/password-reset/confirm/`
 
-**Description:** Set new password after OTP verification (step 3 of 3).
+  **Description:** Set new password after OTP verification (step 3 of 3).
 
-**Request Body:**
-```json
-{
-  "email": "student@example.com",
-  "otp": "123456",
-  "new_password": "NewSecurePass789!",
-  "new_password_confirm": "NewSecurePass789!"
-}
-```
+  **Request Body:**
+  ```json
+  {
+    "email": "student@example.com",
+    "otp": "123456",
+    "new_password": "NewSecurePass789!",
+    "new_password_confirm": "NewSecurePass789!"
+  }
+  ```
 
-**Success Response (200):**
-```json
-{
-  "message": "Password reset successful. You can now login with your new password."
-}
+  **Success Response (200):**
+  ```json
+  {
+    "message": "Password reset successful. You can now login with your new password."
+  }
 ```
 
 **Error Responses:**
