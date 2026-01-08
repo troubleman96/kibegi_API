@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u%i7d=u%)@k(6blq_pr^%tgo7@ktkrsh_qm%ob8w%mq-s0_=%g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['api.kibegi.com', '158.69.112.207', 'localhost', '192.168.10.144', '127.0.0.1']
+ALLOWED_HOSTS = ['api.kibegi.com', '194.163.153.255', 'localhost', '192.168.10.144', '127.0.0.1']
 
 
 
