@@ -4,8 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
-from django.http import FileResponse, Http404, HttpResponseRedirect
+from django.http import FileResponse, Http404, StreamingHttpResponse
 from django.utils.encoding import smart_str
+from django.core.files.storage import default_storage
 from datetime import timedelta
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from drf_spectacular.types import OpenApiTypes
@@ -411,24 +412,43 @@ class DownloadFileAPIView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
         
-        # Generate signed URL from MinIO/S3 and redirect
-        # This offloads file serving to MinIO, reducing server load
+        # Stream file from MinIO/S3 through Django
+        # This ensures proper headers and CORS for downloads
         try:
-            # upload.file.url generates a signed URL with proper authentication
-            # AWS_QUERYSTRING_AUTH=True in settings enables signed URLs
-            download_url = upload.file.url
-            
-            if not download_url:
+            # Check if file exists in storage
+            if not default_storage.exists(upload.file.name):
                 return Response(
-                    error_response("Unable to generate download URL"),
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    error_response("File not found in storage"),
+                    status=status.HTTP_404_NOT_FOUND
                 )
             
-            # Redirect client to the signed MinIO URL
-            return HttpResponseRedirect(download_url)
+            # Open file from S3/MinIO
+            file_handle = default_storage.open(upload.file.name, 'rb')
+            
+            # Detect MIME type
+            mime_type, _ = mimetypes.guess_type(upload.file_name)
+            if not mime_type:
+                mime_type = 'application/octet-stream'
+            
+            # Create streaming response with proper headers
+            response = FileResponse(
+                file_handle,
+                content_type=mime_type,
+                as_attachment=True,
+                filename=smart_str(upload.file_name)
+            )
+            
+            # Set headers for proper download behavior
+            response['Content-Length'] = upload.file_size
+            response['Content-Disposition'] = f'attachment; filename="{smart_str(upload.file_name)}"'
+            response['X-Content-Type-Options'] = 'nosniff'
+            response['Cache-Control'] = 'private, max-age=3600'
+            
+            # CORS headers are handled by django-cors-headers middleware
+            return response
             
         except Exception as e:
             return Response(
-                error_response(f"Error generating download URL: {str(e)}"),
+                error_response(f"Error downloading file: {str(e)}"),
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

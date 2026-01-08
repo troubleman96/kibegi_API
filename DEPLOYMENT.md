@@ -172,6 +172,9 @@ server {
     server_name api.kibegi.com;
 
     client_max_body_size 50M;
+    
+    # Disable buffering for streaming responses (important for file downloads)
+    proxy_buffering off;
 
     location = /favicon.ico { 
         access_log off; 
