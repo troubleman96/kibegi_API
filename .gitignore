@@ -87,3 +87,16 @@ celerybeat.pid
 *.bak
 *.backup
 *~
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+.env.*
+logs/
+*.log
+media/
+staticfiles/
+.DS_Store
