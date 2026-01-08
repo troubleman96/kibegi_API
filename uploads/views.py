@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
 from django.utils import timezone
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponseRedirect
 from django.utils.encoding import smart_str
 from datetime import timedelta
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
@@ -411,39 +411,24 @@ class DownloadFileAPIView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
         
-        # Check if file exists on disk
-        if not os.path.exists(upload.file.path):
-            return Response(
-                error_response("File not found on server"),
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        # Detect MIME type
-        mime_type, _ = mimetypes.guess_type(upload.file.path)
-        if not mime_type:
-            mime_type = 'application/octet-stream'
-        
-        # Open file for reading
+        # Generate signed URL from MinIO/S3 and redirect
+        # This offloads file serving to MinIO, reducing server load
         try:
-            file_handle = upload.file.open('rb')
-        except IOError:
+            # upload.file.url generates a signed URL with proper authentication
+            # AWS_QUERYSTRING_AUTH=True in settings enables signed URLs
+            download_url = upload.file.url
+            
+            if not download_url:
+                return Response(
+                    error_response("Unable to generate download URL"),
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+            
+            # Redirect client to the signed MinIO URL
+            return HttpResponseRedirect(download_url)
+            
+        except Exception as e:
             return Response(
-                error_response("Error opening file"),
+                error_response(f"Error generating download URL: {str(e)}"),
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-        
-        # Create response with proper headers
-        response = FileResponse(
-            file_handle,
-            content_type=mime_type,
-            as_attachment=True,  # Force download instead of display
-            filename=smart_str(upload.file_name)  # Handle unicode filenames
-        )
-        
-        # Set additional headers for better compatibility
-        response['Content-Length'] = upload.file_size
-        response['Content-Disposition'] = f'attachment; filename="{smart_str(upload.file_name)}"'
-        response['X-Content-Type-Options'] = 'nosniff'  # Security header
-        response['Cache-Control'] = 'private, max-age=3600'  # Cache for 1 hour
-        
-        return response
