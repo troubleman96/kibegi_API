@@ -183,8 +183,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50MB in bytes
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50MB in bytes
 
-# MinIO S3-compatible storage configuration
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# MinIO S3-compatible storage configuration (Django 4.2+ style)
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 # MinIO credentials and bucket settings
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default='MINIO_ACCESS_KEY')
