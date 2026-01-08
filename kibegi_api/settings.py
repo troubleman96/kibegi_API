@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular',
+    'storages',
 
     # Local apps
     'core',
@@ -163,17 +164,54 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = []  # Add custom static directories here if needed
+
+# Static files storage configuration
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
 
 # Media files (user uploads)
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # File upload settings
-# Maximum size for files uploaded via POST (100MB to match FileHandler.MAX_FILE_SIZE)
-DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB in bytes
-FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB in bytes
+# Maximum size for files uploaded via POST (50MB to match user storage limit)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50MB in bytes
+FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50MB in bytes
+
+# MinIO S3-compatible storage configuration
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# MinIO credentials and bucket settings
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default='MINIO_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default='MINIO_SECRET_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='kibegi-uploads')
+AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL', default='https://storage.kibegi.com')
+AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='us-east-1')
+
+# S3 connection settings
+AWS_S3_USE_SSL = config('AWS_S3_USE_SSL', default=True, cast=bool)
+AWS_S3_VERIFY = config('AWS_S3_VERIFY', default=True, cast=bool)
+
+# Access control
+# For private buckets, use AWS_QUERYSTRING_AUTH=True to generate signed URLs
+AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', default=True, cast=bool)
+AWS_DEFAULT_ACL = None  # Use bucket's default ACL
+
+# MinIO/S3 transfer settings for large file uploads
+AWS_S3_FILE_OVERWRITE = False  # Don't overwrite files with same name
+AWS_S3_MAX_MEMORY_SIZE = 52428800  # 50MB - files larger than this use temporary file storage
+AWS_S3_SIGNATURE_VERSION = 's3v4'  # Required for MinIO
+
+# Optional: Set custom domain for direct file access (if using CDN or custom domain)
+# AWS_S3_CUSTOM_DOMAIN = config('AWS_S3_CUSTOM_DOMAIN', default=None)
+
+# Optional: URL expiration for signed URLs (in seconds) - default 1 hour
+# AWS_QUERYSTRING_EXPIRE = config('AWS_QUERYSTRING_EXPIRE', default=3600, cast=int)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -270,12 +308,15 @@ OTP_EXPIRY_SECONDS = config('OTP_EXPIRY_SECONDS', default=300, cast=int)
 OTP_LENGTH = config('OTP_LENGTH', default=6, cast=int)
 
 
-# Logging configuration - write structured logs to a rotating file
+# Logging configuration - write structured logs to a rotating file and upload to MinIO
 import logging
 from logging.handlers import RotatingFileHandler
 
 LOG_DIR = BASE_DIR / 'logs'
 LOG_FILE = LOG_DIR / 'kibegi_api.log'
+
+# Enable MinIO log uploads (set to False to disable)
+ENABLE_MINIO_LOG_UPLOAD = config('ENABLE_MINIO_LOG_UPLOAD', default=True, cast=bool)
 
 LOGGING = {
     'version': 1,
@@ -288,11 +329,13 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
+            'class': 'core.utils.log_handler.MinIORotatingFileHandler' if ENABLE_MINIO_LOG_UPLOAD else 'logging.handlers.RotatingFileHandler',
             'filename': str(LOG_FILE),
-            'maxBytes': 1024 * 1024 * 5,  # 5MB
+            'maxBytes': 1024 * 1024 * 5,  # 5MB - will upload to MinIO when rotated
             'backupCount': 5,
             'formatter': 'standard',
+            'bucket_name': config('AWS_STORAGE_BUCKET_NAME', default='kibegi-uploads'),
+            's3_prefix': 'logs',
         },
         'console': {
             'class': 'logging.StreamHandler',

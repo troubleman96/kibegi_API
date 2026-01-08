@@ -1,0 +1,25 @@
+location /static/ {
+    alias /path/to/Backend/staticfiles/;
+}
+
+location /admin/ {
+    proxy_pass http://127.0.0.1:8000;
+    # ... other proxy settings
+}
+
+
+# Upload current log file
+python manage.py upload_logs
+
+# Upload all log files including backups
+python manage.py upload_logs --all
+
+
+minio structure 
+kibegi-uploads/
+  ├── logs/
+  │   ├── current/
+  │   │   └── kibegi_api_current.log  # Manual uploads
+  │   ├── kibegi_api_20260108_143022.log  # Auto-uploaded when rotated
+  │   └── kibegi_api_20260108_150045.log
+  └── uploads/  # Your file uploads
