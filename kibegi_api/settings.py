@@ -297,8 +297,48 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
-# CORS (development)
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS Configuration - Properly configured for production and development
+CORS_ALLOWED_ORIGINS = [
+    "https://kibegi.com",
+    "https://www.kibegi.com",
+    "http://localhost:5173",  # For local development (Vite)
+    "http://localhost:4173",  # For local preview
+    "http://localhost:3000",  # Alternative dev port
+    "http://127.0.0.1:5173",
+]
+
+# Set to False since we're using Bearer tokens, not cookies
+CORS_ALLOW_CREDENTIALS = False
+
+# Allow necessary headers including Authorization for Bearer tokens
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Allow necessary HTTP methods
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# Expose headers for blob/file responses
+CORS_EXPOSE_HEADERS = [
+    'Content-Type',
+    'Content-Disposition',
+    'Content-Length',
+]
 
 # Load email and other secrets from environment (.env) using python-decouple
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
