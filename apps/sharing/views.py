@@ -4,10 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.http import FileResponse, Http404
 from django.utils.encoding import smart_str
+from django.core.files.storage import default_storage
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from drf_spectacular.types import OpenApiTypes
 import mimetypes
-import os
 from .models import SharedFile
 from .serializers import (
     ShareFileSerializer, BulkShareSerializer, SharedFileSerializer,
@@ -493,21 +493,21 @@ class DownloadSharedFileAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        # Check if file exists on disk
-        if not os.path.exists(upload.file.path):
+        # Check if file exists in the configured storage backend
+        if not default_storage.exists(upload.file.name):
             return Response(
-                error_response("File not found on server"),
+                error_response("File not found in storage"),
                 status=status.HTTP_404_NOT_FOUND
             )
         
         # Detect MIME type
-        mime_type, _ = mimetypes.guess_type(upload.file.path)
+        mime_type, _ = mimetypes.guess_type(upload.file.name)
         if not mime_type:
             mime_type = 'application/octet-stream'
         
         # Open file for reading
         try:
-            file_handle = upload.file.open('rb')
+            file_handle = default_storage.open(upload.file.name, 'rb')
         except IOError:
             return Response(
                 error_response("Error opening file"),
@@ -529,4 +529,3 @@ class DownloadSharedFileAPIView(APIView):
         response['Cache-Control'] = 'private, max-age=3600'
         
         return response
-

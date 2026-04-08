@@ -1,8 +1,11 @@
 from unittest.mock import patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
+from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import timedelta
 
 from apps.authentication.models import PasswordResetOTP, User
 from apps.classes.models import Class, Membership
@@ -166,6 +169,45 @@ class AuthenticationEndpointTests(BaseAPITestCase):
         )
         self.assertEqual(login_response.status_code, status.HTTP_200_OK)
 
+    @patch("apps.authentication.views.EmailService.send_resend_otp")
+    def test_resend_and_logout_endpoints(self, send_resend_otp):
+        pending_user = User.objects.create_user(
+            email="pending@test.com",
+            full_name="Pending User",
+            user_type="student",
+            password="StrongPass123!",
+            is_active=False,
+        )
+        PasswordResetOTP.objects.create(
+            email=pending_user.email,
+            code="111111",
+            purpose="registration",
+            expires_at=timezone.now() + timedelta(minutes=5),
+        )
+
+        register_resend = self.client.post(
+            "/api/v1/auth/register/resend/",
+            {"email": pending_user.email},
+            format="json",
+        )
+        self.assertEqual(register_resend.status_code, status.HTTP_200_OK)
+
+        password_resend = self.client.post(
+            "/api/v1/auth/password-reset/resend/",
+            {"email": self.student.email},
+            format="json",
+        )
+        self.assertEqual(password_resend.status_code, status.HTTP_200_OK)
+        self.assertEqual(send_resend_otp.call_count, 2)
+
+        refresh = str(RefreshToken.for_user(self.student))
+        logout_response = self.client.post(
+            "/api/v1/auth/logout/",
+            {"refresh": refresh},
+            format="json",
+        )
+        self.assertEqual(logout_response.status_code, status.HTTP_200_OK)
+
 
 class ClassesEndpointTests(BaseAPITestCase):
     def test_class_create_search_join_members_and_leave_flow(self):
@@ -197,6 +239,69 @@ class ClassesEndpointTests(BaseAPITestCase):
         self.assertEqual(leave_response.status_code, status.HTTP_200_OK)
         self.assertFalse(created_class.members.filter(id=self.outsider.id).exists())
 
+    def test_class_detail_update_and_delete_by_creator(self):
+        lecturer_client = self.api_client_for(self.lecturer)
+
+        detail_response = lecturer_client.get(f"/api/v1/classes/{self.class_obj.id}/")
+        self.assertEqual(detail_response.status_code, status.HTTP_200_OK)
+
+        update_response = lecturer_client.patch(
+            f"/api/v1/classes/{self.class_obj.id}/",
+            {"description": "Updated algorithms class"},
+            format="json",
+        )
+        self.assertEqual(update_response.status_code, status.HTTP_200_OK)
+        self.class_obj.refresh_from_db()
+        self.assertEqual(self.class_obj.description, "Updated algorithms class")
+
+        forbidden_update = self.api_client_for(self.student).patch(
+            f"/api/v1/classes/{self.class_obj.id}/",
+            {"description": "Nope"},
+            format="json",
+        )
+        self.assertEqual(forbidden_update.status_code, status.HTTP_403_FORBIDDEN)
+
+        temp_class = Class.objects.create(
+            name="To Delete",
+            description="Delete me",
+            creator=self.lecturer,
+            is_verified=True,
+            is_public=True,
+        )
+        Membership.objects.create(user=self.lecturer, class_obj=temp_class, role="lecturer")
+        delete_response = lecturer_client.delete(f"/api/v1/classes/{temp_class.id}/")
+        self.assertEqual(delete_response.status_code, status.HTTP_200_OK)
+        self.assertFalse(Class.objects.filter(id=temp_class.id).exists())
+
+
+class CoreEndpointTests(BaseAPITestCase):
+    def test_global_search_returns_cross_app_results(self):
+        upload = self.make_upload(name="algorithms-notes.txt")
+        SharedFile.objects.create(
+            upload=upload,
+            shared_by=self.lecturer,
+            shared_with=self.student,
+            status="accepted",
+        )
+        friendship = Friendship.objects.create(
+            user=self.student,
+            friend=self.other_student,
+            status="accepted",
+        )
+
+        client = self.api_client_for(self.student)
+        search_response = client.get("/api/v1/search/?q=algo&categories=classes,files")
+        self.assertEqual(search_response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(search_response.data["data"]["counts"]["classes"], 1)
+        self.assertGreaterEqual(search_response.data["data"]["counts"]["files"], 1)
+
+        friends_response = client.get("/api/v1/search/?q=Other&categories=friends")
+        self.assertEqual(friends_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(friends_response.data["data"]["counts"]["friends"], 1)
+
+        invalid_response = client.get("/api/v1/search/?q=a")
+        self.assertEqual(invalid_response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class UploadsFilesAndStorageEndpointTests(BaseAPITestCase):
     def test_upload_and_storage_endpoints_track_usage(self):
@@ -227,6 +332,47 @@ class UploadsFilesAndStorageEndpointTests(BaseAPITestCase):
 
         recalc_response = lecturer_client.post("/api/v1/storage/recalculate/")
         self.assertEqual(recalc_response.status_code, status.HTTP_200_OK)
+
+    @patch("django.core.files.storage.FileSystemStorage.delete")
+    def test_upload_listing_download_trash_restore_and_permanent_delete(self, delete_file):
+        lecturer_client = self.api_client_for(self.lecturer)
+        upload = self.make_upload(name="chapter1.txt", content=b"chapter one")
+
+        list_response = lecturer_client.get("/api/v1/uploads/")
+        self.assertEqual(list_response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(list_response.data["count"], 1)
+
+        search_response = lecturer_client.get("/api/v1/uploads/search/?q=chapter")
+        self.assertEqual(search_response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(search_response.data["count"], 1)
+
+        recent_response = lecturer_client.get("/api/v1/uploads/recent/")
+        self.assertEqual(recent_response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(recent_response.data["count"], 1)
+
+        download_response = self.api_client_for(self.student).get(f"/api/v1/uploads/{upload.file_code}/download/")
+        self.assertEqual(download_response.status_code, status.HTTP_200_OK)
+        self.assertIn("attachment;", download_response["Content-Disposition"])
+
+        soft_delete_response = lecturer_client.delete(f"/api/v1/uploads/{upload.file_code}/")
+        self.assertEqual(soft_delete_response.status_code, status.HTTP_200_OK)
+        upload.refresh_from_db()
+        self.assertTrue(upload.is_deleted)
+
+        trash_response = lecturer_client.get("/api/v1/uploads/trash/")
+        self.assertEqual(trash_response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(trash_response.data["count"], 1)
+
+        restore_response = lecturer_client.post(f"/api/v1/uploads/{upload.id}/restore/")
+        self.assertEqual(restore_response.status_code, status.HTTP_200_OK)
+        upload.refresh_from_db()
+        self.assertFalse(upload.is_deleted)
+
+        upload.soft_delete()
+        permanent_delete_response = lecturer_client.delete(f"/api/v1/uploads/{upload.id}/permanent-delete/")
+        self.assertEqual(permanent_delete_response.status_code, status.HTTP_200_OK)
+        delete_file.assert_called()
+        self.assertFalse(Upload.objects.filter(id=upload.id).exists())
 
     def test_upload_detail_requires_membership_or_share(self):
         upload = self.make_upload()
@@ -263,6 +409,20 @@ class UploadsFilesAndStorageEndpointTests(BaseAPITestCase):
         all_files_response = student_client.get("/api/v1/files/all/")
         self.assertEqual(all_files_response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(all_files_response.data["data"]), 1)
+
+    def test_deleted_and_restore_file_endpoints(self):
+        upload = self.make_upload(uploader=self.student, name="deleted-notes.txt")
+        upload.soft_delete()
+
+        client = self.api_client_for(self.student)
+        deleted_response = client.get("/api/v1/files/deleted/")
+        self.assertEqual(deleted_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(deleted_response.data["data"]), 1)
+
+        restore_response = client.post(f"/api/v1/files/{upload.file_code}/restore/")
+        self.assertEqual(restore_response.status_code, status.HTTP_200_OK)
+        upload.refresh_from_db()
+        self.assertFalse(upload.is_deleted)
 
     @patch("django.core.files.storage.FileSystemStorage.delete")
     def test_permanent_delete_endpoints_use_storage_backend_delete(self, delete_file):
@@ -311,6 +471,19 @@ class FriendsAndNotificationsEndpointTests(BaseAPITestCase):
         remove_response = student_client.delete(f"/api/v1/friends/{friendship.id}/")
         self.assertEqual(remove_response.status_code, status.HTTP_200_OK)
 
+    def test_decline_and_cancel_friend_request_endpoints(self):
+        pending = Friendship.objects.create(user=self.student, friend=self.other_student, status="pending")
+
+        sent_response = self.api_client_for(self.student).get("/api/v1/friends/requests/sent/")
+        self.assertEqual(sent_response.status_code, status.HTTP_200_OK)
+
+        decline_response = self.api_client_for(self.other_student).post(f"/api/v1/friends/{pending.id}/decline/")
+        self.assertEqual(decline_response.status_code, status.HTTP_200_OK)
+
+        pending = Friendship.objects.create(user=self.student, friend=self.other_student, status="pending")
+        cancel_response = self.api_client_for(self.student).post(f"/api/v1/friends/{pending.id}/cancel/")
+        self.assertEqual(cancel_response.status_code, status.HTTP_200_OK)
+
     def test_notification_endpoints_work(self):
         Notification.objects.create(
             user=self.student,
@@ -340,3 +513,69 @@ class FriendsAndNotificationsEndpointTests(BaseAPITestCase):
 
         delete_response = client.delete(f"/api/v1/notifications/{notification_id}/")
         self.assertEqual(delete_response.status_code, status.HTTP_200_OK)
+
+
+class SharingEndpointTests(BaseAPITestCase):
+    def test_share_list_detail_accept_reject_and_download_endpoints(self):
+        upload = self.make_upload()
+        sharer_client = self.api_client_for(self.lecturer)
+
+        create_response = sharer_client.post(
+            "/api/v1/sharing/",
+            {
+                "file_code": upload.file_code,
+                "shared_with_id": self.student.id,
+                "message": "Please review this",
+            },
+            format="json",
+        )
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+        share_id = create_response.data["data"]["id"]
+
+        recipient_client = self.api_client_for(self.student)
+        requests_response = recipient_client.get("/api/v1/sharing/requests/")
+        self.assertEqual(requests_response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(requests_response.data["count"], 1)
+
+        detail_response = recipient_client.get(f"/api/v1/sharing/{share_id}/")
+        self.assertEqual(detail_response.status_code, status.HTTP_200_OK)
+
+        shared_with_me_pending = recipient_client.get("/api/v1/sharing/shared-with-me/?status=pending")
+        self.assertEqual(shared_with_me_pending.status_code, status.HTTP_200_OK)
+
+        accept_response = recipient_client.post(f"/api/v1/sharing/{share_id}/accept/")
+        self.assertEqual(accept_response.status_code, status.HTTP_200_OK)
+
+        my_shares_response = sharer_client.get("/api/v1/sharing/my-shares/?status=accepted")
+        self.assertEqual(my_shares_response.status_code, status.HTTP_200_OK)
+        self.assertGreaterEqual(my_shares_response.data["count"], 1)
+
+        download_response = recipient_client.get(f"/api/v1/sharing/{share_id}/download/")
+        self.assertEqual(download_response.status_code, status.HTTP_200_OK)
+        self.assertIn("attachment;", download_response["Content-Disposition"])
+
+        rejected_share = SharedFile.objects.create(
+            upload=self.make_upload(name="reject-me.txt"),
+            shared_by=self.lecturer,
+            shared_with=self.other_student,
+            status="pending",
+        )
+        reject_response = self.api_client_for(self.other_student).post(
+            f"/api/v1/sharing/{rejected_share.id}/reject/"
+        )
+        self.assertEqual(reject_response.status_code, status.HTTP_200_OK)
+
+    @patch("apps.sharing.views.bulk_share_async")
+    def test_bulk_share_endpoint(self, bulk_share_async_mock):
+        upload = self.make_upload(name="bulk.txt")
+        response = self.api_client_for(self.lecturer).post(
+            "/api/v1/sharing/bulk/",
+            {
+                "file_code": upload.file_code,
+                "user_ids": [self.student.id, self.other_student.id],
+                "message": "Bulk share",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        bulk_share_async_mock.assert_called_once()
