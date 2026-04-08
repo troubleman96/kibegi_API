@@ -104,7 +104,7 @@ class UserAdmin(BaseUserAdmin):
                 '<img src="{}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />',
                 obj.profile_image.url
             )
-        return format_html(
+        return mark_safe(
             '<div style="width: 40px; height: 40px; border-radius: 50%; background-color: #E5E7EB; '
             'display: flex; align-items: center; justify-content: center; color: #6B7280; font-size: 18px;">👤</div>'
         )
@@ -146,12 +146,8 @@ class UserAdmin(BaseUserAdmin):
     def is_active_badge(self, obj):
         """Display active status as a colored badge"""
         if obj.is_active:
-            return format_html(
-                '<span style="color: #10B981;">✓ Active</span>'
-            )
-        return format_html(
-            '<span style="color: #EF4444;">✗ Inactive</span>'
-        )
+            return mark_safe('<span style="color: #10B981;">✓ Active</span>')
+        return mark_safe('<span style="color: #EF4444;">✗ Inactive</span>')
     is_active_badge.short_description = 'Status'
     is_active_badge.admin_order_field = 'is_active'
     

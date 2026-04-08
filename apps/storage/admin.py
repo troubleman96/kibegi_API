@@ -5,6 +5,7 @@ This module configures the Django admin interface for storage models.
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.db.models import Sum
 from .models import UserStorage, StorageUsageHistory
 
@@ -146,16 +147,16 @@ class UserStorageAdmin(admin.ModelAdmin):
     def status_badge(self, obj):
         """Display storage status"""
         if obj.is_full:
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #EF4444; color: white; padding: 3px 8px; '
                 'border-radius: 10px; font-size: 11px;">🚫 FULL</span>'
             )
         if obj.is_near_limit():
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #F59E0B; color: white; padding: 3px 8px; '
                 'border-radius: 10px; font-size: 11px;">⚠️ Near Limit</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background-color: #10B981; color: white; padding: 3px 8px; '
             'border-radius: 10px; font-size: 11px;">✓ OK</span>'
         )

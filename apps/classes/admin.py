@@ -79,11 +79,11 @@ class ClassAdmin(admin.ModelAdmin):
     def verification_badge(self, obj):
         """Display verification status as badge"""
         if obj.is_verified:
-            return format_html(
+            return mark_safe(
                 '<span style="background-color: #10B981; color: white; padding: 3px 8px; '
                 'border-radius: 10px; font-size: 11px;">✓ Verified</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background-color: #6B7280; color: white; padding: 3px 8px; '
             'border-radius: 10px; font-size: 11px;">Study Group</span>'
         )

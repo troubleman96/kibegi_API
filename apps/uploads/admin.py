@@ -155,9 +155,7 @@ class UploadAdmin(admin.ModelAdmin):
             days_ago = (timezone.now() - obj.deleted_at).days if obj.deleted_at else 0
             days_until_permanent = 21 - days_ago
             if days_until_permanent <= 0:
-                return format_html(
-                    '<span style="color: #EF4444;">🗑️ Ready for deletion</span>'
-                )
+                return mark_safe('<span style="color: #EF4444;">🗑️ Ready for deletion</span>')
             return format_html(
                 '<span style="color: #F59E0B;">🗑️ Deleted ({} days left)</span>',
                 days_until_permanent
