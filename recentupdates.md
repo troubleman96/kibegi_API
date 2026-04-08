@@ -147,3 +147,34 @@ The latest test coverage now explicitly verifies:
 These checks live in:
 
 - [apps/core/test_api_endpoints.py](/home/troubleman/projects/Kibegi/Backend/apps/core/test_api_endpoints.py)
+
+## Redis API Caching
+
+The API now supports Redis-backed response caching for read-heavy endpoints without changing existing response shapes.
+
+Behavior:
+
+- Uses Redis when `REDIS_URL` is set
+- Falls back safely to Django local memory cache when Redis is not configured
+- Caches only successful JSON `GET` responses for read-heavy endpoints
+- Automatically invalidates related cache groups after profile, class, upload, file, friend, share, notification, and storage mutations
+
+Configured endpoint groups:
+
+- profile endpoints
+- classes and class search endpoints
+- global search endpoint
+- uploads list/detail/trash/search/recent endpoints
+- files aggregate/detail/deleted endpoints
+- friends list/search/request-list endpoints
+- notifications list endpoint
+- sharing list/detail endpoints
+- storage summary/info/history endpoints
+
+Production environment:
+
+```env
+REDIS_URL=redis://127.0.0.1:6379/1
+```
+
+If Redis is unavailable, the API still works normally and uses local in-process caching instead.

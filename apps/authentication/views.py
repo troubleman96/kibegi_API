@@ -26,6 +26,7 @@ from .serializers import (
 )
 from .services import EmailService
 from apps.core.utils.responses import success_response, error_response
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 User = get_user_model()
 
@@ -453,6 +454,7 @@ class ChangePasswordAPIView(APIView):
         # Set the new password (validate_password was already applied in serializer)
         user.set_password(new_password)
         user.save()
+        invalidate_cache_namespaces('profile')
 
         return success_response(message=_('Password changed successfully'))
 
@@ -468,8 +470,13 @@ class UserProfileAPIView(APIView):
         responses={200: UserProfileSerializer}
     )
     def get(self, request):
+        cache_key = build_cache_key(request, 'profile')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         serializer = UserProfileSerializer(request.user, context={'request': request})
-        return success_response(data=serializer.data)
+        response = success_response(data=serializer.data)
+        return cache_response(cache_key, response, 'profile')
 
     @extend_schema(
         summary="Update user profile",
@@ -481,6 +488,7 @@ class UserProfileAPIView(APIView):
         serializer = UserProfileSerializer(request.user, data=request.data, partial=True, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        invalidate_cache_namespaces('profile')
         return success_response(data=serializer.data, message=_('Profile updated'))
 
     @extend_schema(
@@ -543,6 +551,7 @@ Upload or update the authenticated user's profile image.
         # Set new profile image
         user.profile_image = serializer.validated_data['profile_image']
         user.save()
+        invalidate_cache_namespaces('profile')
         
         # Return updated profile
         profile_serializer = UserProfileSerializer(user, context={'request': request})
@@ -575,6 +584,7 @@ Upload or update the authenticated user's profile image.
         # Clear the field
         user.profile_image = None
         user.save()
+        invalidate_cache_namespaces('profile')
         
         return success_response(
             message=_('Profile image removed successfully')

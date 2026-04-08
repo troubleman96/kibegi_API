@@ -380,6 +380,31 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER or 'we
 OTP_EXPIRY_SECONDS = config('OTP_EXPIRY_SECONDS', default=300, cast=int)
 OTP_LENGTH = config('OTP_LENGTH', default=6, cast=int)
 
+# Cache configuration
+REDIS_URL = config('REDIS_URL', default='')
+
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL,
+            'TIMEOUT': 300,
+            'OPTIONS': {
+                'socket_connect_timeout': 5,
+                'socket_timeout': 5,
+                'retry_on_timeout': True,
+            },
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'kibegi-local-cache',
+            'TIMEOUT': 300,
+        }
+    }
+
 
 # Logging configuration - write structured logs to a rotating file and upload to MinIO
 import logging

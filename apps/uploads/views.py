@@ -17,6 +17,7 @@ from .models import Upload
 from .serializers import UploadSerializer, UploadListSerializer
 from apps.core.utils.responses import success_response, error_response
 from apps.core.pagination import StandardResultsSetPagination
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 
 @extend_schema(tags=['Uploads'])
@@ -50,6 +51,7 @@ class UploadListCreateAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         upload = serializer.save()
+        invalidate_cache_namespaces('uploads', 'files', 'storage', 'search', 'classes')
         
         return success_response(
             message="File uploaded successfully",
@@ -58,18 +60,24 @@ class UploadListCreateAPIView(generics.ListCreateAPIView):
         )
     
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'uploads')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'uploads')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Uploads retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'uploads')
 
 
 @extend_schema(tags=["Uploads"])
@@ -97,12 +105,17 @@ class UploadDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return instance
     
     def retrieve(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'uploads')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return success_response(
+        response = success_response(
             message="Upload retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'uploads')
     
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -118,6 +131,7 @@ class UploadDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        invalidate_cache_namespaces('uploads', 'files', 'storage', 'search', 'classes', 'sharing')
         
         return success_response(
             message="Upload updated successfully",
@@ -135,6 +149,7 @@ class UploadDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             )
         
         instance.soft_delete()
+        invalidate_cache_namespaces('uploads', 'files', 'storage', 'search', 'classes', 'sharing')
         return success_response(
             message="Upload moved to trash",
             status_code=status.HTTP_200_OK
@@ -156,18 +171,24 @@ class TrashAPIView(generics.ListAPIView):
         )
     
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'uploads', extra='trash')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'uploads')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Trash retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'uploads')
 
 
 @extend_schema(tags=["Uploads"])
@@ -186,6 +207,7 @@ class RestoreUploadAPIView(APIView):
             )
         
         upload.restore()
+        invalidate_cache_namespaces('uploads', 'files', 'storage', 'search', 'classes', 'sharing')
         return success_response(
             message="Upload restored successfully",
             data=UploadSerializer(upload, context={'request': request}).data
@@ -260,6 +282,7 @@ class PermanentDeleteAPIView(APIView):
         
         # Delete database record
         upload.delete()
+        invalidate_cache_namespaces('uploads', 'files', 'storage', 'search', 'classes', 'sharing')
         
         return success_response(
             message=f"'{file_name}' permanently deleted",
@@ -291,18 +314,24 @@ class SearchUploadsAPIView(generics.ListAPIView):
         return queryset
     
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'uploads', 'search')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'search')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Search results retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'search')
 
 
 @extend_schema(tags=["Uploads"])
@@ -327,18 +356,24 @@ class RecentFilesAPIView(generics.ListAPIView):
         return queryset
     
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'uploads', extra='recent')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'uploads')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Recent files retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'uploads')
 
 
 @extend_schema(

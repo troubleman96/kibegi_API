@@ -12,6 +12,7 @@ from apps.uploads.models import Upload
 from apps.sharing.models import SharedFile
 from .serializers import UnifiedFileSerializer, DeletedFileSerializer
 from apps.core.utils.responses import success_response, error_response
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 
 class AllFilesAPIView(APIView):
@@ -28,6 +29,10 @@ class AllFilesAPIView(APIView):
         tags=['Files']
     )
     def get(self, request):
+        cache_key = build_cache_key(request, 'files', 'uploads', 'sharing')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         user = request.user
         files_data = []
 
@@ -82,10 +87,11 @@ class AllFilesAPIView(APIView):
                 })
 
         serializer = UnifiedFileSerializer(files_data, many=True, context={'request': request})
-        return success_response(
+        response = success_response(
             data=serializer.data,
             message=f"Retrieved {len(files_data)} files"
         )
+        return cache_response(cache_key, response, 'files')
 
 
 class MyUploadsAPIView(APIView):
@@ -101,6 +107,10 @@ class MyUploadsAPIView(APIView):
         tags=['Files']
     )
     def get(self, request):
+        cache_key = build_cache_key(request, 'files', 'uploads', extra='my-uploads')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         user = request.user
         
         uploads = Upload.objects.filter(
@@ -128,10 +138,11 @@ class MyUploadsAPIView(APIView):
             })
 
         serializer = UnifiedFileSerializer(files_data, many=True, context={'request': request})
-        return success_response(
+        response = success_response(
             data=serializer.data,
             message=f"Retrieved {len(files_data)} uploads"
         )
+        return cache_response(cache_key, response, 'files')
 
 
 class SharedWithMeAPIView(APIView):
@@ -147,6 +158,10 @@ class SharedWithMeAPIView(APIView):
         tags=['Files']
     )
     def get(self, request):
+        cache_key = build_cache_key(request, 'files', 'sharing', extra='shared-with-me')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         user = request.user
 
         shared_files = SharedFile.objects.filter(
@@ -176,10 +191,11 @@ class SharedWithMeAPIView(APIView):
                 })
 
         serializer = UnifiedFileSerializer(files_data, many=True, context={'request': request})
-        return success_response(
+        response = success_response(
             data=serializer.data,
             message=f"Retrieved {len(files_data)} shared files"
         )
+        return cache_response(cache_key, response, 'files')
 
 
 class DeletedFilesAPIView(APIView):
@@ -196,6 +212,10 @@ class DeletedFilesAPIView(APIView):
         tags=['Files']
     )
     def get(self, request):
+        cache_key = build_cache_key(request, 'files', 'uploads', 'sharing', extra='deleted')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         user = request.user
         deleted_files_data = []
         now = timezone.now()
@@ -254,10 +274,11 @@ class DeletedFilesAPIView(APIView):
                 })
 
         serializer = DeletedFileSerializer(deleted_files_data, many=True, context={'request': request})
-        return success_response(
+        response = success_response(
             data=serializer.data,
             message=f"Retrieved {len(deleted_files_data)} deleted files"
         )
+        return cache_response(cache_key, response, 'files')
 
 
 class SingleFileDetailAPIView(APIView):
@@ -285,6 +306,10 @@ class SingleFileDetailAPIView(APIView):
         tags=['Files']
     )
     def get(self, request, file_code):
+        cache_key = build_cache_key(request, 'files', 'uploads', 'sharing')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         user = request.user
 
         # First, try to find in uploads
@@ -312,10 +337,11 @@ class SingleFileDetailAPIView(APIView):
             }
             
             serializer = UnifiedFileSerializer(file_data, context={'request': request})
-            return success_response(
+            response = success_response(
                 data=serializer.data,
                 message="File found in uploads"
             )
+            return cache_response(cache_key, response, 'files')
         
         except Upload.DoesNotExist:
             pass
@@ -347,10 +373,11 @@ class SingleFileDetailAPIView(APIView):
                 }
                 
                 serializer = UnifiedFileSerializer(file_data, context={'request': request})
-                return success_response(
+                response = success_response(
                     data=serializer.data,
                     message="File found in shared files"
                 )
+                return cache_response(cache_key, response, 'files')
         
         except SharedFile.DoesNotExist:
             pass
@@ -427,6 +454,7 @@ class PermanentDeleteFileAPIView(APIView):
             
             # Delete database record
             upload.delete()
+            invalidate_cache_namespaces('files', 'uploads', 'sharing', 'storage', 'search', 'classes')
             
             return success_response(
                 message=f"'{file_name}' permanently deleted",
@@ -447,6 +475,7 @@ class PermanentDeleteFileAPIView(APIView):
             
             # Delete the share record (not the original file)
             shared.delete()
+            invalidate_cache_namespaces('files', 'sharing', 'notifications')
             
             return success_response(
                 message=f"'{file_name}' removed from your files",
@@ -513,6 +542,7 @@ class RestoreFileAPIView(APIView):
             
             # Restore the upload
             upload.restore()
+            invalidate_cache_namespaces('files', 'uploads', 'sharing', 'storage', 'search', 'classes')
             
             # Prepare response data
             file_data = {

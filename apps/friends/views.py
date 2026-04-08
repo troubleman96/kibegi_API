@@ -12,6 +12,7 @@ from .serializers import (
 from .services import FriendService
 from apps.core.utils.responses import success_response, error_response
 from apps.core.pagination import StandardResultsSetPagination
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 # Logger for friends app
 logger = logging.getLogger('kibegi')
@@ -58,6 +59,10 @@ class FriendshipListAPIView(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         """Return paginated list of friends"""
+        cache_key = build_cache_key(request, 'friends')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
@@ -65,13 +70,15 @@ class FriendshipListAPIView(generics.ListAPIView):
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'friends')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Friends list retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'friends')
 
 
 @extend_schema(tags=['Friends'])
@@ -127,6 +134,7 @@ class AddFriendAPIView(APIView):
             )
             
             logger.info(f"Friend request sent: {request.user.email} -> {recipient.email} (ID: {friendship.id})")
+            invalidate_cache_namespaces('friends', 'notifications', 'search')
             
             response_serializer = FriendshipSerializer(friendship)
             return success_response(
@@ -179,13 +187,18 @@ class SearchUsersAPIView(generics.ListAPIView):
                 status_code=status.HTTP_400_BAD_REQUEST
             )
         
+        cache_key = build_cache_key(request, 'friends', 'search')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         
-        return success_response(
+        response = success_response(
             message=f"Found {len(serializer.data)} users",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'search')
 
 
 @extend_schema(tags=['Friends'])
@@ -235,6 +248,7 @@ class AcceptFriendRequestAPIView(APIView):
         
         # Accept the request
         friendship.accept()
+        invalidate_cache_namespaces('friends', 'notifications', 'search')
         
         logger.info(f"Friend request accepted: {friendship.user.email} <-> {friendship.friend.email} (ID: {pk})")
         
@@ -309,6 +323,7 @@ class UpdateNicknameAPIView(APIView):
         old_nickname = friendship.nickname
         friendship.nickname = serializer.validated_data['nickname']
         friendship.save()
+        invalidate_cache_namespaces('friends')
         
         logger.info(f"Nickname updated for friendship {pk}: '{old_nickname}' -> '{friendship.nickname}'")
         
@@ -368,6 +383,7 @@ class RemoveFriendAPIView(APIView):
             user=friendship.friend,
             friend=friendship.user
         ).delete()
+        invalidate_cache_namespaces('friends', 'notifications', 'search')
         
         logger.info(f"Friendship removed: {user_email} <-> {friend_email} (was {friendship_status})")
         
@@ -404,6 +420,10 @@ class IncomingFriendRequestsAPIView(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         """Return list of incoming friend requests"""
+        cache_key = build_cache_key(request, 'friends', extra='incoming')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         count = queryset.count()
         
@@ -413,13 +433,15 @@ class IncomingFriendRequestsAPIView(generics.ListAPIView):
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'friends')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message=f"Found {count} incoming friend request(s)",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'friends')
 
 
 @extend_schema(tags=['Friends'])
@@ -446,6 +468,10 @@ class SentFriendRequestsAPIView(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         """Return list of sent friend requests"""
+        cache_key = build_cache_key(request, 'friends', extra='sent')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         count = queryset.count()
         
@@ -455,13 +481,15 @@ class SentFriendRequestsAPIView(generics.ListAPIView):
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'friends')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message=f"Found {count} sent friend request(s)",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'friends')
 
 
 @extend_schema(tags=['Friends'])
@@ -516,6 +544,7 @@ class DeclineFriendRequestAPIView(APIView):
         
         # Delete the friend request
         friendship.delete()
+        invalidate_cache_namespaces('friends', 'notifications', 'search')
         
         logger.info(f"Friend request declined: {sender_email} -> {request.user.email} (Request ID: {pk})")
         
@@ -576,6 +605,7 @@ class CancelFriendRequestAPIView(APIView):
         
         # Delete the friend request
         friendship.delete()
+        invalidate_cache_namespaces('friends', 'notifications', 'search')
         
         logger.info(f"Friend request cancelled: {request.user.email} -> {recipient_email} (Request ID: {pk})")
         

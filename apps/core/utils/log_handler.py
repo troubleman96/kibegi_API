@@ -6,6 +6,7 @@ import threading
 import time
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
+from pathlib import Path
 from decouple import config
 
 
@@ -61,6 +62,7 @@ class MinIORotatingFileHandler(RotatingFileHandler):
     def __init__(self, filename, mode='a', maxBytes=0, backupCount=0,
                  encoding=None, delay=False, bucket_name='kibegi-uploads',
                  s3_prefix='logs'):
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
         super().__init__(filename, mode, maxBytes, backupCount, encoding, delay)
         self.bucket_name = bucket_name
         self.s3_prefix = s3_prefix

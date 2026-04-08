@@ -17,6 +17,7 @@ from drf_spectacular.types import OpenApiTypes
 from .services import GlobalSearchService
 from .serializers import GlobalSearchResponseSerializer, SearchQuerySerializer
 from .utils.responses import success_response, error_response
+from .utils.api_cache import build_cache_key, get_cached_response, cache_response
 
 logger = logging.getLogger('kibegi')
 
@@ -221,6 +222,10 @@ GET /api/v1/search/?q=john&limit=5&categories=users,friends
         
         Returns categorized results from users, classes, files, and friends.
         """
+        cache_key = build_cache_key(request, 'search')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         # Get and validate query parameters
         query = request.query_params.get('q', '').strip()
         limit_str = request.query_params.get('limit', '10')
@@ -277,10 +282,11 @@ GET /api/v1/search/?q=john&limit=5&categories=users,friends
             
             logger.info(f"Search completed for {request.user.email}: '{query}' -> {results['total_results']} results")
             
-            return success_response(
+            response = success_response(
                 message=f"Found {results['total_results']} result(s) for '{query}'",
                 data=results
             )
+            return cache_response(cache_key, response, 'search')
             
         except Exception as e:
             logger.error(f"Search error for {request.user.email}: {str(e)}", exc_info=True)

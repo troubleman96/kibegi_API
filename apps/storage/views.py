@@ -16,6 +16,7 @@ from .serializers import (
 )
 from .services import StorageService
 from apps.core.utils.responses import success_response, error_response
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 
 class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
@@ -53,6 +54,10 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
         Returns:
             Response: Storage information with success status
         """
+        cache_key = build_cache_key(request, 'storage')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         try:
             # Get or create storage record and update it
             storage = StorageService.update_user_storage(request.user, recalculate=True)
@@ -65,10 +70,11 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
             
             # Return response directly - success_response returns a Response object
             # Make sure data is a plain dict/list, not a Response object
-            return success_response(
+            response = success_response(
                 message="Storage information retrieved successfully",
                 data=data
             )
+            return cache_response(cache_key, response, 'storage')
         
         except Exception as e:
             # Return error response directly
@@ -94,6 +100,10 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
                 - Usage percentage
                 - Status flags (is_full, is_near_limit)
         """
+        cache_key = build_cache_key(request, 'storage', extra='info')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         try:
             # Get comprehensive storage information
             storage_info = StorageService.get_storage_info(request.user)
@@ -102,10 +112,11 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
             serializer = StorageInfoSerializer(storage_info)
             
             # success_response already returns a Response object, so return it directly
-            return success_response(
+            response = success_response(
                 message="Storage information retrieved successfully",
                 data=serializer.data
             )
+            return cache_response(cache_key, response, 'storage')
         
         except Exception as e:
             # error_response already returns a Response object, so return it directly
@@ -129,6 +140,7 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
         try:
             # Force recalculation
             storage = StorageService.update_user_storage(request.user, recalculate=True)
+            invalidate_cache_namespaces('storage')
             
             # Get updated info
             storage_info = StorageService.get_storage_info(request.user)
@@ -162,6 +174,10 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
         Returns:
             Response: List of storage usage history records
         """
+        cache_key = build_cache_key(request, 'storage', extra='history')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         try:
             # Get storage record
             storage = StorageService.get_or_create_user_storage(request.user)
@@ -176,10 +192,11 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
             serializer = StorageUsageHistorySerializer(history, many=True)
             
             # success_response already returns a Response object, so return it directly
-            return success_response(
+            response = success_response(
                 message="Storage history retrieved successfully",
                 data=serializer.data
             )
+            return cache_response(cache_key, response, 'storage')
         
         except Exception as e:
             # error_response already returns a Response object, so return it directly

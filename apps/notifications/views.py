@@ -8,6 +8,7 @@ from .models import Notification
 from .serializers import NotificationSerializer, NotificationListSerializer, MarkAsReadSerializer
 from .services import NotificationService
 from apps.core.utils.responses import success_response, error_response
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 
 class NotificationPagination(PageNumberPagination):
@@ -60,6 +61,10 @@ class NotificationListAPIView(APIView):
     )
     def get(self, request):
         """Get list of notifications"""
+        cache_key = build_cache_key(request, 'notifications')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         # Get query parameters
         is_read_param = request.query_params.get('is_read', 'all').lower()
         notification_type = request.query_params.get('type', None)
@@ -93,10 +98,11 @@ class NotificationListAPIView(APIView):
         paginated_response = paginator.get_paginated_response(serializer.data)
         paginated_response.data['unread_count'] = unread_count
         
-        return success_response(
+        response = success_response(
             data=paginated_response.data,
             message=f"Retrieved {notifications.count()} notifications"
         )
+        return cache_response(cache_key, response, 'notifications')
 
 
 class MarkNotificationReadAPIView(APIView):
@@ -143,6 +149,7 @@ class MarkNotificationReadAPIView(APIView):
         # Get updated notification
         notification = Notification.objects.get(id=pk)
         serializer = NotificationSerializer(notification)
+        invalidate_cache_namespaces('notifications')
         
         return success_response(
             data=serializer.data,
@@ -174,6 +181,7 @@ class MarkAllReadAPIView(APIView):
     def post(self, request):
         """Mark all notifications as read"""
         count = NotificationService.mark_all_as_read(request.user)
+        invalidate_cache_namespaces('notifications')
         
         return success_response(
             data={'marked_read': count},
@@ -214,6 +222,7 @@ class DeleteNotificationAPIView(APIView):
                 message=message,
                 status_code=404
             )
+        invalidate_cache_namespaces('notifications')
         
         return success_response(
             message=message

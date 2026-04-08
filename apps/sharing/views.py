@@ -17,6 +17,7 @@ from .services import SharingService
 from .tasks import create_share_async, bulk_share_async, accept_share_async, reject_share_async
 from apps.core.utils.responses import success_response, error_response
 from apps.core.pagination import StandardResultsSetPagination
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 
 @extend_schema(tags=['File Sharing'])
@@ -67,6 +68,7 @@ class ShareFileAPIView(APIView):
             
             # Return full share details immediately
             response_serializer = SharedFileSerializer(share)
+            invalidate_cache_namespaces('sharing', 'files', 'notifications')
             return success_response(
                 message="File shared successfully. Recipient will be notified.",
                 data=response_serializer.data,
@@ -151,18 +153,24 @@ class ShareRequestListAPIView(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         """Return paginated list of pending requests"""
+        cache_key = build_cache_key(request, 'sharing', extra='pending')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'sharing')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Pending requests retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'sharing')
 
 
 @extend_schema(tags=['File Sharing'])
@@ -201,18 +209,24 @@ class SharedWithMeAPIView(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         """Return paginated list of shared files"""
+        cache_key = build_cache_key(request, 'sharing', 'files')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'sharing')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Shared files retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'sharing')
 
 
 @extend_schema(tags=['File Sharing'])
@@ -249,18 +263,24 @@ class MySharesAPIView(generics.ListAPIView):
     
     def list(self, request, *args, **kwargs):
         """Return paginated list of user's shares"""
+        cache_key = build_cache_key(request, 'sharing', extra='my-shares')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'sharing')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Your shares retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'sharing')
 
 
 @extend_schema(tags=['File Sharing'])
@@ -305,6 +325,7 @@ class AcceptShareAPIView(APIView):
         
         # Accept the share immediately
         share.accept()
+        invalidate_cache_namespaces('sharing', 'files', 'notifications')
         
         # Trigger async notification to sharer in background
         # This prevents blocking if sharer is offline
@@ -362,6 +383,7 @@ class RejectShareAPIView(APIView):
         
         # Reject the share immediately
         share.reject()
+        invalidate_cache_namespaces('sharing', 'files', 'notifications')
         
         # Trigger async notification to sharer in background
         # This prevents blocking if sharer is offline
@@ -406,12 +428,17 @@ class ShareDetailAPIView(generics.RetrieveAPIView):
     
     def retrieve(self, request, *args, **kwargs):
         """Return share details"""
+        cache_key = build_cache_key(request, 'sharing')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return success_response(
+        response = success_response(
             message="Share details retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'sharing')
 
 
 @extend_schema(

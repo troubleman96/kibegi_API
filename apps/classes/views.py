@@ -11,6 +11,7 @@ from .serializers import (
 from .services import ClassService
 from apps.core.utils.responses import success_response, error_response
 from apps.core.pagination import StandardResultsSetPagination
+from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 
 @extend_schema(tags=['Classes'])
@@ -35,6 +36,7 @@ class ClassListCreateAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         class_obj = serializer.save()
+        invalidate_cache_namespaces('classes', 'search')
         
         return success_response(
             message="Class created successfully",
@@ -43,18 +45,24 @@ class ClassListCreateAPIView(generics.ListCreateAPIView):
         )
     
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'classes')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'classes')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Classes retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'classes')
 
 
 @extend_schema(tags=["Classes"])
@@ -101,12 +109,17 @@ class ClassDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         - recent_uploads: List of 10 most recent uploads
         - uploader_stats: Per-uploader statistics with active contributor flag
         """
+        cache_key = build_cache_key(request, 'classes')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         instance = self.get_object()
         serializer = self.get_serializer(instance, context={'request': request})
-        return success_response(
+        response = success_response(
             message="Class retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'classes')
     
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -122,6 +135,7 @@ class ClassDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        invalidate_cache_namespaces('classes', 'search')
         
         return success_response(
             message="Class updated successfully",
@@ -139,6 +153,7 @@ class ClassDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
             )
         
         instance.delete()
+        invalidate_cache_namespaces('classes', 'search')
         return success_response(
             message="Class deleted successfully",
             status_code=status.HTTP_200_OK
@@ -159,18 +174,24 @@ class ClassSearchAPIView(generics.ListAPIView):
         return Class.objects.none()
     
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'classes', 'search')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'search')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Search results retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'search')
 
 
 @extend_schema(tags=["Classes"])
@@ -199,6 +220,7 @@ class JoinClassAPIView(APIView):
             class_obj=class_obj,
             role='student'
         )
+        invalidate_cache_namespaces('classes', 'search')
         
         return success_response(
             message="Successfully joined class",
@@ -238,18 +260,24 @@ class ClassMembersAPIView(generics.ListAPIView):
         return context
     
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, 'classes')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return cache_response(cache_key, response, 'classes')
         
         serializer = self.get_serializer(queryset, many=True)
-        return success_response(
+        response = success_response(
             message="Class members retrieved successfully",
             data=serializer.data
         )
+        return cache_response(cache_key, response, 'classes')
 
 
 @extend_schema(tags=["Classes"])
@@ -283,6 +311,7 @@ class LeaveClassAPIView(APIView):
             )
         
         membership.delete()
+        invalidate_cache_namespaces('classes', 'search')
         return success_response(
             message="Successfully left the class"
         )
