@@ -2456,3 +2456,1162 @@ TypeError: Object of type Response is not JSON serializable
 2025-11-27 21:28:14,981 INFO kibegi GET /admin/jsi18n/ status=200 user=itslugenge96@icloud.com time_ms=795.2 body=
 2025-11-27 21:28:19,346 INFO kibegi GET /favicon.ico status=404 user=itslugenge96@icloud.com time_ms=16.1 body=
 2025-11-27 21:28:19,708 WARNING django.request Not Found: /favicon.ico
+2026-04-08 07:54:26,579 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,580 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,606 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,606 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,612 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,613 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,618 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,619 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,633 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,633 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,640 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,641 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,648 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,648 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,653 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,654 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,660 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,660 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,663 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,664 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,667 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,668 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,672 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,673 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,678 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,679 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,682 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,683 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,686 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,686 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,690 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,691 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,697 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,697 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,701 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,702 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,707 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,707 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,713 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,713 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,722 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,722 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,726 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,726 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,729 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,730 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,733 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,734 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,741 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,742 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,745 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,746 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,750 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,750 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,755 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,756 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,762 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,762 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,767 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,767 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,771 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,772 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,775 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,776 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,784 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,784 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,788 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,789 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,794 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,794 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,799 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,799 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,805 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,806 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,810 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,810 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,815 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,815 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,819 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,820 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,829 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,830 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,834 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,834 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,839 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,839 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,847 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,848 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,856 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:54:26,856 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:54:26,869 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:54:26,869 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:54:26,873 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:54:26,874 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:54:26,877 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:54:26,877 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:54:26,884 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 07:54:26,885 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 07:54:26,891 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 07:54:26,891 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 07:54:26,894 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 07:54:26,895 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 07:54:26,901 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 07:54:26,901 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 07:54:26,905 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 07:54:26,905 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 07:54:26,908 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 07:54:26,909 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 07:56:01,383 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:01,383 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:01,400 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:01,400 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:01,404 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:01,404 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:01,408 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:01,408 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:01,418 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:01,592 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=169.0 body=
+2026-04-08 07:56:01,619 INFO kibegi POST /api/v1/sharing/47df46aa-0170-43a6-b852-2f1ad7814004/accept/ status=200 user=student2@test.com time_ms=23.5 body=
+2026-04-08 07:56:01,633 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=8.5 body=
+2026-04-08 07:56:01,652 INFO kibegi POST /api/v1/sharing/a02e6152-9d9c-4de7-b6da-388925a45776/reject/ status=200 user=student3@test.com time_ms=16.8 body=
+2026-04-08 07:56:01,668 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:01,669 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:01,673 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:01,673 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:01,677 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:01,677 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:01,681 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:01,682 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:01,693 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:01,704 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.8 body=
+2026-04-08 07:56:01,712 INFO kibegi POST /api/v1/sharing/bulk/ status=202 user=student1@test.com time_ms=6.4 body=
+2026-04-08 07:56:01,719 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:01,720 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:01,724 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:01,724 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:01,728 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:01,728 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:01,733 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:01,733 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:01,746 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:01,755 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.0 body=
+2026-04-08 07:56:01,770 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=13.4 body=
+2026-04-08 07:56:01,773 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 07:56:01,780 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:01,780 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:01,785 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:01,786 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:01,789 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:01,790 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:01,793 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:01,793 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:01,805 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:01,814 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.8 body=
+2026-04-08 07:56:01,827 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=11.3 body=
+2026-04-08 07:56:01,838 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=9.6 body=
+2026-04-08 07:56:01,853 INFO kibegi GET /api/v1/sharing/280e1628-c836-44de-a731-9f97d9ecaec6/ status=200 user=student2@test.com time_ms=12.8 body=
+2026-04-08 07:56:01,859 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:01,860 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:01,865 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:01,865 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:01,869 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:01,869 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:01,872 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:01,873 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:01,886 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:01,895 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.4 body=
+2026-04-08 07:56:01,908 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=11.4 body=
+2026-04-08 07:56:01,915 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:01,915 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:01,920 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:01,920 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:01,923 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:01,924 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:01,927 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:01,928 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:01,940 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:01,950 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.9 body=
+2026-04-08 07:56:01,956 INFO kibegi POST /api/v1/sharing/de185132-83fb-4cfe-a5ad-6b4ce2b64d27/accept/ status=404 user=student3@test.com time_ms=4.9 body=
+2026-04-08 07:56:01,958 WARNING django.request Not Found: /api/v1/sharing/de185132-83fb-4cfe-a5ad-6b4ce2b64d27/accept/
+2026-04-08 07:56:01,963 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:01,964 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:01,969 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:01,970 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:01,973 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:01,974 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:01,977 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:01,978 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:01,988 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:01,998 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.6 body=
+2026-04-08 07:56:02,008 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=7.7 body=
+2026-04-08 07:56:02,009 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 07:56:02,016 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:02,017 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:02,021 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:02,022 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:02,025 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:02,025 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:02,028 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:02,028 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:02,039 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:02,046 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.6 body=
+2026-04-08 07:56:02,064 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=15.2 body=
+2026-04-08 07:56:02,071 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:02,072 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:02,075 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:02,075 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:02,079 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:02,079 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:02,083 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:02,083 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:02,094 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:02,096 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=0.9 body={"file_code": "2SAYJ4VW", "shared_with_id": 3}
+2026-04-08 07:56:02,098 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 07:56:02,103 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 07:56:02,104 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 07:56:02,107 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 07:56:02,107 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 07:56:02,111 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 07:56:02,111 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 07:56:02,124 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:02,128 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 07:56:02,129 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 07:56:02,132 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 07:56:02,133 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 07:56:02,136 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 07:56:02,137 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 07:56:02,146 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:02,154 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 07:56:02,155 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 07:56:02,158 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 07:56:02,158 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 07:56:02,169 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:02,176 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:02,179 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:02,184 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 07:56:02,185 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 07:56:02,188 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 07:56:02,189 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 07:56:20,297 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,297 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,310 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,310 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,313 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,313 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,316 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,317 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,324 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,422 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=95.1 body=
+2026-04-08 07:56:20,434 INFO kibegi POST /api/v1/sharing/425babe6-2356-417b-a487-af2ddb5908dd/accept/ status=200 user=student2@test.com time_ms=10.2 body=
+2026-04-08 07:56:20,441 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=5.0 body=
+2026-04-08 07:56:20,452 INFO kibegi POST /api/v1/sharing/e8625b6b-24ae-4a02-b020-80a7f97f9e09/reject/ status=200 user=student3@test.com time_ms=9.7 body=
+2026-04-08 07:56:20,464 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,464 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,467 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,467 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,469 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,470 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,472 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,472 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,482 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,490 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.6 body=
+2026-04-08 07:56:20,497 INFO kibegi POST /api/v1/sharing/bulk/ status=202 user=student1@test.com time_ms=5.0 body=
+2026-04-08 07:56:20,504 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,504 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,508 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,508 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,512 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,512 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,515 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,516 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,526 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,532 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.6 body=
+2026-04-08 07:56:20,539 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=5.9 body=
+2026-04-08 07:56:20,541 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 07:56:20,545 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,545 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,548 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,548 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,551 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,551 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,554 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,554 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,561 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,566 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.7 body=
+2026-04-08 07:56:20,576 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=8.3 body=
+2026-04-08 07:56:20,589 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=11.0 body=
+2026-04-08 07:56:20,605 INFO kibegi GET /api/v1/sharing/2f996f57-245b-4a3d-80eb-628bf2eeb02a/ status=200 user=student2@test.com time_ms=13.8 body=
+2026-04-08 07:56:20,611 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,612 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,615 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,615 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,619 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,619 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,623 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,623 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,630 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,636 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.1 body=
+2026-04-08 07:56:20,643 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=5.5 body=
+2026-04-08 07:56:20,647 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,647 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,650 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,650 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,653 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,654 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,657 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,657 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,667 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,672 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.5 body=
+2026-04-08 07:56:20,678 INFO kibegi POST /api/v1/sharing/43f2da70-85ca-4099-8882-7ccbc505f01b/accept/ status=404 user=student3@test.com time_ms=4.4 body=
+2026-04-08 07:56:20,680 WARNING django.request Not Found: /api/v1/sharing/43f2da70-85ca-4099-8882-7ccbc505f01b/accept/
+2026-04-08 07:56:20,685 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,685 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,690 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,691 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,695 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,695 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,699 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,700 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,712 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,719 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.7 body=
+2026-04-08 07:56:20,727 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=5.9 body=
+2026-04-08 07:56:20,728 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 07:56:20,733 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,733 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,737 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,737 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,739 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,739 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,742 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,742 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,749 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,754 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.4 body=
+2026-04-08 07:56:20,764 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=8.9 body=
+2026-04-08 07:56:20,770 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 07:56:20,770 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 07:56:20,772 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 07:56:20,773 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 07:56:20,775 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 07:56:20,775 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 07:56:20,778 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 07:56:20,778 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 07:56:20,786 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,788 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=0.8 body={"file_code": "86XNVRPH", "shared_with_id": 3}
+2026-04-08 07:56:20,790 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 07:56:20,796 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 07:56:20,796 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 07:56:20,799 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 07:56:20,799 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 07:56:20,803 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 07:56:20,803 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 07:56:20,810 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,814 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 07:56:20,814 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 07:56:20,818 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 07:56:20,818 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 07:56:20,821 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 07:56:20,821 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 07:56:20,828 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,835 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 07:56:20,835 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 07:56:20,838 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 07:56:20,838 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 07:56:20,847 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,851 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,854 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 07:56:20,857 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 07:56:20,857 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 07:56:20,860 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 07:56:20,860 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:00:40,763 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:40,764 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:40,782 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:40,782 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:40,785 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:40,786 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:40,789 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:40,789 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:40,802 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:40,931 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=124.8 body=
+2026-04-08 08:00:40,948 INFO kibegi POST /api/v1/sharing/b7be6f6a-dfd8-46c3-99be-737cc7463c88/accept/ status=200 user=student2@test.com time_ms=15.1 body=
+2026-04-08 08:00:40,961 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=7.4 body=
+2026-04-08 08:00:40,976 INFO kibegi POST /api/v1/sharing/3dedc2c0-ec00-45fc-95a4-160e2c2d1679/reject/ status=200 user=student3@test.com time_ms=12.6 body=
+2026-04-08 08:00:40,989 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:40,990 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:40,994 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:40,995 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:40,997 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:40,998 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,001 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,002 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,012 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,024 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:41,024 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:41,029 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:41,029 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:41,034 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:41,034 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,039 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,039 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,049 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,055 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.2 body=
+2026-04-08 08:00:41,066 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=9.2 body=
+2026-04-08 08:00:41,068 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:00:41,071 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:41,071 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:41,074 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:41,074 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:41,076 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:41,076 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,079 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,079 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,086 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,094 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.8 body=
+2026-04-08 08:00:41,104 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=8.4 body=
+2026-04-08 08:00:41,113 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=7.7 body=
+2026-04-08 08:00:41,125 INFO kibegi GET /api/v1/sharing/d82dc59b-04cf-4332-83e5-99ae785ac263/ status=200 user=student2@test.com time_ms=10.5 body=
+2026-04-08 08:00:41,131 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:41,131 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:41,135 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:41,135 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:41,138 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:41,138 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,141 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,141 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,149 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,155 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.2 body=
+2026-04-08 08:00:41,163 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=6.0 body=
+2026-04-08 08:00:41,168 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:41,168 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:41,170 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:41,171 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:41,174 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:41,174 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,176 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,177 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,186 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,195 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.5 body=
+2026-04-08 08:00:41,201 INFO kibegi POST /api/v1/sharing/535f4f6a-bd79-4a26-9d8b-8a681713b335/accept/ status=404 user=student3@test.com time_ms=3.3 body=
+2026-04-08 08:00:41,202 WARNING django.request Not Found: /api/v1/sharing/535f4f6a-bd79-4a26-9d8b-8a681713b335/accept/
+2026-04-08 08:00:41,210 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:41,210 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:41,216 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:41,217 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:41,220 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:41,221 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,223 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,224 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,233 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,238 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.9 body=
+2026-04-08 08:00:41,246 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=5.5 body=
+2026-04-08 08:00:41,248 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:00:41,253 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:41,254 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:41,257 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:41,258 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:41,261 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:41,262 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,268 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,268 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,280 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,287 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.4 body=
+2026-04-08 08:00:41,302 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=13.2 body=
+2026-04-08 08:00:41,308 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:41,308 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:41,311 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:41,311 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:41,314 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:41,314 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:41,317 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:41,317 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:41,324 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,326 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=0.9 body={"file_code": "IAJ3NHU9", "shared_with_id": 3}
+2026-04-08 08:00:41,327 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 08:00:41,333 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:00:41,334 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:00:41,339 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:00:41,339 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:00:41,343 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:00:41,344 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:00:41,353 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,358 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:00:41,359 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:00:41,363 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:00:41,363 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:00:41,368 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:00:41,369 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:00:41,379 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,390 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:00:41,390 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:00:41,394 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:00:41,394 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:00:41,405 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,412 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,418 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:41,424 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:00:41,424 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:00:41,428 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:00:41,428 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:00:58,646 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:58,647 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:58,673 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:58,673 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:58,677 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:58,678 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:58,685 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:58,690 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:58,711 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:58,875 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=157.9 body=
+2026-04-08 08:00:58,894 INFO kibegi POST /api/v1/sharing/641f5311-ee10-47c3-811a-e7c3f5592a7d/accept/ status=200 user=student2@test.com time_ms=15.9 body=
+2026-04-08 08:00:58,904 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=6.0 body=
+2026-04-08 08:00:58,916 INFO kibegi POST /api/v1/sharing/2a05e5b9-0d38-4ad1-a311-04ea0847510e/reject/ status=200 user=student3@test.com time_ms=10.3 body=
+2026-04-08 08:00:58,926 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:58,926 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:58,929 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:58,930 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:58,933 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:58,933 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:58,936 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:58,937 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:58,948 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:58,956 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.5 body=
+2026-04-08 08:00:58,963 INFO kibegi POST /api/v1/sharing/bulk/ status=202 user=student1@test.com time_ms=4.8 body=
+2026-04-08 08:00:58,968 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:58,968 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:58,971 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:58,971 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:58,974 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:58,974 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:58,977 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:58,977 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:58,985 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:58,990 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.6 body=
+2026-04-08 08:00:59,001 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=9.0 body=
+2026-04-08 08:00:59,003 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:00:59,008 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:59,008 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:59,011 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:59,011 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:59,014 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:59,015 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:59,018 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:59,018 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:59,028 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,034 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.1 body=
+2026-04-08 08:00:59,045 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=9.4 body=
+2026-04-08 08:00:59,055 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=7.5 body=
+2026-04-08 08:00:59,067 INFO kibegi GET /api/v1/sharing/52dca23b-2e50-439b-b7bf-af67c1a24010/ status=200 user=student2@test.com time_ms=10.2 body=
+2026-04-08 08:00:59,072 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:59,072 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:59,075 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:59,075 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:59,078 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:59,079 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:59,082 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:59,082 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:59,091 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,098 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.7 body=
+2026-04-08 08:00:59,108 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=8.3 body=
+2026-04-08 08:00:59,113 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:59,114 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:59,117 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:59,117 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:59,119 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:59,120 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:59,122 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:59,122 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:59,131 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,136 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.6 body=
+2026-04-08 08:00:59,141 INFO kibegi POST /api/v1/sharing/1c9d1530-c4c1-4f59-9117-073abd4a1edb/accept/ status=404 user=student3@test.com time_ms=3.6 body=
+2026-04-08 08:00:59,143 WARNING django.request Not Found: /api/v1/sharing/1c9d1530-c4c1-4f59-9117-073abd4a1edb/accept/
+2026-04-08 08:00:59,147 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:59,148 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:59,151 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:59,151 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:59,154 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:59,154 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:59,158 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:59,158 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:59,167 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,172 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.8 body=
+2026-04-08 08:00:59,178 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=3.8 body=
+2026-04-08 08:00:59,179 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:00:59,183 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:59,184 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:59,187 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:59,187 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:59,191 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:59,191 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:59,195 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:59,195 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:59,204 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,212 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=7.0 body=
+2026-04-08 08:00:59,227 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=13.7 body=
+2026-04-08 08:00:59,236 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:00:59,236 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:00:59,239 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:00:59,239 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:00:59,243 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:00:59,244 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:00:59,249 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:00:59,249 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:00:59,257 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,260 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=1.1 body={"file_code": "VYE5VEQW", "shared_with_id": 3}
+2026-04-08 08:00:59,262 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 08:00:59,267 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:00:59,267 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:00:59,270 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:00:59,271 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:00:59,274 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:00:59,274 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:00:59,283 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,287 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:00:59,287 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:00:59,291 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:00:59,291 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:00:59,294 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:00:59,294 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:00:59,303 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,310 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:00:59,310 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:00:59,313 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:00:59,313 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:00:59,323 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,328 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,331 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:00:59,335 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:00:59,335 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:00:59,339 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:00:59,339 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:02:49,690 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:49,691 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:49,717 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:49,718 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:49,723 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:49,723 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:49,730 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:49,731 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:49,749 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:49,945 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=190.0 body=
+2026-04-08 08:02:49,970 INFO kibegi POST /api/v1/sharing/5b356271-f32b-46b3-9ad4-ec0714280fd9/accept/ status=200 user=student2@test.com time_ms=21.8 body=
+2026-04-08 08:02:49,983 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=8.4 body=
+2026-04-08 08:02:50,004 INFO kibegi POST /api/v1/sharing/42abd34a-5e29-43bd-8f0f-e4dfaa22210c/reject/ status=200 user=student3@test.com time_ms=17.6 body=
+2026-04-08 08:02:50,019 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,019 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,023 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,024 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,029 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,030 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,034 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,035 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,047 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,057 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.5 body=
+2026-04-08 08:02:50,065 INFO kibegi POST /api/v1/sharing/bulk/ status=202 user=student1@test.com time_ms=5.9 body=
+2026-04-08 08:02:50,073 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,073 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,077 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,078 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,082 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,082 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,086 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,087 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,098 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,107 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.6 body=
+2026-04-08 08:02:50,122 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=12.3 body=
+2026-04-08 08:02:50,125 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:02:50,131 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,133 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,139 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,140 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,144 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,144 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,148 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,149 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,161 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,171 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.7 body=
+2026-04-08 08:02:50,188 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=14.2 body=
+2026-04-08 08:02:50,203 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=12.6 body=
+2026-04-08 08:02:50,222 INFO kibegi GET /api/v1/sharing/38192925-3a39-4e0c-a23a-6fa2134eb3d6/ status=200 user=student2@test.com time_ms=16.7 body=
+2026-04-08 08:02:50,230 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,230 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,235 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,235 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,239 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,240 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,244 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,244 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,257 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,265 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.2 body=
+2026-04-08 08:02:50,278 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=10.0 body=
+2026-04-08 08:02:50,284 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,285 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,289 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,289 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,293 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,294 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,298 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,299 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,310 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,320 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.6 body=
+2026-04-08 08:02:50,327 INFO kibegi POST /api/v1/sharing/dc3f4194-55fe-47ec-9d9f-ca95da7ba67b/accept/ status=404 user=student3@test.com time_ms=5.0 body=
+2026-04-08 08:02:50,329 WARNING django.request Not Found: /api/v1/sharing/dc3f4194-55fe-47ec-9d9f-ca95da7ba67b/accept/
+2026-04-08 08:02:50,335 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,335 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,340 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,340 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,344 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,344 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,348 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,348 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,358 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,366 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.7 body=
+2026-04-08 08:02:50,375 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=6.7 body=
+2026-04-08 08:02:50,376 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:02:50,381 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,382 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,385 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,386 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,389 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,390 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,393 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,394 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,404 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,412 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.3 body=
+2026-04-08 08:02:50,437 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=22.0 body=
+2026-04-08 08:02:50,445 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:02:50,445 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:02:50,449 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:02:50,450 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:02:50,455 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:02:50,456 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:02:50,460 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:02:50,460 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:02:50,474 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,477 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=1.1 body={"file_code": "1GIC06NK", "shared_with_id": 3}
+2026-04-08 08:02:50,479 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 08:02:50,485 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:02:50,485 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:02:50,489 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:02:50,489 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:02:50,493 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:02:50,493 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:02:50,503 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,508 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:02:50,508 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:02:50,511 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:02:50,512 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:02:50,515 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:02:50,515 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:02:50,526 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,535 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:02:50,535 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:02:50,539 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:02:50,539 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:02:50,548 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,583 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,593 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:02:50,598 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:02:50,598 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:02:50,610 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:02:50,610 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:08:25,708 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:25,709 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:25,726 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:25,727 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:25,730 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:25,731 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:25,736 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:25,737 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:25,749 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:25,900 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=147.2 body=
+2026-04-08 08:08:25,920 INFO kibegi POST /api/v1/sharing/3271e786-bd5a-426f-970b-a62f302655cb/accept/ status=200 user=student2@test.com time_ms=17.5 body=
+2026-04-08 08:08:25,928 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=4.6 body=
+2026-04-08 08:08:25,945 INFO kibegi POST /api/v1/sharing/07da1d78-4c59-472a-8737-eac98b8dc97e/reject/ status=200 user=student3@test.com time_ms=14.7 body=
+2026-04-08 08:08:25,956 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:25,957 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:25,960 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:25,960 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:25,963 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:25,964 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:25,967 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:25,967 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:25,975 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:25,984 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.7 body=
+2026-04-08 08:08:25,990 INFO kibegi POST /api/v1/sharing/bulk/ status=202 user=student1@test.com time_ms=4.3 body=
+2026-04-08 08:08:25,997 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:25,997 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:26,000 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:26,001 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:26,006 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:26,007 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:26,011 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:26,011 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:26,021 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,029 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.0 body=
+2026-04-08 08:08:26,042 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=9.7 body=
+2026-04-08 08:08:26,045 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:08:26,053 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:26,053 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:26,057 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:26,057 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:26,060 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:26,060 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:26,064 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:26,064 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:26,074 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,081 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=3.9 body=
+2026-04-08 08:08:26,100 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=16.3 body=
+2026-04-08 08:08:26,113 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=11.2 body=
+2026-04-08 08:08:26,129 INFO kibegi GET /api/v1/sharing/648e30eb-fa9b-4653-92a7-46e90f55b4e9/ status=200 user=student2@test.com time_ms=13.6 body=
+2026-04-08 08:08:26,139 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:26,139 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:26,143 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:26,143 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:26,148 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:26,148 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:26,151 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:26,152 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:26,160 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,168 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.5 body=
+2026-04-08 08:08:26,178 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=7.9 body=
+2026-04-08 08:08:26,184 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:26,185 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:26,189 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:26,189 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:26,193 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:26,193 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:26,196 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:26,197 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:26,207 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,215 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.7 body=
+2026-04-08 08:08:26,221 INFO kibegi POST /api/v1/sharing/0a4e5ac0-3ce3-464d-8f9a-8b01f6565e91/accept/ status=404 user=student3@test.com time_ms=4.4 body=
+2026-04-08 08:08:26,223 WARNING django.request Not Found: /api/v1/sharing/0a4e5ac0-3ce3-464d-8f9a-8b01f6565e91/accept/
+2026-04-08 08:08:26,230 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:26,231 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:26,234 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:26,235 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:26,241 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:26,242 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:26,248 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:26,248 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:26,258 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,267 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.9 body=
+2026-04-08 08:08:26,273 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=4.5 body=
+2026-04-08 08:08:26,275 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:08:26,280 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:26,281 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:26,284 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:26,284 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:26,288 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:26,289 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:26,292 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:26,294 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:26,303 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,309 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.8 body=
+2026-04-08 08:08:26,323 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=11.9 body=
+2026-04-08 08:08:26,330 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:08:26,331 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:08:26,334 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:08:26,334 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:08:26,337 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:08:26,338 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:08:26,341 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:08:26,341 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:08:26,350 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,353 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=1.1 body={"file_code": "TTRCSZSN", "shared_with_id": 3}
+2026-04-08 08:08:26,355 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 08:08:26,360 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:08:26,361 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:08:26,364 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:08:26,365 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:08:26,368 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:08:26,369 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:08:26,377 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,383 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:08:26,384 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:08:26,392 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:08:26,393 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:08:26,397 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:08:26,397 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:08:26,408 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,415 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:08:26,416 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:08:26,421 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:08:26,421 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:08:26,429 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,434 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,438 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:08:26,441 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:08:26,441 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:08:26,444 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:08:26,444 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:13:39,806 INFO kibegi GET /api/v1/failing/?page=1 status=500 user=anon time_ms=0.2 body={"page": "1"} error=RuntimeError: boom
+2026-04-08 08:13:39,813 INFO kibegi POST /api/v1/test/ status=201 user=anon time_ms=0.1 body={"email": "user@example.com", "password": "*****"} error=
+2026-04-08 08:13:39,823 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:39,824 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:39,853 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:39,854 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:39,858 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:39,858 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:39,862 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:39,863 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:39,881 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,022 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=132.7 body={"email": "student2@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,046 INFO kibegi POST /api/v1/sharing/955f9baa-619b-4240-9c90-88b1bcf88cb3/accept/ status=200 user=student2@test.com time_ms=21.8 body= error=
+2026-04-08 08:13:40,065 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=9.7 body={"email": "student3@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,091 INFO kibegi POST /api/v1/sharing/2ac6c8c4-7c92-4b45-be57-06e206987615/reject/ status=200 user=student3@test.com time_ms=24.2 body= error=
+2026-04-08 08:13:40,105 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,106 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,110 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,110 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,114 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,115 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,119 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,120 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,132 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,142 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.8 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,152 INFO kibegi POST /api/v1/sharing/bulk/ status=202 user=student1@test.com time_ms=6.2 body={"file_code": "QYGCZEW6", "user_ids": [3, 4], "message": "Sharing with multiple users"} error=
+2026-04-08 08:13:40,159 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,159 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,163 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,164 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,168 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,169 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,175 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,175 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,188 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,197 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.3 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,216 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=16.6 body={"file_code": "AJCL1I2D", "shared_with_id": 3} error=
+2026-04-08 08:13:40,219 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:13:40,225 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,225 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,228 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,229 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,232 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,233 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,236 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,236 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,251 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,264 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=9.1 body={"email": "student2@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,281 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=14.7 body= error=
+2026-04-08 08:13:40,297 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=13.6 body= error=
+2026-04-08 08:13:40,317 INFO kibegi GET /api/v1/sharing/eeb16f0d-c85a-4017-90c6-60ef4a4da92d/ status=200 user=student2@test.com time_ms=17.6 body= error=
+2026-04-08 08:13:40,324 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,325 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,329 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,329 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,332 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,332 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,336 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,336 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,346 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,355 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.4 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,369 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=10.8 body= error=
+2026-04-08 08:13:40,374 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,374 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,378 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,378 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,382 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,382 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,385 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,386 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,397 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,406 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=7.3 body={"email": "student3@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,413 INFO kibegi POST /api/v1/sharing/111fb325-9065-4a4a-a527-81030d53cec6/accept/ status=404 user=student3@test.com time_ms=4.4 body= error=
+2026-04-08 08:13:40,414 WARNING django.request Not Found: /api/v1/sharing/111fb325-9065-4a4a-a527-81030d53cec6/accept/
+2026-04-08 08:13:40,420 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,420 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,424 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,425 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,428 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,428 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,432 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,432 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,445 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,455 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.6 body={"email": "student2@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,466 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=7.5 body={"file_code": "K10VQE5Y", "shared_with_id": 4} error=
+2026-04-08 08:13:40,468 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:13:40,473 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,474 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,477 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,478 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,483 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,483 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,487 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,488 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,501 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,509 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.1 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:13:40,528 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=17.0 body={"file_code": "HG24Y9CE", "shared_with_id": 3, "message": "Check out this document!"} error=
+2026-04-08 08:13:40,537 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:13:40,537 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:13:40,541 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:13:40,541 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:13:40,545 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:13:40,545 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:13:40,549 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:13:40,549 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:13:40,561 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,564 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=1.0 body={"file_code": "LUFCBZ4X", "shared_with_id": 3} error=
+2026-04-08 08:13:40,565 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 08:13:40,570 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:13:40,571 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:13:40,574 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:13:40,574 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:13:40,578 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:13:40,578 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:13:40,590 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,595 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:13:40,595 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:13:40,599 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:13:40,599 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:13:40,603 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:13:40,603 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:13:40,614 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,625 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:13:40,625 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:13:40,629 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:13:40,629 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:13:40,640 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,647 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,651 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:13:40,656 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:13:40,656 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:13:40,660 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:13:40,660 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:14:58,478 INFO kibegi GET /api/v1/health/ status=200 user=anon time_ms=3.5 body= error=
+2026-04-08 08:14:58,482 INFO kibegi GET /api/v1/failing/?page=1 status=500 user=anon time_ms=0.1 body={"page": "1"} error=RuntimeError: boom
+2026-04-08 08:14:58,487 INFO kibegi POST /api/v1/test/ status=201 user=anon time_ms=0.2 body={"email": "user@example.com", "password": "*****"} error=
+2026-04-08 08:14:58,495 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:58,495 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:58,512 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:58,512 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:58,514 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:58,514 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:58,520 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:58,521 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:58,532 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:58,650 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=114.5 body={"email": "student2@test.com", "password": "*****"} error=
+2026-04-08 08:14:58,669 INFO kibegi POST /api/v1/sharing/611a6bc2-9cab-42c8-9b7f-ba268a77e11b/accept/ status=200 user=student2@test.com time_ms=15.7 body= error=
+2026-04-08 08:14:58,678 INFO kibegi POST /api/v1/auth/login/ status=200 user=student2@test.com time_ms=6.5 body={"email": "student3@test.com", "password": "*****"} error=
+2026-04-08 08:14:58,692 INFO kibegi POST /api/v1/sharing/e7e9a26d-57e7-46d0-837a-c37e0d52eb5f/reject/ status=200 user=student3@test.com time_ms=12.2 body= error=
+2026-04-08 08:14:58,699 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:58,699 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:58,702 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:58,702 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:58,706 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:58,706 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:58,710 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:58,711 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:58,725 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:58,736 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=8.6 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:14:58,743 INFO kibegi POST /api/v1/sharing/bulk/ status=202 user=student1@test.com time_ms=4.8 body={"file_code": "MWJDCAGI", "user_ids": [3, 4], "message": "Sharing with multiple users"} error=
+2026-04-08 08:14:58,750 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:58,751 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:58,755 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:58,755 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:58,759 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:58,759 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:58,762 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:58,762 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:58,768 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:58,774 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.3 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:14:58,784 INFO kibegi POST /api/v1/sharing/ status=400 user=student1@test.com time_ms=7.9 body={"file_code": "W5JFQT6F", "shared_with_id": 3} error=
+2026-04-08 08:14:58,786 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:14:58,790 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:58,790 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:58,793 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:58,793 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:58,796 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:58,797 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:58,800 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:58,800 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:58,809 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:58,817 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=4.9 body={"email": "student2@test.com", "password": "*****"} error=
+2026-04-08 08:14:58,831 INFO kibegi GET /api/v1/sharing/requests/ status=200 user=student2@test.com time_ms=11.5 body= error=
+2026-04-08 08:14:58,841 INFO kibegi GET /api/v1/sharing/shared-with-me/ status=200 user=student2@test.com time_ms=8.8 body= error=
+2026-04-08 08:14:58,856 INFO kibegi GET /api/v1/sharing/0010c3ec-c243-493a-bcb9-ad3d044cc179/ status=200 user=student2@test.com time_ms=12.6 body= error=
+2026-04-08 08:14:58,864 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:58,864 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:58,867 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:58,868 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:58,871 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:58,871 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:58,874 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:58,874 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:58,886 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:58,894 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.6 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:14:58,906 INFO kibegi GET /api/v1/sharing/my-shares/ status=200 user=student1@test.com time_ms=10.1 body= error=
+2026-04-08 08:14:58,915 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:58,915 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:58,919 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:58,920 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:58,923 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:58,924 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:58,928 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:58,928 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:58,942 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:58,951 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.2 body={"email": "student3@test.com", "password": "*****"} error=
+2026-04-08 08:14:58,958 INFO kibegi POST /api/v1/sharing/5c7660ee-46e9-4049-b503-0e82807f6604/accept/ status=404 user=student3@test.com time_ms=4.6 body= error=
+2026-04-08 08:14:58,960 WARNING django.request Not Found: /api/v1/sharing/5c7660ee-46e9-4049-b503-0e82807f6604/accept/
+2026-04-08 08:14:58,965 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:58,966 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:58,969 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:58,970 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:58,975 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:58,976 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:58,980 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:58,981 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:58,993 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,002 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=6.7 body={"email": "student2@test.com", "password": "*****"} error=
+2026-04-08 08:14:59,012 INFO kibegi POST /api/v1/sharing/ status=400 user=student2@test.com time_ms=6.7 body={"file_code": "N3AKMCH1", "shared_with_id": 4} error=
+2026-04-08 08:14:59,015 WARNING django.request Bad Request: /api/v1/sharing/
+2026-04-08 08:14:59,021 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:59,022 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:59,027 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:59,028 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:59,032 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:59,033 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:59,036 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:59,037 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:59,046 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,053 INFO kibegi POST /api/v1/auth/login/ status=200 user=anon time_ms=5.3 body={"email": "student1@test.com", "password": "*****"} error=
+2026-04-08 08:14:59,081 INFO kibegi POST /api/v1/sharing/ status=201 user=student1@test.com time_ms=25.7 body={"file_code": "7R6ERD6G", "shared_with_id": 3, "message": "Check out this document!"} error=
+2026-04-08 08:14:59,088 INFO kibegi Created storage record for user lecturer@test.com with 50.0MB quota
+2026-04-08 08:14:59,088 INFO kibegi Created storage record for new user: lecturer@test.com
+2026-04-08 08:14:59,092 INFO kibegi Created storage record for user student1@test.com with 50.0MB quota
+2026-04-08 08:14:59,092 INFO kibegi Created storage record for new user: student1@test.com
+2026-04-08 08:14:59,095 INFO kibegi Created storage record for user student2@test.com with 50.0MB quota
+2026-04-08 08:14:59,095 INFO kibegi Created storage record for new user: student2@test.com
+2026-04-08 08:14:59,099 INFO kibegi Created storage record for user student3@test.com with 50.0MB quota
+2026-04-08 08:14:59,099 INFO kibegi Created storage record for new user: student3@test.com
+2026-04-08 08:14:59,110 INFO kibegi Updated storage for student1@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,114 INFO kibegi POST /api/v1/sharing/ status=401 user=anon time_ms=1.7 body={"file_code": "3KKP81DP", "shared_with_id": 3} error=
+2026-04-08 08:14:59,115 WARNING django.request Unauthorized: /api/v1/sharing/
+2026-04-08 08:14:59,122 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:14:59,122 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:14:59,126 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:14:59,127 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:14:59,130 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:14:59,131 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:14:59,140 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,146 INFO kibegi Created storage record for user lecturer@service.com with 50.0MB quota
+2026-04-08 08:14:59,146 INFO kibegi Created storage record for new user: lecturer@service.com
+2026-04-08 08:14:59,150 INFO kibegi Created storage record for user student1@service.com with 50.0MB quota
+2026-04-08 08:14:59,151 INFO kibegi Created storage record for new user: student1@service.com
+2026-04-08 08:14:59,155 INFO kibegi Created storage record for user student2@service.com with 50.0MB quota
+2026-04-08 08:14:59,155 INFO kibegi Created storage record for new user: student2@service.com
+2026-04-08 08:14:59,166 INFO kibegi Updated storage for student1@service.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,175 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:14:59,176 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:14:59,179 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:14:59,179 INFO kibegi Created storage record for new user: lecturer-storage@test.com
+2026-04-08 08:14:59,189 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,195 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,199 INFO kibegi Updated storage for storage@test.com: 0.0MB / 50.00MB (0%)
+2026-04-08 08:14:59,203 INFO kibegi Created storage record for user storage@test.com with 50.0MB quota
+2026-04-08 08:14:59,204 INFO kibegi Created storage record for new user: storage@test.com
+2026-04-08 08:14:59,207 INFO kibegi Created storage record for user lecturer-storage@test.com with 50.0MB quota
+2026-04-08 08:14:59,208 INFO kibegi Created storage record for new user: lecturer-storage@test.com
