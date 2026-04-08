@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apps.notifications',
     'apps.files',
     'apps.storage',
+    'apps.schedule',
 ]
 
 MIDDLEWARE = [
@@ -379,6 +380,11 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER or 'we
 # OTP settings
 OTP_EXPIRY_SECONDS = config('OTP_EXPIRY_SECONDS', default=300, cast=int)
 OTP_LENGTH = config('OTP_LENGTH', default=6, cast=int)
+
+# Schedule app configuration
+# This URL is returned to the frontend so it can open a dedicated schedule
+# subscription screen instead of relying only on backend-rendered pages.
+SCHEDULE_FRONTEND_URL = config('SCHEDULE_FRONTEND_URL', default='')
 
 # Cache configuration
 REDIS_URL = config('REDIS_URL', default='')
