@@ -5,6 +5,7 @@ This module configures the Django admin interface for class-related models.
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.db.models import Count, Sum
 from .models import Class, Membership
 
@@ -92,8 +93,8 @@ class ClassAdmin(admin.ModelAdmin):
     def visibility_badge(self, obj):
         """Display visibility as badge"""
         if obj.is_public:
-            return format_html('<span style="color: #3B82F6;">🌐 Public</span>')
-        return format_html('<span style="color: #6B7280;">🔒 Private</span>')
+            return mark_safe('<span style="color: #3B82F6;">🌐 Public</span>')
+        return mark_safe('<span style="color: #6B7280;">🔒 Private</span>')
     visibility_badge.short_description = 'Visibility'
     visibility_badge.admin_order_field = 'is_public'
     

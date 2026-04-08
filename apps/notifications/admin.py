@@ -5,6 +5,7 @@ This module configures the Django admin interface for notification models.
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from .models import Notification
 
 
@@ -116,8 +117,8 @@ class NotificationAdmin(admin.ModelAdmin):
     def read_status(self, obj):
         """Display read status with icon"""
         if obj.is_read:
-            return format_html('<span style="color: #10B981;">✓ Read</span>')
-        return format_html('<span style="color: #F59E0B; font-weight: bold;">● Unread</span>')
+            return mark_safe('<span style="color: #10B981;">✓ Read</span>')
+        return mark_safe('<span style="color: #F59E0B; font-weight: bold;">● Unread</span>')
     read_status.short_description = 'Status'
     read_status.admin_order_field = 'is_read'
     

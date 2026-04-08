@@ -7,6 +7,7 @@ and customizes the admin site appearance.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils import timezone
 from django.db.models import Count, Sum
 from .models import User, PasswordResetOTP
@@ -116,7 +117,7 @@ class UserAdmin(BaseUserAdmin):
                 '<img src="{}" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #E5E7EB;" />',
                 obj.profile_image.url
             )
-        return format_html('<span style="color: #6B7280;">No profile image</span>')
+        return mark_safe('<span style="color: #6B7280;">No profile image</span>')
     profile_image_preview.short_description = 'Profile Image Preview'
     
     # Actions
@@ -249,10 +250,10 @@ class PasswordResetOTPAdmin(admin.ModelAdmin):
     def status_badge(self, obj):
         """Display status based on usage and expiry"""
         if obj.is_used:
-            return format_html('<span style="color: #6B7280;">● Used</span>')
+            return mark_safe('<span style="color: #6B7280;">● Used</span>')
         if obj.expires_at < timezone.now():
-            return format_html('<span style="color: #EF4444;">● Expired</span>')
-        return format_html('<span style="color: #10B981;">● Active</span>')
+            return mark_safe('<span style="color: #EF4444;">● Expired</span>')
+        return mark_safe('<span style="color: #10B981;">● Active</span>')
     status_badge.short_description = 'Status'
     
     @admin.action(description='🚫 Invalidate selected OTPs')

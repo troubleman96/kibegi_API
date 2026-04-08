@@ -5,6 +5,7 @@ This module configures the Django admin interface for upload-related models.
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils import timezone
 from .models import Upload
 
@@ -144,7 +145,7 @@ class UploadAdmin(admin.ModelAdmin):
                 '{}<br><small style="color: #6B7280;">{}</small>',
                 obj.class_obj.name, obj.class_obj.class_code
             )
-        return format_html('<span style="color: #6B7280;">—</span>')
+        return mark_safe('<span style="color: #6B7280;">—</span>')
     class_info.short_description = 'Class'
     class_info.admin_order_field = 'class_obj__name'
     
@@ -161,7 +162,7 @@ class UploadAdmin(admin.ModelAdmin):
                 '<span style="color: #F59E0B;">🗑️ Deleted ({} days left)</span>',
                 days_until_permanent
             )
-        return format_html('<span style="color: #10B981;">✓ Active</span>')
+        return mark_safe('<span style="color: #10B981;">✓ Active</span>')
     status_badge.short_description = 'Status'
     status_badge.admin_order_field = 'is_deleted'
     

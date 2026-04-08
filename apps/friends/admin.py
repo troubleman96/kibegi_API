@@ -5,6 +5,7 @@ This module configures the Django admin interface for friendship-related models.
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils import timezone
 from .models import Friendship
 
@@ -88,10 +89,10 @@ class FriendshipAdmin(admin.ModelAdmin):
     def direction_arrow(self, obj):
         """Display arrow based on status"""
         if obj.status == 'pending':
-            return format_html('<span style="font-size: 20px; color: #F59E0B;">→</span>')
+            return mark_safe('<span style="font-size: 20px; color: #F59E0B;">→</span>')
         elif obj.status == 'accepted':
-            return format_html('<span style="font-size: 20px; color: #10B981;">↔</span>')
-        return format_html('<span style="font-size: 20px; color: #6B7280;">→</span>')
+            return mark_safe('<span style="font-size: 20px; color: #10B981;">↔</span>')
+        return mark_safe('<span style="font-size: 20px; color: #6B7280;">→</span>')
     direction_arrow.short_description = ''
     
     def recipient_info(self, obj):

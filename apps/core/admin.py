@@ -6,6 +6,7 @@ including request logging and system monitoring.
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.db.models import Count, Avg
 from .models import RequestLog
 
@@ -115,7 +116,7 @@ class RequestLogAdmin(admin.ModelAdmin):
                 '<span style="color: #3B82F6;">{}</span>',
                 obj.user_email
             )
-        return format_html('<span style="color: #6B7280;">Anonymous</span>')
+        return mark_safe('<span style="color: #6B7280;">Anonymous</span>')
     user_info.short_description = 'User'
     user_info.admin_order_field = 'user_email'
     

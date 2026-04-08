@@ -5,6 +5,7 @@ This module configures the Django admin interface for file sharing models.
 """
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from .models import SharedFile
 
 
@@ -125,7 +126,7 @@ class SharedFileAdmin(admin.ModelAdmin):
             'accepted': '<span style="font-size: 20px; color: #10B981;">✓→</span>',
             'rejected': '<span style="font-size: 20px; color: #EF4444;">✗→</span>',
         }
-        return format_html(arrows.get(obj.status, '→'))
+        return mark_safe(arrows.get(obj.status, '→'))
     direction_arrow.short_description = ''
     
     def recipient_info(self, obj):
@@ -166,7 +167,7 @@ class SharedFileAdmin(admin.ModelAdmin):
         if obj.message:
             preview = obj.message[:40] + '...' if len(obj.message) > 40 else obj.message
             return format_html('<span style="color: #6B7280;">{}</span>', preview)
-        return format_html('<span style="color: #D1D5DB;">—</span>')
+        return mark_safe('<span style="color: #D1D5DB;">—</span>')
     message_preview.short_description = 'Message'
     
     def get_queryset(self, request):
