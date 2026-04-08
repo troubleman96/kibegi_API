@@ -1,3 +1,4 @@
+from io import BytesIO
 from unittest.mock import patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -6,6 +7,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 from datetime import timedelta
+from PIL import Image
 
 from apps.authentication.models import PasswordResetOTP, User
 from apps.classes.models import Class, Membership
@@ -70,6 +72,13 @@ class BaseAPITestCase(APITestCase):
             file_name=name,
             file_size=len(content),
         )
+
+    def make_image_upload(self, name="profile.png", size=(80, 80), color=(20, 120, 200)):
+        buffer = BytesIO()
+        image = Image.new("RGB", size, color)
+        image.save(buffer, format="PNG")
+        buffer.seek(0)
+        return SimpleUploadedFile(name, buffer.read(), content_type="image/png")
 
 
 class AuthenticationEndpointTests(BaseAPITestCase):
@@ -207,6 +216,34 @@ class AuthenticationEndpointTests(BaseAPITestCase):
             format="json",
         )
         self.assertEqual(logout_response.status_code, status.HTTP_200_OK)
+
+    def test_profile_username_and_profile_image_endpoints(self):
+        client = self.api_client_for(self.student)
+
+        update_response = client.patch(
+            "/api/v1/auth/profile/",
+            {"username": "Updated Student Name"},
+            format="json",
+        )
+        self.assertEqual(update_response.status_code, status.HTTP_200_OK)
+        self.student.refresh_from_db()
+        self.assertEqual(self.student.full_name, "Updated Student Name")
+        self.assertEqual(update_response.data["data"]["username"], "Updated Student Name")
+
+        upload_response = client.post(
+            "/api/v1/auth/profile/image/",
+            {"profile_image": self.make_image_upload()},
+            format="multipart",
+        )
+        self.assertEqual(upload_response.status_code, status.HTTP_200_OK)
+        self.student.refresh_from_db()
+        self.assertTrue(bool(self.student.profile_image))
+        self.assertIsNotNone(upload_response.data["data"]["profile_image_url"])
+
+        delete_response = client.delete("/api/v1/auth/profile/image/")
+        self.assertEqual(delete_response.status_code, status.HTTP_200_OK)
+        self.student.refresh_from_db()
+        self.assertFalse(bool(self.student.profile_image))
 
 
 class ClassesEndpointTests(BaseAPITestCase):
