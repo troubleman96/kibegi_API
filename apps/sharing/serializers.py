@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import SharedFile
 from apps.uploads.serializers import UploadSerializer
 from apps.authentication.models import User
+from apps.authentication.serializers import UserSummarySerializer
 
 
 class ShareFileSerializer(serializers.Serializer):
@@ -133,6 +134,8 @@ class SharedFileSerializer(serializers.ModelSerializer):
         source='shared_by.email',
         read_only=True
     )
+    shared_by_profile_image = serializers.ImageField(source='shared_by.profile_image', read_only=True)
+    shared_by_profile_image_url = serializers.SerializerMethodField()
     
     # Recipient details
     shared_with_name = serializers.CharField(
@@ -143,6 +146,8 @@ class SharedFileSerializer(serializers.ModelSerializer):
         source='shared_with.email',
         read_only=True
     )
+    shared_with_profile_image = serializers.ImageField(source='shared_with.profile_image', read_only=True)
+    shared_with_profile_image_url = serializers.SerializerMethodField()
     
     # Computed fields
     can_access = serializers.SerializerMethodField()
@@ -151,8 +156,8 @@ class SharedFileSerializer(serializers.ModelSerializer):
         model = SharedFile
         fields = [
             'id', 'upload', 'status', 'message',
-            'shared_by', 'shared_by_name', 'shared_by_email',
-            'shared_with', 'shared_with_name', 'shared_with_email',
+            'shared_by', 'shared_by_name', 'shared_by_email', 'shared_by_profile_image', 'shared_by_profile_image_url',
+            'shared_with', 'shared_with_name', 'shared_with_email', 'shared_with_profile_image', 'shared_with_profile_image_url',
             'shared_at', 'accepted_at', 'rejected_at',
             'can_access'
         ]
@@ -165,6 +170,12 @@ class SharedFileSerializer(serializers.ModelSerializer):
         """Check if recipient can access the file"""
         return obj.can_access_file
 
+    def get_shared_by_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.shared_by)
+
+    def get_shared_with_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.shared_with)
+
 
 class SharedFileListSerializer(serializers.ModelSerializer):
     """
@@ -176,14 +187,25 @@ class SharedFileListSerializer(serializers.ModelSerializer):
     file_code = serializers.CharField(source='upload.file_code', read_only=True)
     shared_by_name = serializers.CharField(source='shared_by.full_name', read_only=True)
     shared_with_name = serializers.CharField(source='shared_with.full_name', read_only=True)
+    shared_by_profile_image = serializers.ImageField(source='shared_by.profile_image', read_only=True)
+    shared_by_profile_image_url = serializers.SerializerMethodField()
+    shared_with_profile_image = serializers.ImageField(source='shared_with.profile_image', read_only=True)
+    shared_with_profile_image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = SharedFile
         fields = [
             'id', 'file_name', 'file_type', 'file_code',
-            'shared_by_name', 'shared_with_name',
+            'shared_by_name', 'shared_by_profile_image', 'shared_by_profile_image_url',
+            'shared_with_name', 'shared_with_profile_image', 'shared_with_profile_image_url',
             'status', 'message', 'shared_at'
         ]
+
+    def get_shared_by_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.shared_by)
+
+    def get_shared_with_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.shared_with)
 
 
 class AcceptRejectSerializer(serializers.Serializer):
@@ -192,4 +214,3 @@ class AcceptRejectSerializer(serializers.Serializer):
     No additional fields needed - just the action.
     """
     pass
-

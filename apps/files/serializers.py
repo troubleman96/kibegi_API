@@ -2,15 +2,14 @@ from rest_framework import serializers
 from apps.uploads.models import Upload
 from apps.sharing.models import SharedFile
 from django.contrib.auth import get_user_model
+from apps.authentication.serializers import UserSummarySerializer
 
 User = get_user_model()
 
 
-class FileOwnerSerializer(serializers.ModelSerializer):
+class FileOwnerSerializer(UserSummarySerializer):
     """Serializer for file owner/uploader info"""
-    class Meta:
-        model = User
-        fields = ['id', 'email', 'full_name', 'user_type']
+    pass
 
 
 class UnifiedFileSerializer(serializers.Serializer):

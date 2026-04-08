@@ -19,6 +19,8 @@ class UserSearchResultSerializer(serializers.Serializer):
     email = serializers.EmailField(read_only=True)
     full_name = serializers.CharField(read_only=True)
     user_type = serializers.CharField(read_only=True)
+    profile_image = serializers.CharField(read_only=True, allow_null=True)
+    profile_image_url = serializers.CharField(read_only=True, allow_null=True)
 
 
 class ClassSearchResultSerializer(serializers.Serializer):
@@ -55,6 +57,8 @@ class FriendSearchResultSerializer(serializers.Serializer):
     friend_email = serializers.EmailField(read_only=True)
     friend_name = serializers.CharField(read_only=True)
     friend_type = serializers.CharField(read_only=True)
+    friend_profile_image = serializers.CharField(read_only=True, allow_null=True)
+    friend_profile_image_url = serializers.CharField(read_only=True, allow_null=True)
     nickname = serializers.CharField(read_only=True, allow_blank=True)
     accepted_at = serializers.CharField(read_only=True, allow_null=True)
 
@@ -135,4 +139,3 @@ class SearchQuerySerializer(serializers.Serializer):
         required=False,
         help_text="Categories to search. Leave empty to search all. Options: users, classes, files, friends"
     )
-

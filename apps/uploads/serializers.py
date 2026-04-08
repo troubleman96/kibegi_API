@@ -1,10 +1,13 @@
 from rest_framework import serializers
 from .models import Upload
 from .services import FileHandler
+from apps.authentication.serializers import UserSummarySerializer
 
 
 class UploadSerializer(serializers.ModelSerializer):
     uploader_name = serializers.CharField(source='uploader.full_name', read_only=True)
+    uploader_profile_image = serializers.ImageField(source='uploader.profile_image', read_only=True)
+    uploader_profile_image_url = serializers.SerializerMethodField()
     class_name = serializers.CharField(source='class_obj.name', read_only=True)
     file_url = serializers.SerializerMethodField()
     file_type = serializers.CharField(read_only=True)  # Auto-detected, not user input
@@ -15,12 +18,12 @@ class UploadSerializer(serializers.ModelSerializer):
         model = Upload
         fields = [
             'id', 'file', 'file_name', 'file_type', 'file_size', 'file_code',
-            'uploader', 'uploader_name', 'class_obj', 'class_name',
+            'uploader', 'uploader_name', 'uploader_profile_image', 'uploader_profile_image_url', 'class_obj', 'class_name',
             'is_deleted', 'deleted_at', 'created_at', 'updated_at',
             'file_url'
         ]
         read_only_fields = [
-            'id', 'file_code', 'file_type', 'file_size', 'uploader', 'uploader_name',
+            'id', 'file_code', 'file_type', 'file_size', 'uploader', 'uploader_name', 'uploader_profile_image', 'uploader_profile_image_url',
             'class_name', 'is_deleted', 'deleted_at', 'created_at', 'updated_at',
             'file_url'
         ]
@@ -30,6 +33,9 @@ class UploadSerializer(serializers.ModelSerializer):
         if obj.file and request:
             return request.build_absolute_uri(obj.file.url)
         return None
+
+    def get_uploader_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.uploader)
     
     def validate_file(self, value):
         """Validate file using FileHandler"""
@@ -46,11 +52,16 @@ class UploadSerializer(serializers.ModelSerializer):
 class UploadListSerializer(serializers.ModelSerializer):
     """Lightweight serializer for list views"""
     uploader_name = serializers.CharField(source='uploader.full_name', read_only=True)
+    uploader_profile_image = serializers.ImageField(source='uploader.profile_image', read_only=True)
+    uploader_profile_image_url = serializers.SerializerMethodField()
     class_name = serializers.CharField(source='class_obj.name', read_only=True)
     
     class Meta:
         model = Upload
         fields = [
             'id', 'file_name', 'file_type', 'file_size', 'file_code',
-            'uploader_name', 'class_name', 'created_at'
+            'uploader_name', 'uploader_profile_image', 'uploader_profile_image_url', 'class_name', 'created_at'
         ]
+
+    def get_uploader_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.uploader)

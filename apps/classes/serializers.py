@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.db.models import Count
 from .models import Class, Membership
 from apps.authentication.models import User
+from apps.authentication.serializers import UserSummarySerializer
 
 
 # ============================================================================
@@ -56,16 +57,23 @@ class UploadsSummarySerializer(serializers.Serializer):
 class MembershipSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.full_name', read_only=True)
     user_email = serializers.CharField(source='user.email', read_only=True)
+    user_profile_image = serializers.ImageField(source='user.profile_image', read_only=True)
+    user_profile_image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Membership
-        fields = ['id', 'user', 'user_name', 'user_email', 'role', 'joined_at']
+        fields = ['id', 'user', 'user_name', 'user_email', 'user_profile_image', 'user_profile_image_url', 'role', 'joined_at']
         read_only_fields = ['id', 'joined_at']
+
+    def get_user_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.user)
 
 
 class ClassSerializer(serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
     creator_type = serializers.CharField(source='creator.user_type', read_only=True)
+    creator_profile_image = serializers.ImageField(source='creator.profile_image', read_only=True)
+    creator_profile_image_url = serializers.SerializerMethodField()
     member_count = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     user_role = serializers.SerializerMethodField()
@@ -74,10 +82,13 @@ class ClassSerializer(serializers.ModelSerializer):
         model = Class
         fields = [
             'id', 'name', 'description', 'class_code', 'is_public', 'is_verified',
-            'creator', 'creator_name', 'creator_type', 'member_count', 'is_member',
+            'creator', 'creator_name', 'creator_type', 'creator_profile_image', 'creator_profile_image_url', 'member_count', 'is_member',
             'user_role', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'class_code', 'is_verified', 'creator', 'created_at', 'updated_at']
+
+    def get_creator_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.creator)
     
     def get_member_count(self, obj):
         # Use annotation if available, otherwise count
@@ -124,11 +135,16 @@ class ClassListSerializer(serializers.ModelSerializer):
     """Lightweight serializer for list views"""
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
     creator_type = serializers.CharField(source='creator.user_type', read_only=True)
+    creator_profile_image = serializers.ImageField(source='creator.profile_image', read_only=True)
+    creator_profile_image_url = serializers.SerializerMethodField()
     member_count = serializers.IntegerField(source='total_members', read_only=True)
     
     class Meta:
         model = Class
-        fields = ['id', 'name', 'class_code', 'is_public', 'is_verified', 'creator_name', 'creator_type', 'member_count', 'created_at']
+        fields = ['id', 'name', 'class_code', 'is_public', 'is_verified', 'creator_name', 'creator_type', 'creator_profile_image', 'creator_profile_image_url', 'member_count', 'created_at']
+
+    def get_creator_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.creator)
 
 
 # ============================================================================
@@ -154,6 +170,8 @@ class ClassDetailSerializer(serializers.ModelSerializer):
     # Basic class info
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
     creator_type = serializers.CharField(source='creator.user_type', read_only=True)
+    creator_profile_image = serializers.ImageField(source='creator.profile_image', read_only=True)
+    creator_profile_image_url = serializers.SerializerMethodField()
     member_count = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     user_role = serializers.SerializerMethodField()
@@ -168,12 +186,15 @@ class ClassDetailSerializer(serializers.ModelSerializer):
         fields = [
             # Basic info
             'id', 'name', 'description', 'class_code', 'is_public', 'is_verified',
-            'creator', 'creator_name', 'creator_type', 'member_count', 'is_member',
+            'creator', 'creator_name', 'creator_type', 'creator_profile_image', 'creator_profile_image_url', 'member_count', 'is_member',
             'user_role', 'created_at', 'updated_at',
             # Upload info - NEW
             'uploads_summary', 'recent_uploads', 'uploader_stats'
         ]
         read_only_fields = ['id', 'class_code', 'is_verified', 'creator', 'created_at', 'updated_at']
+
+    def get_creator_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.creator)
     
     def get_member_count(self, obj):
         """Get total member count for the class"""
@@ -315,10 +336,11 @@ class MemberSerializer(serializers.ModelSerializer):
     """Serializer for displaying class members"""
     role = serializers.SerializerMethodField()
     joined_at = serializers.SerializerMethodField()
+    profile_image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = User
-        fields = ['id', 'full_name', 'email', 'user_type', 'role', 'joined_at']
+        fields = ['id', 'full_name', 'email', 'user_type', 'profile_image', 'profile_image_url', 'role', 'joined_at']
     
     def get_role(self, obj):
         class_obj = self.context.get('class_obj')
@@ -333,3 +355,6 @@ class MemberSerializer(serializers.ModelSerializer):
             membership = class_obj.memberships.filter(user=obj).first()
             return membership.joined_at if membership else None
         return None
+
+    def get_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj)

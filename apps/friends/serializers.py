@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Friendship
 from apps.authentication.models import User
+from apps.authentication.serializers import UserSummarySerializer
 
 
 class UserSearchSerializer(serializers.ModelSerializer):
@@ -9,10 +10,15 @@ class UserSearchSerializer(serializers.ModelSerializer):
     
     Shows basic user info for friend search.
     """
+    profile_image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'email', 'full_name', 'user_type']
+        fields = ['id', 'email', 'full_name', 'user_type', 'profile_image', 'profile_image_url']
         read_only_fields = fields
+
+    def get_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj)
 
 
 class AddFriendSerializer(serializers.Serializer):
@@ -61,13 +67,18 @@ class FriendshipSerializer(serializers.ModelSerializer):
         source='friend.full_name',
         read_only=True
     )
+    user_profile_image = serializers.ImageField(source='user.profile_image', read_only=True)
+    user_profile_image_url = serializers.SerializerMethodField()
+    friend_profile_image = serializers.ImageField(source='friend.profile_image', read_only=True)
+    friend_profile_image_url = serializers.SerializerMethodField()
     display_name = serializers.CharField(read_only=True)
     
     class Meta:
         model = Friendship
         fields = [
             'id', 'user', 'user_email', 'user_name',
-            'friend', 'friend_email', 'friend_name',
+            'user_profile_image', 'user_profile_image_url',
+            'friend', 'friend_email', 'friend_name', 'friend_profile_image', 'friend_profile_image_url',
             'nickname', 'display_name', 'status',
             'created_at', 'accepted_at'
         ]
@@ -75,6 +86,12 @@ class FriendshipSerializer(serializers.ModelSerializer):
             'id', 'user', 'friend', 'status',
             'created_at', 'accepted_at'
         ]
+
+    def get_user_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.user)
+
+    def get_friend_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.friend)
 
 
 class FriendshipListSerializer(serializers.ModelSerializer):
@@ -111,12 +128,7 @@ class FriendshipListSerializer(serializers.ModelSerializer):
         else:
             friend = obj.user
         
-        return {
-            'id': friend.id,
-            'email': friend.email,
-            'full_name': friend.full_name,
-            'user_type': friend.user_type
-        }
+        return UserSummarySerializer(friend, context=self.context).data
 
 
 class UpdateNicknameSerializer(serializers.Serializer):
@@ -163,17 +175,27 @@ class FriendRequestSerializer(serializers.ModelSerializer):
     sender_email = serializers.CharField(source='user.email', read_only=True)
     sender_name = serializers.CharField(source='user.full_name', read_only=True)
     sender_type = serializers.CharField(source='user.user_type', read_only=True)
+    sender_profile_image = serializers.ImageField(source='user.profile_image', read_only=True)
+    sender_profile_image_url = serializers.SerializerMethodField()
     recipient_id = serializers.UUIDField(source='friend.id', read_only=True)
     recipient_email = serializers.CharField(source='friend.email', read_only=True)
     recipient_name = serializers.CharField(source='friend.full_name', read_only=True)
     recipient_type = serializers.CharField(source='friend.user_type', read_only=True)
+    recipient_profile_image = serializers.ImageField(source='friend.profile_image', read_only=True)
+    recipient_profile_image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Friendship
         fields = [
             'id', 
-            'sender_id', 'sender_email', 'sender_name', 'sender_type',
-            'recipient_id', 'recipient_email', 'recipient_name', 'recipient_type',
+            'sender_id', 'sender_email', 'sender_name', 'sender_type', 'sender_profile_image', 'sender_profile_image_url',
+            'recipient_id', 'recipient_email', 'recipient_name', 'recipient_type', 'recipient_profile_image', 'recipient_profile_image_url',
             'status', 'created_at'
         ]
         read_only_fields = fields
+
+    def get_sender_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.user)
+
+    def get_recipient_profile_image_url(self, obj):
+        return UserSummarySerializer(context=self.context).get_profile_image_url(obj.friend)

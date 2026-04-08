@@ -240,6 +240,15 @@ class AuthenticationEndpointTests(BaseAPITestCase):
         self.assertTrue(bool(self.student.profile_image))
         self.assertIsNotNone(upload_response.data["data"]["profile_image_url"])
 
+        members_response = client.get(f"/api/v1/classes/{self.class_obj.id}/members/")
+        self.assertEqual(members_response.status_code, status.HTTP_200_OK)
+        student_member = next(
+            item for item in members_response.data["results"]
+            if item["email"] == self.student.email
+        )
+        self.assertIsNotNone(student_member["profile_image"])
+        self.assertIsNotNone(student_member["profile_image_url"])
+
         delete_response = client.delete("/api/v1/auth/profile/image/")
         self.assertEqual(delete_response.status_code, status.HTTP_200_OK)
         self.student.refresh_from_db()

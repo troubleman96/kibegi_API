@@ -149,6 +149,8 @@ class GlobalSearchService:
                 "email": user.email,
                 "full_name": user.full_name,
                 "user_type": user.user_type,
+                "profile_image": user.profile_image.name if user.profile_image else None,
+                "profile_image_url": user.profile_image.url if user.profile_image else None,
             }
             for user in users
         ]
@@ -278,6 +280,8 @@ class GlobalSearchService:
                 "friend_email": friend.email,
                 "friend_name": friend.full_name,
                 "friend_type": friend.user_type,
+                "friend_profile_image": friend.profile_image.name if friend.profile_image else None,
+                "friend_profile_image_url": friend.profile_image.url if friend.profile_image else None,
                 "nickname": friendship.nickname if friendship.user == current_user else "",
                 "accepted_at": friendship.accepted_at.isoformat() if friendship.accepted_at else None,
             })
@@ -286,4 +290,3 @@ class GlobalSearchService:
                 break
         
         return results
-

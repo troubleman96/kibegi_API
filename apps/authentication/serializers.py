@@ -7,6 +7,27 @@ from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
 
+class UserSummarySerializer(serializers.ModelSerializer):
+    """Shared lightweight user serializer for nested API responses."""
+    profile_image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'full_name', 'user_type', 'profile_image', 'profile_image_url']
+        read_only_fields = fields
+
+    def get_profile_image_url(self, obj):
+        request = self.context.get('request')
+        if obj.profile_image and request:
+            return request.build_absolute_uri(obj.profile_image.url)
+        if obj.profile_image:
+            try:
+                return obj.profile_image.url
+            except ValueError:
+                return None
+        return None
+
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password], style={'input_type': 'password'})
     confirm_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
@@ -93,6 +114,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if obj.profile_image and request:
             return request.build_absolute_uri(obj.profile_image.url)
+        if obj.profile_image:
+            try:
+                return obj.profile_image.url
+            except ValueError:
+                return None
         return None
 
 
