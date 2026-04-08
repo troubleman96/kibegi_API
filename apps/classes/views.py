@@ -223,7 +223,7 @@ class ClassMembersAPIView(generics.ListAPIView):
                 from rest_framework.exceptions import PermissionDenied
                 raise PermissionDenied("You don't have access to this class")
             
-            return class_obj.members.all()
+            return class_obj.members.order_by('id')
         except Class.DoesNotExist:
             from rest_framework.exceptions import NotFound
             raise NotFound("Class not found")

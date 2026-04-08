@@ -33,15 +33,17 @@ class UnifiedFileSerializer(serializers.Serializer):
     accepted = serializers.BooleanField(required=False, allow_null=True)
     
     def get_file_url(self, obj):
-        if hasattr(obj, 'file') and obj.file:
+        file_obj = obj.get('file') if isinstance(obj, dict) else getattr(obj, 'file', None)
+        if file_obj:
             request = self.context.get('request')
             if request:
-                return request.build_absolute_uri(obj.file.url)
+                return request.build_absolute_uri(file_obj.url)
         return None
     
     def get_shared_by(self, obj):
-        if hasattr(obj, 'owner') and obj.owner:
-            return FileOwnerSerializer(obj.owner).data
+        shared_by = obj.get('shared_by') if isinstance(obj, dict) else getattr(obj, 'shared_by', None)
+        if shared_by:
+            return FileOwnerSerializer(shared_by).data
         return None
 
 
@@ -62,6 +64,7 @@ class DeletedFileSerializer(serializers.Serializer):
     was_accepted = serializers.BooleanField(required=False, allow_null=True)
     
     def get_shared_by(self, obj):
-        if hasattr(obj, 'owner') and obj.owner:
-            return FileOwnerSerializer(obj.owner).data
+        shared_by = obj.get('shared_by') if isinstance(obj, dict) else getattr(obj, 'shared_by', None)
+        if shared_by:
+            return FileOwnerSerializer(shared_by).data
         return None

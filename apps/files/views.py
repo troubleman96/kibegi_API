@@ -402,7 +402,6 @@ class PermanentDeleteFileAPIView(APIView):
     )
     def delete(self, request, file_code):
         user = request.user
-        import os
         import logging
         logger = logging.getLogger(__name__)
 
@@ -416,14 +415,15 @@ class PermanentDeleteFileAPIView(APIView):
             
             # Store file info before deletion
             file_name = upload.file_name
-            file_path = upload.file.path if upload.file else None
-            
-            # Delete physical file from storage
-            if file_path and os.path.exists(file_path):
+            storage = upload.file.storage if upload.file else None
+            file_name_in_storage = upload.file.name if upload.file else None
+
+            # Delete physical file from storage in a backend-safe way (local, S3, MinIO)
+            if storage and file_name_in_storage:
                 try:
-                    os.remove(file_path)
-                except OSError as e:
-                    logger.error(f"Failed to delete physical file {file_path}: {e}")
+                    storage.delete(file_name_in_storage)
+                except Exception as e:
+                    logger.error(f"Failed to delete physical file {file_name_in_storage}: {e}")
             
             # Delete database record
             upload.delete()

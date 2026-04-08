@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 from django.db.models import Q
 from django.utils import timezone
 from django.http import FileResponse, Http404, StreamingHttpResponse
@@ -81,6 +82,19 @@ class UploadDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         """Users can only access non-deleted uploads"""
         return Upload.objects.filter(is_deleted=False)
+
+    def get_object(self):
+        instance = super().get_object()
+        user = self.request.user
+
+        is_owner = instance.uploader_id == user.id
+        is_class_member = instance.class_obj.members.filter(id=user.id).exists()
+        has_share_access = instance.shares.filter(shared_with=user, status='accepted').exists()
+
+        if not (is_owner or is_class_member or has_share_access):
+            raise PermissionDenied("You don't have permission to access this file")
+
+        return instance
     
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -231,17 +245,18 @@ class PermanentDeleteAPIView(APIView):
         
         # Store file info before deletion
         file_name = upload.file_name
-        file_path = upload.file.path if upload.file else None
-        
-        # Delete physical file from storage
-        if file_path and os.path.exists(file_path):
+        storage = upload.file.storage if upload.file else None
+        file_name_in_storage = upload.file.name if upload.file else None
+
+        # Delete physical file from storage in a backend-safe way (local, S3, MinIO)
+        if storage and file_name_in_storage:
             try:
-                os.remove(file_path)
-            except OSError as e:
+                storage.delete(file_name_in_storage)
+            except Exception as e:
                 # Log error but continue with database deletion
                 import logging
                 logger = logging.getLogger(__name__)
-                logger.error(f"Failed to delete physical file {file_path}: {e}")
+                logger.error(f"Failed to delete physical file {file_name_in_storage}: {e}")
         
         # Delete database record
         upload.delete()
