@@ -47,15 +47,15 @@ INSTALLED_APPS = [
     'storages',
 
     # Local apps
-    'core',
-    'authentication',
-    'classes',
-    'uploads',
-    'sharing',
-    'friends',
-    'notifications',
-    'files',
-    'storage',
+    'apps.core',
+    'apps.authentication',
+    'apps.classes',
+    'apps.uploads',
+    'apps.sharing',
+    'apps.friends',
+    'apps.notifications',
+    'apps.files',
+    'apps.storage',
 ]
 
 MIDDLEWARE = [
@@ -183,42 +183,68 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50MB in bytes
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50MB in bytes
 
-# MinIO S3-compatible storage configuration (Django 4.2+ style)
+# MinIO / S3-compatible storage configuration
+MINIO_ENABLED = config('MINIO_ENABLED', default=True, cast=bool)
+MINIO_API_ENDPOINT = config('MINIO_API_ENDPOINT', default='')
+MINIO_ACCESS_KEY = config(
+    'MINIO_ACCESS_KEY',
+    default=config('AWS_ACCESS_KEY_ID', default='MINIO_ACCESS_KEY'),
+)
+MINIO_SECRET_KEY = config(
+    'MINIO_SECRET_KEY',
+    default=config('AWS_SECRET_ACCESS_KEY', default='MINIO_SECRET_KEY'),
+)
+MINIO_BUCKET = config(
+    'MINIO_BUCKET',
+    default=config('AWS_STORAGE_BUCKET_NAME', default='kibegi-uploads'),
+)
+MINIO_SECURE = config(
+    'MINIO_SECURE',
+    default=config('AWS_S3_USE_SSL', default=True, cast=bool),
+    cast=bool,
+)
+MINIO_PUBLIC_BASE_URL = config('MINIO_PUBLIC_BASE_URL', default='')
+
+if MINIO_API_ENDPOINT and not MINIO_API_ENDPOINT.startswith(('http://', 'https://')):
+    _minio_scheme = 'https' if MINIO_SECURE else 'http'
+    MINIO_ENDPOINT_URL = f'{_minio_scheme}://{MINIO_API_ENDPOINT}'
+else:
+    MINIO_ENDPOINT_URL = MINIO_API_ENDPOINT or config(
+        'AWS_S3_ENDPOINT_URL',
+        default='https://storage.kibegi.com',
+    )
+
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "BACKEND": (
+            "storages.backends.s3boto3.S3Boto3Storage"
+            if MINIO_ENABLED
+            else "django.core.files.storage.FileSystemStorage"
+        ),
     },
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
-# MinIO credentials and bucket settings
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default='MINIO_ACCESS_KEY')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default='MINIO_SECRET_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='kibegi-uploads')
-AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL', default='https://storage.kibegi.com')
+AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+AWS_STORAGE_BUCKET_NAME = MINIO_BUCKET
+AWS_S3_ENDPOINT_URL = MINIO_ENDPOINT_URL
 AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='us-east-1')
+AWS_S3_USE_SSL = MINIO_SECURE
+AWS_S3_VERIFY = config('AWS_S3_VERIFY', default=MINIO_SECURE, cast=bool)
+AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', default=False, cast=bool)
+AWS_DEFAULT_ACL = None
+AWS_S3_FILE_OVERWRITE = False
+AWS_S3_MAX_MEMORY_SIZE = 52428800
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_QUERYSTRING_EXPIRE = config('AWS_QUERYSTRING_EXPIRE', default=3600, cast=int)
+AWS_S3_ADDRESSING_STYLE = 'path'
+AWS_LOCATION = ''
 
-# S3 connection settings
-AWS_S3_USE_SSL = config('AWS_S3_USE_SSL', default=True, cast=bool)
-AWS_S3_VERIFY = config('AWS_S3_VERIFY', default=True, cast=bool)
-
-# Access control
-# For private buckets, use AWS_QUERYSTRING_AUTH=True to generate signed URLs
-AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', default=True, cast=bool)
-AWS_DEFAULT_ACL = None  # Use bucket's default ACL
-
-# MinIO/S3 transfer settings for large file uploads
-AWS_S3_FILE_OVERWRITE = False  # Don't overwrite files with same name
-AWS_S3_MAX_MEMORY_SIZE = 52428800  # 50MB - files larger than this use temporary file storage
-AWS_S3_SIGNATURE_VERSION = 's3v4'  # Required for MinIO
-
-# Optional: Set custom domain for direct file access (if using CDN or custom domain)
-# AWS_S3_CUSTOM_DOMAIN = config('AWS_S3_CUSTOM_DOMAIN', default=None)
-
-# Optional: URL expiration for signed URLs (in seconds) - default 1 hour
-# AWS_QUERYSTRING_EXPIRE = config('AWS_QUERYSTRING_EXPIRE', default=3600, cast=int)
+if MINIO_PUBLIC_BASE_URL:
+    MEDIA_URL = MINIO_PUBLIC_BASE_URL.rstrip('/') + '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -376,7 +402,7 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'INFO',
-            'class': 'core.utils.log_handler.MinIORotatingFileHandler' if ENABLE_MINIO_LOG_UPLOAD else 'logging.handlers.RotatingFileHandler',
+            'class': 'apps.core.utils.log_handler.MinIORotatingFileHandler' if ENABLE_MINIO_LOG_UPLOAD else 'logging.handlers.RotatingFileHandler',
             'filename': str(LOG_FILE),
             'maxBytes': 1024 * 1024 * 5,  # 5MB - will upload to MinIO when rotated
             'backupCount': 5,

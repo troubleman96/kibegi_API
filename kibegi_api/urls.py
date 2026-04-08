@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from authentication.views import RegisterAPIView, LoginAPIView
+from apps.authentication.views import RegisterAPIView, LoginAPIView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 urlpatterns = [
@@ -30,15 +30,15 @@ urlpatterns = [
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     
     # API v1 endpoints
-    path('api/v1/', include('core.urls')),  # Core endpoints (search, etc.)
-    path('api/v1/auth/', include('authentication.urls')),
-    path('api/v1/classes/', include('classes.urls')),
-    path('api/v1/uploads/', include('uploads.urls')),
-    path('api/v1/sharing/', include('sharing.urls')),
-    path('api/v1/friends/', include('friends.urls')),
-    path('api/v1/notifications/', include('notifications.urls')),
-    path('api/v1/files/', include('files.urls')),
-    path('api/v1/storage/', include('storage.urls')),
+    path('api/v1/', include('apps.core.urls')),  # Core endpoints (search, etc.)
+    path('api/v1/auth/', include('apps.authentication.urls')),
+    path('api/v1/classes/', include('apps.classes.urls')),
+    path('api/v1/uploads/', include('apps.uploads.urls')),
+    path('api/v1/sharing/', include('apps.sharing.urls')),
+    path('api/v1/friends/', include('apps.friends.urls')),
+    path('api/v1/notifications/', include('apps.notifications.urls')),
+    path('api/v1/files/', include('apps.files.urls')),
+    path('api/v1/storage/', include('apps.storage.urls')),
     
     # Compatibility shortcuts (deprecated - use /api/v1/auth/ instead)
     path('register/', RegisterAPIView.as_view()),
