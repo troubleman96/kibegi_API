@@ -102,6 +102,8 @@ class FriendshipListSerializer(serializers.ModelSerializer):
     Used in friend list endpoints.
     """
     friend_info = serializers.SerializerMethodField()
+    nickname = serializers.SerializerMethodField()
+    display_name = serializers.SerializerMethodField()
     
     class Meta:
         model = Friendship
@@ -129,6 +131,38 @@ class FriendshipListSerializer(serializers.ModelSerializer):
             friend = obj.user
         
         return UserSummarySerializer(friend, context=self.context).data
+
+    def get_nickname(self, obj):
+        """
+        Return the nickname owned by the current user for this friend.
+
+        Nicknames are stored on the Friendship row where `user` is the owner.
+        For the reverse row (where the current user is `friend`), the nickname
+        belongs to the other party and should not be shown here.
+        """
+        request = self.context.get('request')
+        if not request:
+            return obj.nickname
+
+        return obj.nickname if obj.user_id == request.user.id else ""
+
+    def get_display_name(self, obj):
+        """
+        Display name for list UI:
+        - If the current user owns this row, use their nickname (if set) else friend's full name.
+        - Otherwise, always show the other user's full name (never the current user's own name).
+        """
+        request = self.context.get('request')
+        if not request:
+            return obj.display_name
+
+        current_user_id = request.user.id
+        if obj.user_id == current_user_id:
+            return obj.nickname or obj.friend.full_name
+
+        # Current user is the recipient of this directional row; nickname (if any)
+        # belongs to the other party, so ignore it here.
+        return obj.user.full_name
 
 
 class UpdateNicknameSerializer(serializers.Serializer):

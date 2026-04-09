@@ -120,14 +120,46 @@ class FriendService:
         Returns:
             QuerySet of Friendship objects
         """
-        qs = Friendship.objects.filter(
-            Q(user=user) | Q(friend=user)
-        ).select_related('user', 'friend')
-        
+        qs = Friendship.objects.filter(Q(user=user) | Q(friend=user)).select_related("user", "friend")
+
         if status:
             qs = qs.filter(status=status)
-        
-        return qs
+
+        # When nicknames are set by the "friend" side, the API creates a reverse
+        # Friendship record so each side can store their own nickname.
+        # That can result in duplicates for accepted friendships in list views.
+        if status == "accepted":
+            return FriendService._dedupe_accepted_friendships(user, qs.order_by("-created_at"))
+
+        return qs.order_by("-created_at")
+
+    @staticmethod
+    def _dedupe_accepted_friendships(user, queryset):
+        """
+        Deduplicate accepted friendships so each other user appears once.
+
+        Preference rule:
+        - If both directional records exist, return the one where `user` is the current user
+          (because that row stores the current user's nickname for the other person).
+        - Otherwise, return the only existing row.
+        """
+        current_user_id = user.id
+        chosen_by_other_id = {}
+
+        for friendship in queryset:
+            other_id = friendship.friend_id if friendship.user_id == current_user_id else friendship.user_id
+            existing = chosen_by_other_id.get(other_id)
+            if existing is None:
+                chosen_by_other_id[other_id] = friendship
+                continue
+
+            # Prefer the record owned by the current user.
+            if existing.user_id != current_user_id and friendship.user_id == current_user_id:
+                chosen_by_other_id[other_id] = friendship
+
+        results = list(chosen_by_other_id.values())
+        results.sort(key=lambda item: item.created_at, reverse=True)
+        return results
     
     @staticmethod
     def get_friend_requests(user):

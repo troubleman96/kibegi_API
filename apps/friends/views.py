@@ -65,8 +65,9 @@ class FriendshipListAPIView(generics.ListAPIView):
             return cached_response
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
-        
-        logger.info(f"User {request.user.email} retrieved {queryset.count()} friendships")
+
+        total = len(queryset) if isinstance(queryset, list) else queryset.count()
+        logger.info(f"User {request.user.email} retrieved {total} friendships")
         
         if page is not None:
             serializer = self.get_serializer(page, many=True)
