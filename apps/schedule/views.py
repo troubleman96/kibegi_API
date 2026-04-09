@@ -6,6 +6,12 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from apps.core.utils.responses import success_response, error_response
+from apps.core.utils.api_cache import (
+    build_cache_key,
+    get_cached_response,
+    cache_response,
+    invalidate_cache_namespaces,
+)
 
 from .models import ScheduleCalendar, ScheduleEvent
 from .serializers import (
@@ -32,11 +38,16 @@ class ScheduleCalendarListAPIView(generics.ListAPIView):
         )
 
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, "schedule", extra="calendar-list")
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         serializer = self.get_serializer(self.get_queryset(), many=True)
-        return success_response(
+        response = success_response(
             message="Schedule calendars retrieved successfully",
             data=serializer.data,
         )
+        return cache_response(cache_key, response, "schedule")
 
 
 class ScheduleCalendarDetailAPIView(generics.RetrieveUpdateAPIView):
@@ -53,11 +64,16 @@ class ScheduleCalendarDetailAPIView(generics.RetrieveUpdateAPIView):
         )
 
     def retrieve(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, "schedule", extra=f"calendar:{self.kwargs.get('pk')}")
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         serializer = self.get_serializer(self.get_object())
-        return success_response(
+        response = success_response(
             message="Schedule calendar retrieved successfully",
             data=serializer.data,
         )
+        return cache_response(cache_key, response, "schedule")
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -65,6 +81,7 @@ class ScheduleCalendarDetailAPIView(generics.RetrieveUpdateAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        invalidate_cache_namespaces("schedule")
         return success_response(
             message="Schedule calendar updated successfully",
             data=serializer.data,
@@ -86,17 +103,23 @@ class ScheduleCalendarEventsAPIView(generics.ListCreateAPIView):
         return self.get_calendar().events.all().order_by("start_at", "created_at")
 
     def list(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, "schedule", extra=f"calendar-events:{self.kwargs.get('pk')}")
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         serializer = self.get_serializer(self.get_queryset(), many=True)
-        return success_response(
+        response = success_response(
             message="Schedule events retrieved successfully",
             data=serializer.data,
         )
+        return cache_response(cache_key, response, "schedule")
 
     def create(self, request, *args, **kwargs):
         calendar = self.get_calendar()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(calendar=calendar)
+        invalidate_cache_namespaces("schedule")
         return success_response(
             message="Schedule event created successfully",
             data=serializer.data,
@@ -115,11 +138,16 @@ class ScheduleEventDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return ScheduleEvent.objects.filter(calendar__owner=self.request.user).select_related("calendar")
 
     def retrieve(self, request, *args, **kwargs):
+        cache_key = build_cache_key(request, "schedule", extra=f"event:{self.kwargs.get('pk')}")
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         serializer = self.get_serializer(self.get_object())
-        return success_response(
+        response = success_response(
             message="Schedule event retrieved successfully",
             data=serializer.data,
         )
+        return cache_response(cache_key, response, "schedule")
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -127,6 +155,7 @@ class ScheduleEventDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        invalidate_cache_namespaces("schedule")
         return success_response(
             message="Schedule event updated successfully",
             data=serializer.data,
@@ -135,6 +164,7 @@ class ScheduleEventDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         event = self.get_object()
         event.delete()
+        invalidate_cache_namespaces("schedule")
         return success_response(message="Schedule event deleted successfully", status_code=status.HTTP_200_OK)
 
 
@@ -208,32 +238,42 @@ class PublicScheduleInfoAPIView(PublicScheduleBaseAPIView):
     """Return public info for a tokenized shared calendar."""
 
     def get(self, request, token):
+        cache_key = build_cache_key(request, "schedule", extra=f"public-info:{token}")
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         calendar = self.get_calendar(token=token)
         if not calendar:
             return error_response("Schedule calendar not found", status_code=status.HTTP_404_NOT_FOUND)
 
         ScheduleService.record_public_access(calendar, request, "info")
         serializer = PublicScheduleInfoSerializer(self.build_public_info(request, calendar))
-        return success_response(
+        response = success_response(
             message="Public schedule information retrieved successfully",
             data=serializer.data,
         )
+        return cache_response(cache_key, response, "schedule")
 
 
 class PublicScheduleCodeInfoAPIView(PublicScheduleBaseAPIView):
     """Return public info for a short-code shared calendar."""
 
     def get(self, request, code):
+        cache_key = build_cache_key(request, "schedule", extra=f"public-code-info:{code.upper()}")
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
         calendar = self.get_calendar(code=code)
         if not calendar:
             return error_response("Schedule calendar not found", status_code=status.HTTP_404_NOT_FOUND)
 
         ScheduleService.record_public_access(calendar, request, "code-info")
         serializer = PublicScheduleInfoSerializer(self.build_public_info(request, calendar))
-        return success_response(
+        response = success_response(
             message="Public schedule information retrieved successfully",
             data=serializer.data,
         )
+        return cache_response(cache_key, response, "schedule")
 
 
 class PublicScheduleSubscribeAPIView(PublicScheduleBaseAPIView):

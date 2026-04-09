@@ -1,6 +1,7 @@
 """Business logic for notifications app"""
 
 from django.db.models import QuerySet
+from django.core.exceptions import ValidationError
 from typing import Optional
 
 
@@ -45,13 +46,68 @@ class NotificationService:
             )
         """
         from .models import Notification
+
+        valid_types = {t for (t, _) in Notification.TYPE_CHOICES}
+        if notification_type not in valid_types:
+            raise ValidationError(f"Invalid notification_type: {notification_type}")
         
-        return Notification.objects.create(
+        notification = Notification.objects.create(
             user=user,
             notification_type=notification_type,
             content=content,
             related_object_id=str(related_id)
         )
+        try:
+            from apps.core.utils.api_cache import invalidate_cache_namespaces
+            invalidate_cache_namespaces('notifications')
+        except Exception:
+            # Never fail the originating business flow due to cache issues.
+            pass
+
+        return notification
+
+    @staticmethod
+    def create_bulk(notifications: list[dict]) -> int:
+        """
+        Create many notifications efficiently.
+
+        Args:
+            notifications: list of dicts with keys:
+                - user
+                - notification_type
+                - content
+                - related_id (optional)
+
+        Returns:
+            int: number created
+        """
+        from .models import Notification
+
+        valid_types = {t for (t, _) in Notification.TYPE_CHOICES}
+        objects = []
+        for item in notifications:
+            notification_type = item["notification_type"]
+            if notification_type not in valid_types:
+                raise ValidationError(f"Invalid notification_type: {notification_type}")
+            objects.append(
+                Notification(
+                    user=item["user"],
+                    notification_type=notification_type,
+                    content=item["content"],
+                    related_object_id=str(item.get("related_id", "")),
+                )
+            )
+
+        if not objects:
+            return 0
+
+        Notification.objects.bulk_create(objects)
+        try:
+            from apps.core.utils.api_cache import invalidate_cache_namespaces
+            invalidate_cache_namespaces('notifications')
+        except Exception:
+            pass
+        return len(objects)
     
     @staticmethod
     def get_user_notifications(

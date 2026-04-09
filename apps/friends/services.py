@@ -207,5 +207,19 @@ class FriendService:
             friend=recipient,
             status='pending'
         )
+
+        try:
+            from apps.notifications.services import NotificationService
+
+            sender_name = getattr(sender, "full_name", "Someone")
+            content = f"{sender_name} sent you a friend request"
+            NotificationService.create_notification(
+                user=recipient,
+                notification_type="friend_request",
+                content=content,
+                related_id=str(friendship.id),
+            )
+        except Exception:
+            pass
         
         return friendship

@@ -4,6 +4,7 @@ from .views import (
     MarkNotificationReadAPIView,
     MarkAllReadAPIView,
     DeleteNotificationAPIView,
+    UnreadCountAPIView,
 )
 
 app_name = 'notifications'
@@ -11,6 +12,9 @@ app_name = 'notifications'
 urlpatterns = [
     # List notifications
     path('', NotificationListAPIView.as_view(), name='list'),
+
+    # Fast unread count for UI polling
+    path('unread-count/', UnreadCountAPIView.as_view(), name='unread-count'),
     
     # Mark single notification as read
     path('<int:pk>/read/', MarkNotificationReadAPIView.as_view(), name='read'),

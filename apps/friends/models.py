@@ -79,7 +79,21 @@ class Friendship(models.Model):
         if self.status == 'pending':
             self.status = 'accepted'
             self.accepted_at = timezone.now()
-            self.save()
+            self.save(update_fields=['status', 'accepted_at'])
+
+            try:
+                from apps.notifications.services import NotificationService
+
+                friend_name = getattr(self.friend, "full_name", "Someone")
+                content = f"{friend_name} accepted your friend request"
+                NotificationService.create_notification(
+                    user=self.user,
+                    notification_type="friend_accepted",
+                    content=content,
+                    related_id=str(self.id),
+                )
+            except Exception:
+                pass
     
     def is_pending(self):
         """Check if friendship is still pending"""

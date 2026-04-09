@@ -227,3 +227,29 @@ class DeleteNotificationAPIView(APIView):
         return success_response(
             message=message
         )
+
+
+class UnreadCountAPIView(APIView):
+    """
+    Get unread notification count for the authenticated user.
+
+    GET /api/v1/notifications/unread-count/
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary="Unread Notification Count",
+        description="Get unread notification count for authenticated user (fast for UI polling).",
+        responses={200: OpenApiTypes.OBJECT},
+        tags=['Notifications'],
+    )
+    def get(self, request):
+        cache_key = build_cache_key(request, 'notifications', extra='unread-count')
+        cached_response = get_cached_response(cache_key)
+        if cached_response is not None:
+            return cached_response
+
+        unread_count = NotificationService.get_unread_count(request.user)
+        response = success_response(data={"unread_count": unread_count})
+        return cache_response(cache_key, response, 'notifications')

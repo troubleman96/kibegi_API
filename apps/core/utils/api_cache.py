@@ -11,6 +11,7 @@ CACHE_TIMEOUTS = {
     "files": 90,
     "sharing": 90,
     "friends": 90,
+    "schedule": 60,
     "notifications": 60,
     "storage": 60,
     "search": 45,

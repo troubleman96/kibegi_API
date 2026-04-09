@@ -99,20 +99,60 @@ class SharedFile(models.Model):
         Accept the share request.
         Updates status to 'accepted' and records acceptance timestamp.
         """
+        previous_status = self.status
+        if previous_status == 'accepted':
+            return
+
         self.status = 'accepted'
         self.accepted_at = timezone.now()
         self.rejected_at = None  # Clear any previous rejection
-        self.save()
+        self.save(update_fields=['status', 'accepted_at', 'rejected_at'])
+
+        if previous_status == 'pending':
+            try:
+                from apps.notifications.services import NotificationService
+
+                recipient_name = getattr(self.shared_with, "full_name", "Someone")
+                file_name = getattr(self.upload, "file_name", "a file")
+                content = f"{recipient_name} accepted your share for \"{file_name}\""
+                NotificationService.create_notification(
+                    user=self.shared_by,
+                    notification_type="share_accepted",
+                    content=content,
+                    related_id=str(self.id),
+                )
+            except Exception:
+                pass
     
     def reject(self):
         """
         Reject the share request.
         Updates status to 'rejected' and records rejection timestamp.
         """
+        previous_status = self.status
+        if previous_status == 'rejected':
+            return
+
         self.status = 'rejected'
         self.rejected_at = timezone.now()
         self.accepted_at = None  # Clear any previous acceptance
-        self.save()
+        self.save(update_fields=['status', 'rejected_at', 'accepted_at'])
+
+        if previous_status == 'pending':
+            try:
+                from apps.notifications.services import NotificationService
+
+                recipient_name = getattr(self.shared_with, "full_name", "Someone")
+                file_name = getattr(self.upload, "file_name", "a file")
+                content = f"{recipient_name} rejected your share for \"{file_name}\""
+                NotificationService.create_notification(
+                    user=self.shared_by,
+                    notification_type="share_rejected",
+                    content=content,
+                    related_id=str(self.id),
+                )
+            except Exception:
+                pass
     
     def is_pending(self):
         """Check if share is awaiting acceptance"""
@@ -133,4 +173,3 @@ class SharedFile(models.Model):
         Only accepted shares grant access, and file must not be deleted.
         """
         return self.is_accepted() and not self.upload.is_deleted
-

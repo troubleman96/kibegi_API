@@ -30,7 +30,13 @@ class Notification(models.Model):
     
     TYPE_CHOICES = [
         ('share_request', 'Share Request'),
+        ('share_accepted', 'Share Accepted'),
+        ('share_rejected', 'Share Rejected'),
         ('friend_request', 'Friend Request'),
+        ('friend_accepted', 'Friend Accepted'),
+        ('upload_created', 'Upload Created'),
+        ('class_joined', 'Class Joined'),
+        # Backward-compatible / legacy type kept for older clients.
         ('file_shared', 'File Shared'),
     ]
     

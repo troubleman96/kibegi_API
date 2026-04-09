@@ -215,12 +215,43 @@ class JoinClassAPIView(APIView):
             )
         
         # Add user as member
-        Membership.objects.create(
+        membership = Membership.objects.create(
             user=user,
             class_obj=class_obj,
             role='student'
         )
-        invalidate_cache_namespaces('classes', 'search')
+        invalidate_cache_namespaces('classes', 'search', 'notifications')
+
+        # Notify class creator/lecturers that someone joined
+        try:
+            from apps.notifications.services import NotificationService
+
+            joiner_name = getattr(user, "full_name", "Someone")
+            class_name = getattr(class_obj, "name", "a class")
+            content = f"{joiner_name} joined your class {class_name}"
+
+            lecturer_users = (
+                Membership.objects.filter(class_obj=class_obj, role='lecturer')
+                .select_related('user')
+                .exclude(user=user)
+            )
+            recipients = {class_obj.creator} if class_obj.creator_id != user.id else set()
+            for lecturer_membership in lecturer_users:
+                recipients.add(lecturer_membership.user)
+
+            NotificationService.create_bulk(
+                [
+                    {
+                        "user": recipient,
+                        "notification_type": "class_joined",
+                        "content": content,
+                        "related_id": str(class_obj.id),
+                    }
+                    for recipient in recipients
+                ]
+            )
+        except Exception:
+            pass
         
         return success_response(
             message="Successfully joined class",

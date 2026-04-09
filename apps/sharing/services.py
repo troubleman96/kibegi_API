@@ -222,6 +222,22 @@ class SharingService:
             message=message,
             status='pending'
         )
+
+        try:
+            from apps.notifications.services import NotificationService
+
+            file_name = getattr(upload, "file_name", "a file")
+            sharer_name = getattr(shared_by, "full_name", "Someone")
+            content = f"{sharer_name} shared \"{file_name}\" with you"
+            NotificationService.create_notification(
+                user=shared_with,
+                notification_type="share_request",
+                content=content,
+                related_id=str(share.id),
+            )
+        except Exception:
+            # Sharing must succeed even if notifications fail.
+            pass
         
         return share
     
@@ -267,4 +283,3 @@ class SharingService:
                 })
         
         return results
-
