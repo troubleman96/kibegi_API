@@ -106,8 +106,9 @@ class LoginAPIView(APIView):
             return error_response(message=_('Invalid email or password'), status_code=status.HTTP_401_UNAUTHORIZED)
 
         refresh = RefreshToken.for_user(user)
+        user_serializer = UserProfileSerializer(user, context={'request': request})
         data = {
-            'user': UserProfileSerializer(user).data,
+            'user': user_serializer.data,
             'tokens': {
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
@@ -393,8 +394,9 @@ class RegisterVerifyAPIView(APIView):
 
         # issue tokens now that the user is verified
         refresh = RefreshToken.for_user(user)
+        user_serializer = UserProfileSerializer(user, context={'request': request})
         data = {
-            'user': UserProfileSerializer(user).data,
+            'user': user_serializer.data,
             'tokens': {
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),

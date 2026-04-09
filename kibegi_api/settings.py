@@ -176,7 +176,11 @@ STATICFILES_FINDERS = [
 ]
 
 # Media files (user uploads)
-MEDIA_URL = 'media/'
+# Must be an absolute path prefix so clients receive stable URLs like `/media/...`.
+# A relative prefix (e.g. `media/`) causes `request.build_absolute_uri()` to join
+# against the current API path (e.g. `/api/v1/auth/login/media/...`) which breaks
+# profile picture rendering in the frontend.
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # File upload settings

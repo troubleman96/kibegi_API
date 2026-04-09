@@ -431,10 +431,33 @@ Expect these cases:
 - `404 Not Found` for public links when `is_public_sync` is false
 - `400 Bad Request` for validation errors like invalid times or weekly recurrence without days
 
+Important contract detail:
+- successful schedule JSON responses use the project wrapper: `success`, `message`, `data`, `errors`
+- serializer validation errors are not wrapped and come back as plain DRF field errors
+- some default DRF auth and not-found responses are also not wrapped
+
+Example validation error:
+
+```json
+{
+  "end_at": ["End time must be after start time."]
+}
+```
+
 Recommended frontend behavior:
 - show field-level validation messages for event form errors
 - show a friendly "calendar not available" screen for invalid public links
 - show "sync disabled" if public sharing has been turned off
+
+## Important Gotchas
+
+- `GET /api/v1/schedule/events/{eventId}/` exists and is safe to use for event detail screens
+- `calendar_id` in the share payload is a string, not a number
+- `frontend_subscription_url` can be `null` if `SCHEDULE_FRONTEND_URL` is not configured
+- `GET /api/v1/schedule/calendars/{calendarId}/qr/` returns raw `image/png`, not JSON
+- `GET /api/v1/schedule/calendars/{calendarId}/share/` still returns URLs even when `is_public_sync` is `false`
+- public token/code endpoints only work when `is_public_sync` is `true`
+- code lookup is case-insensitive
 
 ## Minimal Integration Checklist
 
