@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'apps.core',
+    'apps.search',
     'apps.authentication',
     'apps.classes',
     'apps.uploads',
