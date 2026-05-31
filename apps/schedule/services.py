@@ -1,12 +1,18 @@
 import io
+import json
 import logging
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import timedelta
 from typing import Iterable
 
 from django.conf import settings
 from django.db import transaction
+from django.utils import timezone
 from django.urls import reverse
 
-from .models import ScheduleCalendar, ScheduleEvent, ScheduleSyncAccessLog
+from .models import ScheduleCalendar, ScheduleEvent, ScheduleSmsAccount, ScheduleSmsDeliveryLog, ScheduleSyncAccessLog
 
 logger = logging.getLogger("kibegi")
 
@@ -187,4 +193,232 @@ class ScheduleService:
             )
         except Exception as exc:
             logger.warning("Failed to record schedule public access: %s", exc)
+
+
+class AfricasTalkingSmsClient:
+    """Small adapter around Africa's Talking SMS API."""
+
+    def __init__(self):
+        self.username = getattr(settings, "AFRICASTALKING_USERNAME", "")
+        self.api_key = getattr(settings, "AFRICASTALKING_API_KEY", "")
+        self.sender_id = getattr(settings, "AFRICASTALKING_SENDER_ID", "")
+        self.messaging_url = getattr(
+            settings,
+            "AFRICASTALKING_SMS_URL",
+            "https://api.africastalking.com/version1/messaging",
+        )
+
+    def is_configured(self):
+        return bool(self.username and self.api_key)
+
+    def send_sms(self, phone_number: str, message: str, sender_id: str = ""):
+        if not self.is_configured():
+            raise RuntimeError("Africa's Talking SMS settings are not configured.")
+
+        payload = {
+            "username": self.username,
+            "to": phone_number,
+            "message": message,
+        }
+        active_sender = sender_id or self.sender_id
+        if active_sender:
+            payload["from"] = active_sender
+
+        encoded_payload = urllib.parse.urlencode(payload).encode("utf-8")
+        request = urllib.request.Request(self.messaging_url, data=encoded_payload, method="POST")
+        request.add_header("apiKey", self.api_key)
+        request.add_header("Content-Type", "application/x-www-form-urlencoded")
+
+        try:
+            with urllib.request.urlopen(request, timeout=20) as response:
+                body = response.read().decode("utf-8")
+        except urllib.error.HTTPError as exc:
+            error_body = exc.read().decode("utf-8", errors="ignore") if exc.fp else ""
+            raise RuntimeError(f"Africa's Talking SMS request failed: {exc.code} {error_body or exc.reason}") from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"Africa's Talking SMS request failed: {exc.reason}") from exc
+
+        try:
+            response_data = json.loads(body)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("Africa's Talking SMS returned invalid JSON.") from exc
+
+        recipients = response_data.get("SMSMessageData", {}).get("Recipients", [])
+        recipient = recipients[0] if recipients else {}
+        return {
+            "provider_message_id": recipient.get("messageId", ""),
+            "raw_response": response_data,
+        }
+
+
+class ScheduleSmsService:
+    """Dispatch schedule reminder SMS messages and manage credits."""
+
+    @staticmethod
+    def get_account_for_user(user):
+        account, _ = ScheduleSmsAccount.objects.get_or_create(owner=user)
+        return account
+
+    @staticmethod
+    def build_reminder_message(event: ScheduleEvent):
+        start_time = timezone.localtime(event.start_at)
+        when = start_time.strftime("%a, %d %b %Y at %I:%M %p")
+        parts = [f"Kibegi reminder: {event.title}", f"starts on {when}"]
+        if event.location:
+            parts.append(f"Location: {event.location}")
+        return " | ".join(parts)
+
+    @staticmethod
+    def get_due_events(now=None):
+        now = now or timezone.now()
+        grace_minutes = getattr(settings, "SCHEDULE_SMS_GRACE_MINUTES", 10)
+        lookahead_days = getattr(settings, "SCHEDULE_SMS_LOOKAHEAD_DAYS", 7)
+        lower_bound = now - timedelta(minutes=grace_minutes)
+        upper_bound = now + timedelta(days=lookahead_days)
+        candidates = (
+            ScheduleEvent.objects.select_related("calendar", "calendar__owner")
+            .filter(start_at__gte=lower_bound, start_at__lte=upper_bound)
+            .order_by("start_at")
+        )
+        due_events = []
+        for event in candidates:
+            if hasattr(event, "sms_delivery_log"):
+                continue
+            reminder_at = event.reminder_at
+            reminder_deadline = reminder_at + timedelta(minutes=grace_minutes)
+            if reminder_at <= now <= reminder_deadline:
+                due_events.append(event)
+        return due_events
+
+    @classmethod
+    def dispatch_reminder(cls, event: ScheduleEvent, client=None, now=None, dry_run=False):
+        now = now or timezone.now()
+        client = client or AfricasTalkingSmsClient()
+        cost_per_message = getattr(settings, "SCHEDULE_SMS_COST_PER_MESSAGE", 1)
+        message = cls.build_reminder_message(event)
+        account = cls.get_account_for_user(event.calendar.owner)
+
+        if not account.is_active:
+            return ScheduleSmsDeliveryLog.objects.create(
+                event=event,
+                sms_account=account,
+                recipient_phone=account.phone_number,
+                provider_name=account.provider_name,
+                status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
+                message=message,
+                credits_used=0,
+                error_message="SMS account is inactive.",
+                sent_at=now,
+            )
+
+        if not account.phone_number:
+            return ScheduleSmsDeliveryLog.objects.create(
+                event=event,
+                sms_account=account,
+                recipient_phone="",
+                provider_name=account.provider_name,
+                status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
+                message=message,
+                credits_used=0,
+                error_message="No destination phone number is configured.",
+                sent_at=now,
+            )
+
+        if account.balance_credits < cost_per_message:
+            return ScheduleSmsDeliveryLog.objects.create(
+                event=event,
+                sms_account=account,
+                recipient_phone=account.phone_number,
+                provider_name=account.provider_name,
+                status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
+                message=message,
+                credits_used=0,
+                error_message="Insufficient SMS credits.",
+                sent_at=now,
+            )
+
+        if dry_run:
+            return ScheduleSmsDeliveryLog(
+                event=event,
+                sms_account=account,
+                recipient_phone=account.phone_number,
+                provider_name=account.provider_name,
+                status=ScheduleSmsDeliveryLog.STATUS_PENDING,
+                message=message,
+                credits_used=cost_per_message,
+                sent_at=None,
+            )
+
+        try:
+            provider_result = client.send_sms(
+                phone_number=account.phone_number,
+                message=message,
+                sender_id=account.sender_id,
+            )
+        except Exception as exc:
+            return ScheduleSmsDeliveryLog.objects.create(
+                event=event,
+                sms_account=account,
+                recipient_phone=account.phone_number,
+                provider_name=account.provider_name,
+                status=ScheduleSmsDeliveryLog.STATUS_FAILED,
+                message=message,
+                credits_used=0,
+                error_message=str(exc),
+                sent_at=now,
+            )
+
+        with transaction.atomic():
+            account = ScheduleSmsAccount.objects.select_for_update().get(pk=account.pk)
+            if account.balance_credits < cost_per_message:
+                return ScheduleSmsDeliveryLog.objects.create(
+                    event=event,
+                    sms_account=account,
+                    recipient_phone=account.phone_number,
+                    provider_name=account.provider_name,
+                    status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
+                    message=message,
+                    credits_used=0,
+                    error_message="Insufficient SMS credits.",
+                    sent_at=now,
+                )
+
+            account.balance_credits -= cost_per_message
+            account.save(update_fields=["balance_credits", "updated_at"])
+            return ScheduleSmsDeliveryLog.objects.create(
+                event=event,
+                sms_account=account,
+                recipient_phone=account.phone_number,
+                provider_name=account.provider_name,
+                provider_message_id=provider_result.get("provider_message_id", ""),
+                status=ScheduleSmsDeliveryLog.STATUS_SENT,
+                message=message,
+                credits_used=cost_per_message,
+                provider_response=provider_result.get("raw_response"),
+                sent_at=now,
+            )
+
+    @classmethod
+    def dispatch_due_reminders(cls, client=None, now=None, limit=None, dry_run=False):
+        due_events = cls.get_due_events(now=now)
+        if limit is not None:
+            due_events = due_events[:limit]
+
+        results = {
+            "due": len(due_events),
+            "sent": 0,
+            "failed": 0,
+            "skipped": 0,
+        }
+
+        for event in due_events:
+            log = cls.dispatch_reminder(event, client=client, now=now, dry_run=dry_run)
+            if log.status == ScheduleSmsDeliveryLog.STATUS_SENT:
+                results["sent"] += 1
+            elif log.status == ScheduleSmsDeliveryLog.STATUS_FAILED:
+                results["failed"] += 1
+            else:
+                results["skipped"] += 1
+
+        return results
 

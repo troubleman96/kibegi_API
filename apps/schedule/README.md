@@ -8,6 +8,7 @@ This app provides a user-owned schedule system for Kibegi with:
 - short manual calendar codes
 - QR code generation for mobile handoff
 - optional frontend subscription page support via `SCHEDULE_FRONTEND_URL`
+- SMS reminder dispatch with Africa's Talking and per-user reminder credit balance
 
 ## Mounted Routes
 
@@ -26,6 +27,8 @@ This app provides a user-owned schedule system for Kibegi with:
 - `DELETE /api/v1/schedule/events/{id}/`
 - `GET /api/v1/schedule/calendars/{id}/share/`
 - `GET /api/v1/schedule/calendars/{id}/qr/`
+- `GET /api/v1/schedule/sms-account/`
+- `PATCH /api/v1/schedule/sms-account/`
 
 ## Public Endpoints
 
@@ -234,6 +237,44 @@ SCHEDULE_FRONTEND_URL=https://app.kibegi.com/schedule
 When configured, the backend builds:
 
 - `frontend_subscription_url = https://app.kibegi.com/schedule/subscribe/{share_token}`
+
+## SMS Reminder Configuration
+
+Schedule reminders can be delivered by SMS through Africa's Talking.
+
+Environment variables:
+
+```env
+AFRICASTALKING_USERNAME=
+AFRICASTALKING_API_KEY=
+AFRICASTALKING_SENDER_ID=
+AFRICASTALKING_SMS_URL=https://api.africastalking.com/version1/messaging
+SCHEDULE_SMS_COST_PER_MESSAGE=1
+SCHEDULE_SMS_GRACE_MINUTES=10
+SCHEDULE_SMS_LOOKAHEAD_DAYS=7
+```
+
+SMS workflow:
+
+- each user gets a schedule SMS wallet via `GET /api/v1/schedule/sms-account/`
+- the wallet stores a phone number and independent credit balance
+- the reminder command scans due events and consumes 1 credit per message by default
+- the host should run `python manage.py send_schedule_sms_reminders` every minute from cron or a scheduler
+
+Example payload to configure a phone number:
+
+```json
+{
+  "phone_number": "+254700000000",
+  "sender_id": "KIBEGI"
+}
+```
+
+Notes:
+
+- reminders are skipped when the wallet is inactive, the phone number is missing, or credits are exhausted
+- reminder attempts are logged in the admin as SMS delivery records
+- Africa's Talking responses are stored for audit when delivery succeeds
 
 ## Integration Notes
 

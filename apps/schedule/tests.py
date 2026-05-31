@@ -1,10 +1,14 @@
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient
+from datetime import timedelta
+from unittest.mock import patch
 
-from .models import ScheduleCalendar, ScheduleEvent, ScheduleSyncAccessLog
+from .models import ScheduleCalendar, ScheduleEvent, ScheduleSmsAccount, ScheduleSmsDeliveryLog, ScheduleSyncAccessLog
 
 User = get_user_model()
 
@@ -436,3 +440,86 @@ class ScheduleAPITests(TestCase):
         self.assertEqual(calendar_response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(events_response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(event_response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_sms_account_endpoint_returns_and_updates_wallet(self):
+        response = self.client.get(reverse("schedule_sms_account"))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["data"]["balance_credits"], 0)
+
+        update_response = self.client.patch(
+            reverse("schedule_sms_account"),
+            {"phone_number": "+254700000000", "sender_id": "KIBEGI"},
+            format="json",
+        )
+        self.assertEqual(update_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(update_response.data["data"]["phone_number"], "+254700000000")
+        self.assertEqual(update_response.data["data"]["sender_id"], "KIBEGI")
+
+    @override_settings(
+        AFRICASTALKING_USERNAME="test-user",
+        AFRICASTALKING_API_KEY="test-key",
+        AFRICASTALKING_SENDER_ID="KIBEGI",
+        SCHEDULE_SMS_COST_PER_MESSAGE=1,
+        SCHEDULE_SMS_GRACE_MINUTES=15,
+        SCHEDULE_SMS_LOOKAHEAD_DAYS=7,
+    )
+    def test_sms_reminder_command_consumes_credit_and_logs_delivery(self):
+        account = ScheduleSmsAccount.objects.create(
+            owner=self.user,
+            phone_number="+254700000000",
+            balance_credits=2,
+            sender_id="KIBEGI",
+        )
+        event = ScheduleEvent.objects.create(
+            calendar=self.classes_calendar,
+            title="SMS Reminder Class",
+            start_at=timezone.now() + timedelta(hours=1),
+            end_at=timezone.now() + timedelta(hours=2),
+            event_type=ScheduleEvent.EVENT_TYPE_CLASS,
+            recurrence=ScheduleEvent.RECURRENCE_NONE,
+            reminder_minutes=60,
+        )
+
+        with patch("apps.schedule.management.commands.send_schedule_sms_reminders.AfricasTalkingSmsClient") as mock_client_class:
+            mock_client = mock_client_class.return_value
+            mock_client.send_sms.return_value = {
+                "provider_message_id": "msg-123",
+                "raw_response": {"ok": True},
+            }
+            call_command("send_schedule_sms_reminders")
+
+        account.refresh_from_db()
+        self.assertEqual(account.balance_credits, 1)
+        log = ScheduleSmsDeliveryLog.objects.get(event=event)
+        self.assertEqual(log.status, ScheduleSmsDeliveryLog.STATUS_SENT)
+        self.assertEqual(log.provider_message_id, "msg-123")
+        self.assertEqual(log.recipient_phone, "+254700000000")
+
+    @override_settings(
+        AFRICASTALKING_USERNAME="test-user",
+        AFRICASTALKING_API_KEY="test-key",
+        SCHEDULE_SMS_COST_PER_MESSAGE=1,
+        SCHEDULE_SMS_GRACE_MINUTES=15,
+        SCHEDULE_SMS_LOOKAHEAD_DAYS=7,
+    )
+    def test_sms_reminder_command_skips_when_credits_are_missing(self):
+        ScheduleSmsAccount.objects.create(
+            owner=self.user,
+            phone_number="+254700000000",
+            balance_credits=0,
+        )
+        event = ScheduleEvent.objects.create(
+            calendar=self.classes_calendar,
+            title="No Credits Class",
+            start_at=timezone.now() + timedelta(hours=1),
+            end_at=timezone.now() + timedelta(hours=2),
+            event_type=ScheduleEvent.EVENT_TYPE_CLASS,
+            recurrence=ScheduleEvent.RECURRENCE_NONE,
+            reminder_minutes=60,
+        )
+
+        call_command("send_schedule_sms_reminders", dry_run=False)
+
+        log = ScheduleSmsDeliveryLog.objects.get(event=event)
+        self.assertEqual(log.status, ScheduleSmsDeliveryLog.STATUS_SKIPPED)
+        self.assertIn("Insufficient SMS credits", log.error_message)

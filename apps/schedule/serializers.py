@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ScheduleCalendar, ScheduleEvent
+from .models import ScheduleCalendar, ScheduleEvent, ScheduleSmsAccount
 
 
 class ScheduleEventSerializer(serializers.ModelSerializer):
@@ -106,3 +106,32 @@ class PublicScheduleInfoSerializer(serializers.Serializer):
     webcal_url = serializers.CharField(read_only=True)
     subscription_page_url = serializers.URLField(read_only=True)
     frontend_subscription_url = serializers.URLField(read_only=True, allow_null=True)
+
+
+class ScheduleSmsAccountSerializer(serializers.ModelSerializer):
+    """Expose the user's SMS wallet for reminder configuration."""
+
+    class Meta:
+        model = ScheduleSmsAccount
+        fields = [
+            "id",
+            "phone_number",
+            "balance_credits",
+            "provider_name",
+            "sender_id",
+            "is_active",
+            "last_topup_reference",
+            "last_topup_at",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = [
+            "id",
+            "balance_credits",
+            "provider_name",
+            "is_active",
+            "last_topup_reference",
+            "last_topup_at",
+            "created_at",
+            "updated_at",
+        ]

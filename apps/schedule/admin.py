@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ScheduleCalendar, ScheduleEvent, ScheduleSyncAccessLog
+from .models import ScheduleCalendar, ScheduleEvent, ScheduleSmsAccount, ScheduleSmsDeliveryLog, ScheduleSyncAccessLog
 
 
 @admin.register(ScheduleCalendar)
@@ -25,4 +25,19 @@ class ScheduleSyncAccessLogAdmin(admin.ModelAdmin):
     list_filter = ("access_type",)
     search_fields = ("calendar__name", "calendar__owner__email", "ip_address")
     readonly_fields = ("accessed_at",)
+
+
+@admin.register(ScheduleSmsAccount)
+class ScheduleSmsAccountAdmin(admin.ModelAdmin):
+    list_display = ("owner", "phone_number", "balance_credits", "provider_name", "is_active", "last_topup_at")
+    search_fields = ("owner__email", "owner__full_name", "phone_number")
+    list_filter = ("provider_name", "is_active")
+
+
+@admin.register(ScheduleSmsDeliveryLog)
+class ScheduleSmsDeliveryLogAdmin(admin.ModelAdmin):
+    list_display = ("event", "recipient_phone", "status", "credits_used", "provider_name", "sent_at")
+    search_fields = ("event__title", "recipient_phone", "provider_message_id")
+    list_filter = ("status", "provider_name")
+    readonly_fields = ("created_at", "updated_at", "sent_at")
 

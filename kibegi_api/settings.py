@@ -212,6 +212,15 @@ MINIO_SECURE = config(
 )
 MINIO_PUBLIC_BASE_URL = config('MINIO_PUBLIC_BASE_URL', default='')
 
+# Schedule SMS reminder settings
+AFRICASTALKING_USERNAME = config('AFRICASTALKING_USERNAME', default='')
+AFRICASTALKING_API_KEY = config('AFRICASTALKING_API_KEY', default='')
+AFRICASTALKING_SENDER_ID = config('AFRICASTALKING_SENDER_ID', default='')
+AFRICASTALKING_SMS_URL = config('AFRICASTALKING_SMS_URL', default='https://api.africastalking.com/version1/messaging')
+SCHEDULE_SMS_COST_PER_MESSAGE = config('SCHEDULE_SMS_COST_PER_MESSAGE', default=1, cast=int)
+SCHEDULE_SMS_GRACE_MINUTES = config('SCHEDULE_SMS_GRACE_MINUTES', default=10, cast=int)
+SCHEDULE_SMS_LOOKAHEAD_DAYS = config('SCHEDULE_SMS_LOOKAHEAD_DAYS', default=7, cast=int)
+
 if MINIO_API_ENDPOINT and not MINIO_API_ENDPOINT.startswith(('http://', 'https://')):
     _minio_scheme = 'https' if MINIO_SECURE else 'http'
     MINIO_ENDPOINT_URL = f'{_minio_scheme}://{MINIO_API_ENDPOINT}'

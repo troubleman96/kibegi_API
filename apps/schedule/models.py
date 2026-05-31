@@ -195,3 +195,73 @@ class ScheduleSyncAccessLog(models.Model):
     def __str__(self):
         return f"{self.calendar.calendar_code} {self.access_type} @ {timezone.localtime(self.accessed_at)}"
 
+
+class ScheduleSmsAccount(models.Model):
+    """Per-user SMS wallet used to send schedule reminder messages."""
+
+    owner = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="schedule_sms_account",
+    )
+    phone_number = models.CharField(max_length=32, blank=True, default="")
+    balance_credits = models.PositiveIntegerField(default=0)
+    provider_name = models.CharField(max_length=40, default="africastalking")
+    sender_id = models.CharField(max_length=40, blank=True, default="")
+    is_active = models.BooleanField(default=True)
+    last_topup_reference = models.CharField(max_length=120, blank=True, default="")
+    last_topup_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["owner_id"]
+
+    def __str__(self):
+        return f"SMS wallet for {self.owner.email}"
+
+
+class ScheduleSmsDeliveryLog(models.Model):
+    """One record per schedule reminder SMS attempt."""
+
+    STATUS_PENDING = "pending"
+    STATUS_SENT = "sent"
+    STATUS_FAILED = "failed"
+    STATUS_SKIPPED = "skipped"
+    STATUS_CHOICES = (
+        (STATUS_PENDING, "Pending"),
+        (STATUS_SENT, "Sent"),
+        (STATUS_FAILED, "Failed"),
+        (STATUS_SKIPPED, "Skipped"),
+    )
+
+    event = models.OneToOneField(
+        ScheduleEvent,
+        on_delete=models.CASCADE,
+        related_name="sms_delivery_log",
+    )
+    sms_account = models.ForeignKey(
+        ScheduleSmsAccount,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="delivery_logs",
+    )
+    recipient_phone = models.CharField(max_length=32, blank=True, default="")
+    provider_name = models.CharField(max_length=40, default="africastalking")
+    provider_message_id = models.CharField(max_length=120, blank=True, default="")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING, db_index=True)
+    message = models.TextField()
+    credits_used = models.PositiveIntegerField(default=1)
+    error_message = models.TextField(blank=True, default="")
+    provider_response = models.JSONField(null=True, blank=True)
+    sent_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"SMS reminder for {self.event.title} ({self.status})"
+

@@ -19,9 +19,10 @@ from .serializers import (
     ScheduleCalendarDetailSerializer,
     ScheduleCalendarSerializer,
     ScheduleEventSerializer,
+    ScheduleSmsAccountSerializer,
     ScheduleShareSerializer,
 )
-from .services import ScheduleService
+from .services import ScheduleService, ScheduleSmsService
 
 
 class ScheduleCalendarListAPIView(generics.ListAPIView):
@@ -203,6 +204,36 @@ class ScheduleCalendarQRAPIView(APIView):
         qr_target = share_payload["frontend_subscription_url"] or share_payload["subscription_page_url"]
         png_bytes = ScheduleService.generate_qr_png(qr_target)
         return HttpResponse(png_bytes, content_type="image/png")
+
+
+class ScheduleSmsAccountAPIView(APIView):
+    """Expose the authenticated user's SMS wallet for reminder delivery."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get_account(self, user):
+        return ScheduleSmsService.get_account_for_user(user)
+
+    def get(self, request):
+        account = self.get_account(request.user)
+        serializer = ScheduleSmsAccountSerializer(account)
+        return success_response(
+            message="Schedule SMS account retrieved successfully",
+            data=serializer.data,
+        )
+
+    def patch(self, request):
+        account = self.get_account(request.user)
+        serializer = ScheduleSmsAccountSerializer(account, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return success_response(
+            message="Schedule SMS account updated successfully",
+            data=serializer.data,
+        )
+
+    def put(self, request):
+        return self.patch(request)
 
 
 class PublicScheduleBaseAPIView(APIView):

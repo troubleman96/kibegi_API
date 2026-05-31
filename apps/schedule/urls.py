@@ -7,6 +7,7 @@ from .views import (
     ScheduleCalendarQRAPIView,
     ScheduleCalendarShareAPIView,
     ScheduleEventDetailAPIView,
+    ScheduleSmsAccountAPIView,
 )
 
 
@@ -17,4 +18,5 @@ urlpatterns = [
     path("events/<int:pk>/", ScheduleEventDetailAPIView.as_view(), name="schedule_event_detail"),
     path("calendars/<int:pk>/share/", ScheduleCalendarShareAPIView.as_view(), name="schedule_calendar_share"),
     path("calendars/<int:pk>/qr/", ScheduleCalendarQRAPIView.as_view(), name="schedule_calendar_qr"),
+    path("sms-account/", ScheduleSmsAccountAPIView.as_view(), name="schedule_sms_account"),
 ]
