@@ -24,3 +24,13 @@ class ClassService:
     def user_can_access_class(user, class_obj):
         """Check if user can access class"""
         return class_obj.is_public or class_obj.members.filter(id=user.id).exists()
+
+    @staticmethod
+    def user_can_manage_class(user, class_obj):
+        """Check whether a user can manage class-level settings or delegates."""
+        if not user or not user.is_authenticated:
+            return False
+        if class_obj.creator_id == user.id:
+            return True
+        membership = class_obj.memberships.filter(user=user).only('role').first()
+        return bool(membership and membership.role in {'lecturer', 'representative'})

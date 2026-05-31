@@ -197,6 +197,7 @@ class MembershipAdmin(admin.ModelAdmin):
         """Display role as colored badge"""
         colors = {
             'lecturer': '#10B981',
+            'representative': '#F59E0B',
             'student': '#3B82F6',
         }
         color = colors.get(obj.role, '#6B7280')
@@ -215,6 +216,11 @@ class MembershipAdmin(admin.ModelAdmin):
     def make_lecturers(self, request, queryset):
         updated = queryset.update(role='lecturer')
         self.message_user(request, f'{updated} membership(s) changed to lecturer.')
+
+    @admin.action(description='⭐ Change role to Representative')
+    def make_representatives(self, request, queryset):
+        updated = queryset.update(role='representative')
+        self.message_user(request, f'{updated} membership(s) changed to representative.')
     
     @admin.action(description='📚 Change role to Student')
     def make_students(self, request, queryset):

@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'apps.schedule',
     'apps.marketplace',
     'apps.library',
+    'apps.classcomms',
+    'apps.sms',
 ]
 
 MIDDLEWARE = [
@@ -220,6 +222,8 @@ AFRICASTALKING_SMS_URL = config('AFRICASTALKING_SMS_URL', default='https://api.a
 SCHEDULE_SMS_COST_PER_MESSAGE = config('SCHEDULE_SMS_COST_PER_MESSAGE', default=1, cast=int)
 SCHEDULE_SMS_GRACE_MINUTES = config('SCHEDULE_SMS_GRACE_MINUTES', default=10, cast=int)
 SCHEDULE_SMS_LOOKAHEAD_DAYS = config('SCHEDULE_SMS_LOOKAHEAD_DAYS', default=7, cast=int)
+CLASS_COMMS_SMS_COST_PER_MESSAGE = config('CLASS_COMMS_SMS_COST_PER_MESSAGE', default=1, cast=int)
+SMS_COST_PER_MESSAGE = config('SMS_COST_PER_MESSAGE', default=CLASS_COMMS_SMS_COST_PER_MESSAGE, cast=int)
 
 if MINIO_API_ENDPOINT and not MINIO_API_ENDPOINT.startswith(('http://', 'https://')):
     _minio_scheme = 'https' if MINIO_SECURE else 'http'

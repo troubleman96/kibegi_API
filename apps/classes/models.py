@@ -40,6 +40,7 @@ class Class(models.Model):
 class Membership(models.Model):
     ROLE_CHOICES = [
         ('lecturer', 'Lecturer'),
+        ('representative', 'Representative'),
         ('student', 'Student'),
     ]
     

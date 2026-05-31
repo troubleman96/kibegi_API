@@ -1,16 +1,14 @@
-import io
-import json
 import logging
-import urllib.error
-import urllib.parse
-import urllib.request
 from datetime import timedelta
 from typing import Iterable
+import io
 
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
 from django.urls import reverse
+
+from apps.sms.services import SmsService
 
 from .models import ScheduleCalendar, ScheduleEvent, ScheduleSmsAccount, ScheduleSmsDeliveryLog, ScheduleSyncAccessLog
 
@@ -195,67 +193,13 @@ class ScheduleService:
             logger.warning("Failed to record schedule public access: %s", exc)
 
 
-class AfricasTalkingSmsClient:
-    """Small adapter around Africa's Talking SMS API."""
-
-    def __init__(self):
-        self.username = getattr(settings, "AFRICASTALKING_USERNAME", "")
-        self.api_key = getattr(settings, "AFRICASTALKING_API_KEY", "")
-        self.sender_id = getattr(settings, "AFRICASTALKING_SENDER_ID", "")
-        self.messaging_url = getattr(
-            settings,
-            "AFRICASTALKING_SMS_URL",
-            "https://api.africastalking.com/version1/messaging",
-        )
-
-    def is_configured(self):
-        return bool(self.username and self.api_key)
-
-    def send_sms(self, phone_number: str, message: str, sender_id: str = ""):
-        if not self.is_configured():
-            raise RuntimeError("Africa's Talking SMS settings are not configured.")
-
-        payload = {
-            "username": self.username,
-            "to": phone_number,
-            "message": message,
-        }
-        active_sender = sender_id or self.sender_id
-        if active_sender:
-            payload["from"] = active_sender
-
-        encoded_payload = urllib.parse.urlencode(payload).encode("utf-8")
-        request = urllib.request.Request(self.messaging_url, data=encoded_payload, method="POST")
-        request.add_header("apiKey", self.api_key)
-        request.add_header("Content-Type", "application/x-www-form-urlencoded")
-
-        try:
-            with urllib.request.urlopen(request, timeout=20) as response:
-                body = response.read().decode("utf-8")
-        except urllib.error.HTTPError as exc:
-            error_body = exc.read().decode("utf-8", errors="ignore") if exc.fp else ""
-            raise RuntimeError(f"Africa's Talking SMS request failed: {exc.code} {error_body or exc.reason}") from exc
-        except urllib.error.URLError as exc:
-            raise RuntimeError(f"Africa's Talking SMS request failed: {exc.reason}") from exc
-
-        try:
-            response_data = json.loads(body)
-        except json.JSONDecodeError as exc:
-            raise RuntimeError("Africa's Talking SMS returned invalid JSON.") from exc
-
-        recipients = response_data.get("SMSMessageData", {}).get("Recipients", [])
-        recipient = recipients[0] if recipients else {}
-        return {
-            "provider_message_id": recipient.get("messageId", ""),
-            "raw_response": response_data,
-        }
-
-
 class ScheduleSmsService:
     """Dispatch schedule reminder SMS messages and manage credits."""
 
     @staticmethod
     def get_account_for_user(user):
+        # Backwards-compat helper: prefer the legacy ScheduleSmsAccount but
+        # allow callers to migrate to the central SmsAccount model.
         account, _ = ScheduleSmsAccount.objects.get_or_create(owner=user)
         return account
 
@@ -293,110 +237,64 @@ class ScheduleSmsService:
     @classmethod
     def dispatch_reminder(cls, event: ScheduleEvent, client=None, now=None, dry_run=False):
         now = now or timezone.now()
-        client = client or AfricasTalkingSmsClient()
+        # Delegate sending and accounting to the central SmsService. We still
+        # persist a legacy ScheduleSmsDeliveryLog for compatibility with older
+        # consumers and analytics.
         cost_per_message = getattr(settings, "SCHEDULE_SMS_COST_PER_MESSAGE", 1)
         message = cls.build_reminder_message(event)
-        account = cls.get_account_for_user(event.calendar.owner)
+        owner = event.calendar.owner
 
-        if not account.is_active:
-            return ScheduleSmsDeliveryLog.objects.create(
-                event=event,
-                sms_account=account,
-                recipient_phone=account.phone_number,
-                provider_name=account.provider_name,
-                status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
-                message=message,
-                credits_used=0,
-                error_message="SMS account is inactive.",
-                sent_at=now,
-            )
-
-        if not account.phone_number:
-            return ScheduleSmsDeliveryLog.objects.create(
-                event=event,
-                sms_account=account,
-                recipient_phone="",
-                provider_name=account.provider_name,
-                status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
-                message=message,
-                credits_used=0,
-                error_message="No destination phone number is configured.",
-                sent_at=now,
-            )
-
-        if account.balance_credits < cost_per_message:
-            return ScheduleSmsDeliveryLog.objects.create(
-                event=event,
-                sms_account=account,
-                recipient_phone=account.phone_number,
-                provider_name=account.provider_name,
-                status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
-                message=message,
-                credits_used=0,
-                error_message="Insufficient SMS credits.",
-                sent_at=now,
-            )
-
-        if dry_run:
-            return ScheduleSmsDeliveryLog(
-                event=event,
-                sms_account=account,
-                recipient_phone=account.phone_number,
-                provider_name=account.provider_name,
-                status=ScheduleSmsDeliveryLog.STATUS_PENDING,
-                message=message,
-                credits_used=cost_per_message,
-                sent_at=None,
-            )
-
+        central_account = SmsService.get_account_for_owner(owner)
+        # If a legacy ScheduleSmsAccount exists and has credits, prefer its
+        # balance by mirroring it into the central account before sending.
         try:
-            provider_result = client.send_sms(
-                phone_number=account.phone_number,
-                message=message,
-                sender_id=account.sender_id,
-            )
-        except Exception as exc:
-            return ScheduleSmsDeliveryLog.objects.create(
-                event=event,
-                sms_account=account,
-                recipient_phone=account.phone_number,
-                provider_name=account.provider_name,
-                status=ScheduleSmsDeliveryLog.STATUS_FAILED,
-                message=message,
-                credits_used=0,
-                error_message=str(exc),
-                sent_at=now,
-            )
+            legacy = ScheduleSmsAccount.objects.get(owner=owner)
+        except ScheduleSmsAccount.DoesNotExist:
+            legacy = None
 
-        with transaction.atomic():
-            account = ScheduleSmsAccount.objects.select_for_update().get(pk=account.pk)
-            if account.balance_credits < cost_per_message:
-                return ScheduleSmsDeliveryLog.objects.create(
-                    event=event,
-                    sms_account=account,
-                    recipient_phone=account.phone_number,
-                    provider_name=account.provider_name,
-                    status=ScheduleSmsDeliveryLog.STATUS_SKIPPED,
-                    message=message,
-                    credits_used=0,
-                    error_message="Insufficient SMS credits.",
-                    sent_at=now,
-                )
+        if legacy and central_account.balance_credits < cost_per_message and legacy.balance_credits >= cost_per_message:
+            central_account.balance_credits = legacy.balance_credits
+            central_account.phone_number = legacy.phone_number or central_account.phone_number
+            central_account.sender_id = legacy.sender_id or central_account.sender_id
+            central_account.provider_name = legacy.provider_name or central_account.provider_name
+            central_account.save(update_fields=["balance_credits", "phone_number", "sender_id", "provider_name", "updated_at"])
 
-            account.balance_credits -= cost_per_message
-            account.save(update_fields=["balance_credits", "updated_at"])
-            return ScheduleSmsDeliveryLog.objects.create(
-                event=event,
-                sms_account=account,
-                recipient_phone=account.phone_number,
-                provider_name=account.provider_name,
-                provider_message_id=provider_result.get("provider_message_id", ""),
-                status=ScheduleSmsDeliveryLog.STATUS_SENT,
-                message=message,
-                credits_used=cost_per_message,
-                provider_response=provider_result.get("raw_response"),
-                sent_at=now,
-            )
+        # Use SmsService to perform the send; it returns an apps.sms.models.SmsDelivery
+        delivery = SmsService.send_single(account=central_account, phone_number=central_account.phone_number, message=message, context=event, dry_run=dry_run, cost=cost_per_message, client=client)
+
+        # Map the central delivery record into the legacy ScheduleSmsDeliveryLog shape
+        sms_account_obj = None
+        try:
+            sms_account_obj = ScheduleSmsAccount.objects.get(owner=owner)
+        except ScheduleSmsAccount.DoesNotExist:
+            sms_account_obj = ScheduleSmsAccount.objects.create(owner=owner, phone_number=account.phone_number, balance_credits=account.balance_credits, sender_id=account.sender_id, provider_name=account.provider_name, is_active=account.is_active)
+
+        # refresh central account (it may have been updated inside SmsService)
+        try:
+            central_account.refresh_from_db()
+        except Exception:
+            pass
+
+        # sync legacy schedule wallet balance for compatibility
+        try:
+            sms_account_obj.balance_credits = central_account.balance_credits
+            sms_account_obj.save(update_fields=["balance_credits", "updated_at"])
+        except Exception:
+            pass
+
+        return ScheduleSmsDeliveryLog.objects.create(
+            event=event,
+            sms_account=sms_account_obj,
+            recipient_phone=delivery.recipient_phone,
+            provider_name=delivery.provider_name,
+            provider_message_id=getattr(delivery, 'provider_message_id', '') or delivery.provider_message_id,
+            status=delivery.status,
+            message=delivery.message,
+            credits_used=delivery.credits_used,
+            provider_response=delivery.provider_response,
+            error_message=delivery.error_message,
+            sent_at=delivery.sent_at,
+        )
 
     @classmethod
     def dispatch_due_reminders(cls, client=None, now=None, limit=None, dry_run=False):

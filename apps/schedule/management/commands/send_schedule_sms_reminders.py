@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from apps.schedule.services import AfricasTalkingSmsClient, ScheduleSmsService
+from apps.schedule.services import ScheduleSmsService
+from apps.core.utils.sms import AfricasTalkingSmsClient  # re-exported for test patching
 
 
 class Command(BaseCommand):
