@@ -5,6 +5,43 @@ from apps.authentication.serializers import UserSummarySerializer
 from .models import LibraryCategory, LibraryItem
 
 
+class LibraryCategoryReferenceField(serializers.Field):
+    def to_representation(self, value):
+        if not value:
+            return None
+        return LibraryCategorySerializer(value, context=self.context).data
+
+    def to_internal_value(self, data):
+        if data in (None, ''):
+            return None
+
+        queryset = LibraryCategory.objects.filter(is_active=True)
+
+        if isinstance(data, dict):
+            slug = data.get('slug')
+            if slug:
+                category = queryset.filter(slug=slug).first()
+                if category:
+                    return category
+            category_id = data.get('id')
+            if category_id:
+                category = queryset.filter(pk=category_id).first()
+                if category:
+                    return category
+
+        if isinstance(data, int) or (isinstance(data, str) and data.isdigit()):
+            category = queryset.filter(pk=data).first()
+            if category:
+                return category
+
+        if isinstance(data, str):
+            category = queryset.filter(slug=data).first()
+            if category:
+                return category
+
+        raise serializers.ValidationError('Select a valid category.')
+
+
 class LibraryCategorySerializer(serializers.ModelSerializer):
     item_count = serializers.SerializerMethodField()
 
@@ -19,6 +56,7 @@ class LibraryCategorySerializer(serializers.ModelSerializer):
 
 class LibraryItemListSerializer(serializers.ModelSerializer):
     uploaded_by = UserSummarySerializer(read_only=True)
+    category = LibraryCategoryReferenceField(read_only=True)
     category_name = serializers.CharField(source='category.name', read_only=True)
     category_slug = serializers.CharField(source='category.slug', read_only=True)
     file_url = serializers.SerializerMethodField()
@@ -46,6 +84,7 @@ class LibraryItemListSerializer(serializers.ModelSerializer):
 
 class LibraryItemSerializer(serializers.ModelSerializer):
     uploaded_by = UserSummarySerializer(read_only=True)
+    category = LibraryCategoryReferenceField()
     category_name = serializers.CharField(source='category.name', read_only=True)
     category_slug = serializers.CharField(source='category.slug', read_only=True)
     file_url = serializers.SerializerMethodField()

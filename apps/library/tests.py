@@ -66,7 +66,7 @@ class LibraryAPITests(TestCase):
                 'subject': 'Math',
                 'course_code': 'MTH 102',
                 'author_name': 'Student Group',
-                'category': self.category.id,
+                'category': self.category.slug,
             },
             format='multipart',
         )
@@ -74,6 +74,7 @@ class LibraryAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(response.data['success'])
         self.assertEqual(response.data['data']['uploaded_by']['id'], self.user.id)
+        self.assertEqual(response.data['data']['category']['slug'], self.category.slug)
         self.assertEqual(LibraryItem.objects.filter(title='Revision Notes', uploaded_by=self.user).count(), 1)
 
     def test_anonymous_download_endpoint_reaches_public_item(self):
