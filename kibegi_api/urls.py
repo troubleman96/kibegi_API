@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/v1/schedule/', include('apps.schedule.urls')),
     path('api/v1/public/schedule/', include('apps.schedule.public_urls')),
     path('api/v1/marketplace/', include('apps.marketplace.urls')),
+    path('api/v1/library/', include('apps.library.urls')),
     
     # Compatibility shortcuts (deprecated - use /api/v1/auth/ instead)
     path('register/', RegisterAPIView.as_view()),
