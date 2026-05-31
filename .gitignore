@@ -39,6 +39,7 @@ env/
 ENV/
 env.bak/
 venv.bak/
+.venv/
 
 # IDE
 .vscode/
@@ -87,6 +88,7 @@ celerybeat.pid
 *.bak
 *.backup
 *~
+start.md
 
 __pycache__/
 *.pyc
