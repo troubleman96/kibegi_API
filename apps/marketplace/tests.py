@@ -63,6 +63,17 @@ class MarketplaceAPITests(TestCase):
         slugs = [item['slug'] for item in response.data['data']]
         self.assertIn('textbooks', slugs)
 
+    def test_anonymous_users_can_browse_categories_and_listings(self):
+        client = APIClient()
+
+        categories_response = client.get(reverse('marketplace:categories'))
+        listings_response = client.get(reverse('marketplace:listings'))
+
+        self.assertEqual(categories_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(listings_response.status_code, status.HTTP_200_OK)
+        self.assertTrue(categories_response.data['data'])
+        self.assertTrue(listings_response.data['data'])
+
     def test_default_categories_are_seeded(self):
         self.authenticate(self.buyer)
         response = self.client.get(reverse('marketplace:categories'))

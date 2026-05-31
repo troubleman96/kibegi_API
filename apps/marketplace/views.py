@@ -3,7 +3,7 @@ from django.db.models import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.core.pagination import StandardResultsSetPagination
@@ -22,7 +22,7 @@ from .serializers import (
 
 @extend_schema(tags=['Marketplace'])
 class CategoryListAPIView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = CategorySerializer
     pagination_class = StandardResultsSetPagination
 
@@ -42,7 +42,7 @@ class CategoryListAPIView(generics.ListAPIView):
 
 @extend_schema(tags=['Marketplace'])
 class CategoryDetailAPIView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = CategorySerializer
     lookup_field = 'slug'
     queryset = Category.objects.filter(is_active=True)
@@ -50,8 +50,12 @@ class CategoryDetailAPIView(generics.RetrieveAPIView):
 
 @extend_schema(tags=['Marketplace'])
 class ListingListCreateAPIView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -105,7 +109,10 @@ class ListingListCreateAPIView(generics.ListCreateAPIView):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            response = self.get_paginated_response(serializer.data)
+            response = success_response(
+                message='Listings retrieved successfully',
+                data=self.get_paginated_response(serializer.data).data,
+            )
             return cache_response(cache_key, response, 'marketplace')
         serializer = self.get_serializer(queryset, many=True)
         response = success_response(message='Listings retrieved successfully', data=serializer.data)
@@ -125,9 +132,13 @@ class ListingListCreateAPIView(generics.ListCreateAPIView):
 
 @extend_schema(tags=['Marketplace'])
 class ListingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = ListingSerializer
     lookup_field = 'listing_code'
+
+    def get_permissions(self):
+        if self.request.method in ('PUT', 'PATCH', 'DELETE'):
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
     def get_queryset(self):
         return Listing.objects.select_related('seller', 'category')
@@ -194,7 +205,7 @@ class MyListingsAPIView(generics.ListAPIView):
 
 @extend_schema(tags=['Marketplace'])
 class SearchListingsAPIView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = ListingListSerializer
     pagination_class = StandardResultsSetPagination
 
