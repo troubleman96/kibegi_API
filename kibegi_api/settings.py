@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'apps.files',
     'apps.storage',
     'apps.schedule',
+    'apps.marketplace',
 ]
 
 MIDDLEWARE = [
