@@ -475,6 +475,15 @@ All endpoints require authentication (JWT token).
 - User immediately gains access to class content
 - Member count increments
 
+### QR Code Join Support
+
+Class detail and create responses now also include:
+
+- `join_qr_value` - the class code encoded in the QR code
+- `join_qr_image` - a `data:image/png;base64,...` QR image that the frontend can render or download
+
+Use the QR image on the class page so classmates can scan it and submit the same `class_code` join flow.
+
 ---
 
 ### 6. Leave Class

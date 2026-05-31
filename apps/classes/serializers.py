@@ -1,8 +1,44 @@
+import base64
+import io
+import json
+
 from rest_framework import serializers
 from django.db.models import Count
 from .models import Class, Membership
 from apps.authentication.models import User
 from apps.authentication.serializers import UserSummarySerializer
+
+
+class ClassQRCodeMixin:
+    """Shared helpers for generating scan-to-join QR data."""
+
+    def get_join_qr_value(self, obj):
+        return obj.class_code
+
+    def get_join_qr_payload(self, obj):
+        return {
+            "type": "class_join",
+            "class_code": obj.class_code,
+            "class_name": obj.name,
+            "join_endpoint": "/api/v1/classes/join/",
+        }
+
+    def get_join_qr_image(self, obj):
+        payload = self.get_join_qr_payload(obj)
+        if not payload:
+            return None
+
+        import qrcode
+
+        qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=8, border=4)
+        qr.add_data(json.dumps(payload, separators=(",", ":"), sort_keys=True))
+        qr.make(fit=True)
+        image = qr.make_image(fill_color="black", back_color="white")
+
+        output = io.BytesIO()
+        image.save(output, format="PNG")
+        encoded_image = base64.b64encode(output.getvalue()).decode("ascii")
+        return f"data:image/png;base64,{encoded_image}"
 
 
 # ============================================================================
@@ -69,7 +105,7 @@ class MembershipSerializer(serializers.ModelSerializer):
         return UserSummarySerializer(context=self.context).get_profile_image_url(obj.user)
 
 
-class ClassSerializer(serializers.ModelSerializer):
+class ClassSerializer(ClassQRCodeMixin, serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
     creator_type = serializers.CharField(source='creator.user_type', read_only=True)
     creator_profile_image = serializers.ImageField(source='creator.profile_image', read_only=True)
@@ -77,13 +113,16 @@ class ClassSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     user_role = serializers.SerializerMethodField()
+    join_qr_payload = serializers.SerializerMethodField()
+    join_qr_value = serializers.SerializerMethodField()
+    join_qr_image = serializers.SerializerMethodField()
     
     class Meta:
         model = Class
         fields = [
             'id', 'name', 'description', 'class_code', 'is_public', 'is_verified',
             'creator', 'creator_name', 'creator_type', 'creator_profile_image', 'creator_profile_image_url', 'member_count', 'is_member',
-            'user_role', 'created_at', 'updated_at'
+            'user_role', 'join_qr_payload', 'join_qr_value', 'join_qr_image', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'class_code', 'is_verified', 'creator', 'created_at', 'updated_at']
 
@@ -151,7 +190,7 @@ class ClassListSerializer(serializers.ModelSerializer):
 # Class Detail Serializer with Uploads Information
 # ============================================================================
 
-class ClassDetailSerializer(serializers.ModelSerializer):
+class ClassDetailSerializer(ClassQRCodeMixin, serializers.ModelSerializer):
     """
     Detailed serializer for class detail view.
     
@@ -175,6 +214,9 @@ class ClassDetailSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     user_role = serializers.SerializerMethodField()
+    join_qr_payload = serializers.SerializerMethodField()
+    join_qr_value = serializers.SerializerMethodField()
+    join_qr_image = serializers.SerializerMethodField()
     
     # Upload information - NEW FIELDS
     uploads_summary = serializers.SerializerMethodField()
@@ -187,7 +229,7 @@ class ClassDetailSerializer(serializers.ModelSerializer):
             # Basic info
             'id', 'name', 'description', 'class_code', 'is_public', 'is_verified',
             'creator', 'creator_name', 'creator_type', 'creator_profile_image', 'creator_profile_image_url', 'member_count', 'is_member',
-            'user_role', 'created_at', 'updated_at',
+            'user_role', 'join_qr_payload', 'join_qr_value', 'join_qr_image', 'created_at', 'updated_at',
             # Upload info - NEW
             'uploads_summary', 'recent_uploads', 'uploader_stats'
         ]

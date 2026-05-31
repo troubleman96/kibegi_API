@@ -333,9 +333,11 @@ CORS_ALLOWED_ORIGINS = [
     "https://kibegi.com",
     "https://www.kibegi.com",
     "http://localhost:5173",  # For local development (Vite)
+    "http://localhost:8093",  # Frontend dev server used in this workspace
     "http://localhost:4173",  # For local preview
     "http://localhost:3000",  # Alternative dev port
     "http://127.0.0.1:5173",
+    "http://127.0.0.1:8093",
 ]
 
 # Set to False since we're using Bearer tokens, not cookies
