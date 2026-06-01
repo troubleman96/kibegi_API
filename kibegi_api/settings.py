@@ -25,7 +25,14 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-u%i7d=u%)@k(6blq_pr^%
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['api.kibegi.com', '194.163.153.255', 'localhost', '192.168.10.144', '127.0.0.1']
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in config(
+        'ALLOWED_HOSTS',
+        default='api.kibegi.com,194.163.153.255,localhost,127.0.0.1,192.168.10.144',
+    ).split(',')
+    if h.strip()
+]
 
 
 
@@ -343,16 +350,23 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
-# CORS Configuration - Properly configured for production and development
+# CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    "https://kibegi.com",
-    "https://www.kibegi.com",
-    "http://localhost:5173",  # For local development (Vite)
-    "http://localhost:8093",  # Frontend dev server used in this workspace
-    "http://localhost:4173",  # For local preview
-    "http://localhost:3000",  # Alternative dev port
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:8093",
+    o.strip()
+    for o in config(
+        'CORS_ALLOWED_ORIGINS',
+        default=(
+            'https://kibegi.com,'
+            'https://www.kibegi.com,'
+            'http://localhost:5173,'
+            'http://localhost:8093,'
+            'http://localhost:4173,'
+            'http://localhost:3000,'
+            'http://127.0.0.1:5173,'
+            'http://127.0.0.1:8093'
+        ),
+    ).split(',')
+    if o.strip()
 ]
 
 # Set to False since we're using Bearer tokens, not cookies
