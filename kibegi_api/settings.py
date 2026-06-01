@@ -21,10 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u%i7d=u%)@k(6blq_pr^%tgo7@ktkrsh_qm%ob8w%mq-s0_=%g'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-u%i7d=u%)@k(6blq_pr^%tgo7@ktkrsh_qm%ob8w%mq-s0_=%g')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['api.kibegi.com', '194.163.153.255', 'localhost', '192.168.10.144', '127.0.0.1']
 
@@ -457,11 +456,10 @@ LOGGING = {
             'level': 'INFO',
             'class': 'apps.core.utils.log_handler.MinIORotatingFileHandler' if ENABLE_MINIO_LOG_UPLOAD else 'logging.handlers.RotatingFileHandler',
             'filename': str(LOG_FILE),
-            'maxBytes': 1024 * 1024 * 5,  # 5MB - will upload to MinIO when rotated
+            'maxBytes': 1024 * 1024 * 5,
             'backupCount': 5,
             'formatter': 'standard',
-            'bucket_name': config('AWS_STORAGE_BUCKET_NAME', default='kibegi-uploads'),
-            's3_prefix': 'logs',
+            **({'bucket_name': config('AWS_STORAGE_BUCKET_NAME', default='kibegi-uploads'), 's3_prefix': 'logs'} if ENABLE_MINIO_LOG_UPLOAD else {}),
         },
         'console': {
             'class': 'logging.StreamHandler',
