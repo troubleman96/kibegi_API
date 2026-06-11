@@ -667,21 +667,27 @@ class GoogleLoginAPIView(APIView):
                      (id_info.get('given_name', '') + ' ' + id_info.get('family_name', '')).strip()
                      or email.split('@')[0])
 
+        # user_type is only used when creating a brand-new Google account.
+        # Existing users keep whatever type they registered with.
+        requested_type = request.data.get('user_type', 'student')
+        if requested_type not in ('student', 'lecturer'):
+            requested_type = 'student'
+
         # Find or create the user
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # New user — register as student (lecturers must go through manual approval)
+            is_lecturer = requested_type == 'lecturer'
             user = User.objects.create_user(
                 email=email,
                 full_name=full_name or email.split('@')[0],
-                user_type='student',
+                user_type=requested_type,
                 password=None,  # no password — Google auth only
             )
             user.is_active = True
-            user.is_approved = True
+            user.is_approved = not is_lecturer  # lecturers need admin approval
             user.save(update_fields=['is_active', 'is_approved'])
-            logger.info('New Google user created: %s', email)
+            logger.info('New Google user created: %s (type=%s)', email, requested_type)
 
         # Block inactive accounts
         if not user.is_active:
@@ -690,10 +696,10 @@ class GoogleLoginAPIView(APIView):
                 status.HTTP_403_FORBIDDEN,
             )
 
-        # Block unapproved lecturers
+        # Block unapproved lecturers (covers both Google-registered and email-registered)
         if user.user_type == 'lecturer' and not user.is_approved:
             return error_response(
-                _('Your lecturer account is pending admin approval. You will be notified once approved.'),
+                _('pending_approval'),
                 status.HTTP_403_FORBIDDEN,
             )
 
