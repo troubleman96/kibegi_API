@@ -398,7 +398,22 @@ class RegisterVerifyAPIView(APIView):
         except User.DoesNotExist:
             return error_response(message=_('User not found'), status_code=status.HTTP_404_NOT_FOUND)
 
+        # Apply profile data submitted alongside the OTP
+        new_type = request.data.get('user_type', '').strip()
+        university = request.data.get('university', '').strip()[:255]
+        phone_number = request.data.get('phone_number', '').strip()[:20]
+
+        if new_type in ('student', 'lecturer'):
+            user.user_type = new_type
+        if university:
+            user.university = university
+        if phone_number:
+            user.phone_number = phone_number
+
         user.is_active = True
+        # Lecturers always require approval, regardless of whether this was set at registration
+        if user.user_type == 'lecturer':
+            user.is_approved = False
         user.save()
 
         # mark OTP used
@@ -667,11 +682,13 @@ class GoogleLoginAPIView(APIView):
                      (id_info.get('given_name', '') + ' ' + id_info.get('family_name', '')).strip()
                      or email.split('@')[0])
 
-        # user_type is only used when creating a brand-new Google account.
-        # Existing users keep whatever type they registered with.
+        # Profile fields — only applied when creating a brand-new account.
+        # Existing users keep whatever they registered with.
         requested_type = request.data.get('user_type', 'student')
         if requested_type not in ('student', 'lecturer'):
             requested_type = 'student'
+        university = request.data.get('university', '').strip()[:255]
+        phone_number = request.data.get('phone_number', '').strip()[:20]
 
         # Find or create the user
         try:
@@ -686,7 +703,9 @@ class GoogleLoginAPIView(APIView):
             )
             user.is_active = True
             user.is_approved = not is_lecturer  # lecturers need admin approval
-            user.save(update_fields=['is_active', 'is_approved'])
+            user.university = university
+            user.phone_number = phone_number
+            user.save(update_fields=['is_active', 'is_approved', 'university', 'phone_number'])
             logger.info('New Google user created: %s (type=%s)', email, requested_type)
 
         # Block inactive accounts

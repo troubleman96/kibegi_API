@@ -193,11 +193,11 @@ class UserAdmin(BaseUserAdmin):
         if obj.user_type != 'lecturer':
             return mark_safe('<span style="color: #9CA3AF; font-size: 11px;">—</span>')
         if obj.is_approved:
-            return format_html(
+            return mark_safe(
                 '<span style="background:#D1FAE5;color:#065F46;padding:2px 9px;'
                 'border-radius:8px;font-size:11px;font-weight:600;">✓ Approved</span>'
             )
-        return format_html(
+        return mark_safe(
             '<span style="background:#FEF3C7;color:#92400E;padding:2px 9px;'
             'border-radius:8px;font-size:11px;font-weight:600;">⏳ Pending</span>'
         )

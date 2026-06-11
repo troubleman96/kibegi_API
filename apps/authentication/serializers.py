@@ -31,6 +31,8 @@ class UserSummarySerializer(serializers.ModelSerializer):
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password], style={'input_type': 'password'})
     confirm_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    # user_type is finalised during OTP verification (profile step), default to student
+    user_type = serializers.ChoiceField(choices=User.USER_TYPE_CHOICES, required=False, default='student')
 
     class Meta:
         model = User
@@ -105,8 +107,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        # present username and email to clients; email is read-only
-        fields = ['id', 'email', 'username', 'user_type', 'is_approved', 'profile_image', 'profile_image_url', 'date_joined']
+        fields = ['id', 'email', 'username', 'user_type', 'is_approved', 'university', 'phone_number', 'profile_image', 'profile_image_url', 'date_joined']
         read_only_fields = ['id', 'email', 'is_approved', 'date_joined', 'profile_image_url']
     
     def get_profile_image_url(self, obj):

@@ -57,6 +57,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         help_text="User profile picture. Upload an image file."
     )
+    university = models.CharField(_('university'), max_length=255, blank=True, default='')
+    phone_number = models.CharField(_('phone number'), max_length=20, blank=True, default='')
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_approved = models.BooleanField(
