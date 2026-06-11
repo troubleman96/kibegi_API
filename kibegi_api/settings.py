@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'apps.library',
     'apps.classcomms',
     'apps.sms',
+    'apps.assignments',
 ]
 
 MIDDLEWARE = [
@@ -415,6 +416,10 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER or 'we
 # OTP settings
 OTP_EXPIRY_SECONDS = config('OTP_EXPIRY_SECONDS', default=300, cast=int)
 OTP_LENGTH = config('OTP_LENGTH', default=6, cast=int)
+
+# Google OAuth2
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
+GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET', default='')
 
 # Schedule app configuration
 # This URL is returned to the frontend so it can open a dedicated schedule

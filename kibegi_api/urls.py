@@ -47,7 +47,8 @@ urlpatterns = [
     path('api/v1/class-comms/', include('apps.classcomms.urls')),
     path('api/v1/public/class-comms/', include('apps.classcomms.public_urls')),
     path('api/v1/sms/', include('apps.sms.urls')),
-    
+    path('api/v1/assignments/', include('apps.assignments.urls')),
+
     # Compatibility shortcuts (deprecated - use /api/v1/auth/ instead)
     path('register/', RegisterAPIView.as_view()),
     path('login/', LoginAPIView.as_view()),

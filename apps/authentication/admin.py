@@ -26,6 +26,31 @@ admin.site.empty_value_display = '—'  # Show em dash for empty values
 
 
 # =============================================================================
+# Custom List Filters
+# =============================================================================
+
+class PendingLecturerFilter(admin.SimpleListFilter):
+    title = 'Lecturer Approval'
+    parameter_name = 'lecturer_approval'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('pending', '⏳ Pending approval'),
+            ('approved', '✅ Approved'),
+            ('all_lecturers', '🎓 All lecturers'),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'pending':
+            return queryset.filter(user_type='lecturer', is_approved=False, is_active=True)
+        if self.value() == 'approved':
+            return queryset.filter(user_type='lecturer', is_approved=True)
+        if self.value() == 'all_lecturers':
+            return queryset.filter(user_type='lecturer')
+        return queryset
+
+
+# =============================================================================
 # User Admin Configuration
 # =============================================================================
 
@@ -42,20 +67,23 @@ class UserAdmin(BaseUserAdmin):
     # List display configuration
     list_display = [
         'profile_image_thumbnail',
-        'email', 
-        'full_name', 
+        'email',
+        'full_name',
         'user_type_badge',
         'is_active_badge',
+        'approval_badge',
         'is_staff',
         'get_classes_count',
         'get_uploads_count',
         'get_friends_count',
         'date_joined',
     ]
-    
+
     list_filter = [
-        'user_type', 
-        'is_active', 
+        PendingLecturerFilter,
+        'user_type',
+        'is_active',
+        'is_approved',
         'is_staff',
         'is_superuser',
         'date_joined',
@@ -72,6 +100,13 @@ class UserAdmin(BaseUserAdmin):
         ('Personal Information', {
             'fields': ('full_name', 'user_type', 'profile_image', 'profile_image_preview')
         }),
+        ('Approval', {
+            'fields': ('is_approved',),
+            'description': (
+                'Lecturer accounts must be approved before they can log in. '
+                'Students are always approved automatically.'
+            ),
+        }),
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
             'classes': ('collapse',)
@@ -80,11 +115,11 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('last_login', 'date_joined'),
         }),
     )
-    
+
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'full_name', 'user_type', 'password1', 'password2'),
+            'fields': ('email', 'full_name', 'user_type', 'is_approved', 'password1', 'password2'),
         }),
     )
     
@@ -122,6 +157,8 @@ class UserAdmin(BaseUserAdmin):
     
     # Actions
     actions = [
+        'approve_lecturers',
+        'reject_lecturers',
         'activate_users',
         'deactivate_users',
         'make_students',
@@ -150,6 +187,22 @@ class UserAdmin(BaseUserAdmin):
         return mark_safe('<span style="color: #EF4444;">✗ Inactive</span>')
     is_active_badge.short_description = 'Status'
     is_active_badge.admin_order_field = 'is_active'
+
+    def approval_badge(self, obj):
+        """Display approval status — only meaningful for lecturers."""
+        if obj.user_type != 'lecturer':
+            return mark_safe('<span style="color: #9CA3AF; font-size: 11px;">—</span>')
+        if obj.is_approved:
+            return format_html(
+                '<span style="background:#D1FAE5;color:#065F46;padding:2px 9px;'
+                'border-radius:8px;font-size:11px;font-weight:600;">✓ Approved</span>'
+            )
+        return format_html(
+            '<span style="background:#FEF3C7;color:#92400E;padding:2px 9px;'
+            'border-radius:8px;font-size:11px;font-weight:600;">⏳ Pending</span>'
+        )
+    approval_badge.short_description = 'Approval'
+    approval_badge.admin_order_field = 'is_approved'
     
     def get_classes_count(self, obj):
         """Get number of classes user is member of"""
@@ -177,6 +230,44 @@ class UserAdmin(BaseUserAdmin):
         return qs.prefetch_related('joined_classes', 'uploads')
     
     # Bulk Actions
+    @admin.action(description='✅ Approve selected lecturers and notify by email')
+    def approve_lecturers(self, request, queryset):
+        from .services import EmailService
+        lecturers = queryset.filter(user_type='lecturer', is_approved=False)
+        approved = 0
+        for lecturer in lecturers:
+            lecturer.is_approved = True
+            lecturer.is_active = True
+            lecturer.save(update_fields=['is_approved', 'is_active'])
+            EmailService.send_lecturer_approved(
+                email=lecturer.email,
+                user_name=lecturer.full_name or lecturer.email.split('@')[0],
+            )
+            approved += 1
+        if approved:
+            self.message_user(request, f'{approved} lecturer(s) approved and notified by email.')
+        else:
+            self.message_user(request, 'No pending lecturers found in the selection.', level='warning')
+
+    @admin.action(description='🚫 Reject selected lecturers and notify by email')
+    def reject_lecturers(self, request, queryset):
+        from .services import EmailService
+        lecturers = queryset.filter(user_type='lecturer')
+        rejected = 0
+        for lecturer in lecturers:
+            lecturer.is_active = False
+            lecturer.is_approved = False
+            lecturer.save(update_fields=['is_active', 'is_approved'])
+            EmailService.send_lecturer_rejected(
+                email=lecturer.email,
+                user_name=lecturer.full_name or lecturer.email.split('@')[0],
+            )
+            rejected += 1
+        if rejected:
+            self.message_user(request, f'{rejected} lecturer(s) rejected and notified by email.')
+        else:
+            self.message_user(request, 'No lecturers found in the selection.', level='warning')
+
     @admin.action(description='✓ Activate selected users')
     def activate_users(self, request, queryset):
         updated = queryset.update(is_active=True)
@@ -196,6 +287,14 @@ class UserAdmin(BaseUserAdmin):
     def make_lecturers(self, request, queryset):
         updated = queryset.update(user_type='lecturer')
         self.message_user(request, f'{updated} user(s) changed to lecturer.')
+
+    def delete_queryset(self, request, queryset):
+        # SQLite FK constraint ordering fails on bulk delete; delete one-by-one instead
+        for user in queryset:
+            user.delete()
+
+    def delete_model(self, request, obj):
+        obj.delete()
 
 
 # =============================================================================

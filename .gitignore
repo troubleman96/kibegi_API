@@ -90,6 +90,11 @@ celerybeat.pid
 *~
 start.md
 
+# Node (should not exist in API, but guard against accidents)
+node_modules/
+package.json
+package-lock.json
+
 __pycache__/
 *.pyc
 *.pyo

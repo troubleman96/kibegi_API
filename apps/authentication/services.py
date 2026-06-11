@@ -421,6 +421,59 @@ Important:
         return cls._send_email(email, subject, plain_text, html_content)
     
     @classmethod
+    def send_lecturer_approved(cls, email: str, user_name: str) -> bool:
+        subject = "🎉 Your Kibegi Lecturer Account Has Been Approved"
+        preview_text = "Your lecturer account on Kibegi is now active."
+        content = f'''
+                    <tr>
+                        <td style="padding: 40px 40px 30px 40px; text-align: center;">
+                            <h1 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 700; color: {cls.TEXT_COLOR};">
+                                Account Approved!
+                            </h1>
+                            <p style="margin: 0 0 20px 0; font-size: 16px; color: {cls.TEXT_COLOR};">
+                                Hello <strong>{user_name}</strong>! 👋
+                            </p>
+                            <p style="margin: 0 0 20px 0; font-size: 15px; color: {cls.TEXT_LIGHT}; line-height: 1.6;">
+                                Great news! Your lecturer account on Kibegi has been reviewed and approved by our admin team.
+                                You can now log in and start creating classes, uploading materials, and managing your students.
+                            </p>
+                            <div style="background-color: #D1FAE5; border-radius: 8px; padding: 20px; border-left: 4px solid {cls.SUCCESS};">
+                                <p style="margin: 0; font-size: 15px; color: {cls.TEXT_COLOR}; font-weight: 600;">
+                                    ✅ Your account is now active. Log in to get started!
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+'''
+        html_content = cls.get_base_template(content, preview_text)
+        plain_text = f"Hello {user_name},\n\nYour Kibegi lecturer account has been approved. You can now log in.\n\n© 2025 Kibegi."
+        return cls._send_email(email, subject, plain_text, html_content)
+
+    @classmethod
+    def send_lecturer_rejected(cls, email: str, user_name: str) -> bool:
+        subject = "Kibegi Lecturer Account Application Update"
+        preview_text = "An update regarding your Kibegi lecturer account application."
+        content = f'''
+                    <tr>
+                        <td style="padding: 40px 40px 30px 40px; text-align: center;">
+                            <h1 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 700; color: {cls.TEXT_COLOR};">
+                                Account Application Update
+                            </h1>
+                            <p style="margin: 0 0 20px 0; font-size: 16px; color: {cls.TEXT_COLOR};">
+                                Hello <strong>{user_name}</strong>,
+                            </p>
+                            <p style="margin: 0 0 20px 0; font-size: 15px; color: {cls.TEXT_LIGHT}; line-height: 1.6;">
+                                After reviewing your lecturer account application, we are unable to approve your account at this time.
+                                If you believe this is an error, please contact our support team for assistance.
+                            </p>
+                        </td>
+                    </tr>
+'''
+        html_content = cls.get_base_template(content, preview_text)
+        plain_text = f"Hello {user_name},\n\nYour Kibegi lecturer account application was not approved. Contact support if you need assistance.\n\n© 2025 Kibegi."
+        return cls._send_email(email, subject, plain_text, html_content)
+
+    @classmethod
     def _send_email(
         cls,
         to_email: str,

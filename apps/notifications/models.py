@@ -36,6 +36,10 @@ class Notification(models.Model):
         ('friend_accepted', 'Friend Accepted'),
         ('upload_created', 'Upload Created'),
         ('class_joined', 'Class Joined'),
+        ('class_update', 'Class Update'),
+        ('assignment_created', 'Assignment Created'),
+        ('assignment_due_soon', 'Assignment Due Soon'),
+        ('schedule_reminder', 'Schedule Reminder'),
         # Backward-compatible / legacy type kept for older clients.
         ('file_shared', 'File Shared'),
     ]

@@ -25,7 +25,11 @@ from .serializers import (
     ChangePasswordSerializer,
 )
 from .services import EmailService
+from rest_framework.permissions import IsAdminUser
 from apps.core.utils.responses import success_response, error_response
+
+import logging
+logger = logging.getLogger('kibegi')
 from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 User = get_user_model()
@@ -59,6 +63,9 @@ class RegisterAPIView(APIView):
         # Create inactive user (must verify OTP to activate)
         user = serializer.save()
         user.is_active = False
+        # Lecturers need admin approval before they can use the platform
+        if user.user_type == 'lecturer':
+            user.is_approved = False
         user.save()
 
         # generate and send OTP for registration verification
@@ -104,6 +111,12 @@ class LoginAPIView(APIView):
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
         if user is None:
             return error_response(message=_('Invalid email or password'), status_code=status.HTTP_401_UNAUTHORIZED)
+
+        if user.user_type == 'lecturer' and not user.is_approved:
+            return error_response(
+                message=_('Your lecturer account is pending admin approval. You will be notified once approved.'),
+                status_code=status.HTTP_403_FORBIDDEN
+            )
 
         refresh = RefreshToken.for_user(user)
         user_serializer = UserProfileSerializer(user, context={'request': request})
@@ -392,6 +405,13 @@ class RegisterVerifyAPIView(APIView):
         otp.is_used = True
         otp.save()
 
+        # Lecturers await admin approval — return success but no tokens yet
+        if user.user_type == 'lecturer' and not user.is_approved:
+            return success_response(
+                message=_('Email verified. Your lecturer account is pending admin approval. You will be notified once approved.'),
+                status_code=status.HTTP_200_OK
+            )
+
         # issue tokens now that the user is verified
         refresh = RefreshToken.for_user(user)
         user_serializer = UserProfileSerializer(user, context={'request': request})
@@ -570,24 +590,174 @@ Upload or update the authenticated user's profile image.
     def delete(self, request):
         """Remove profile image"""
         user = request.user
-        
+
         if not user.profile_image:
             return error_response(
                 message=_('No profile image to remove'),
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        
+
         # Delete the image file
         try:
             user.profile_image.delete(save=False)
         except Exception:
             pass  # Ignore errors if file doesn't exist
-        
+
         # Clear the field
         user.profile_image = None
         user.save()
         invalidate_cache_namespaces('profile')
-        
+
         return success_response(
             message=_('Profile image removed successfully')
         )
+
+
+@extend_schema(tags=['Authentication'])
+class GoogleLoginAPIView(APIView):
+    """Exchange a Google ID token for Kibegi JWT tokens.
+
+    The frontend completes the Google OAuth2 flow and receives an ID token
+    (credential). It posts that credential here; we verify it with Google,
+    then find-or-create the matching Kibegi user and return access/refresh
+    tokens exactly like the regular login endpoint.
+    """
+    permission_classes = [AllowAny]
+
+    @extend_schema(
+        summary="Login or register with Google",
+        description=(
+            "Post the Google OAuth2 `credential` (ID token) obtained from the "
+            "Google Sign-In button. Returns JWT tokens and user profile on success."
+        ),
+        responses={200: UserProfileSerializer},
+    )
+    def post(self, request):
+        access_token = request.data.get('access_token', '').strip()
+        if not access_token:
+            return error_response(_('Google access_token is required.'), status.HTTP_400_BAD_REQUEST)
+
+        client_id = getattr(settings, 'GOOGLE_CLIENT_ID', '')
+
+        # Verify the access token via Google's tokeninfo endpoint and fetch user info
+        try:
+            import json as _json
+            import urllib.request, urllib.error
+            userinfo_req = urllib.request.Request(
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+            )
+            userinfo_req.add_header('Authorization', f'Bearer {access_token}')
+            with urllib.request.urlopen(userinfo_req, timeout=10) as resp:
+                id_info = _json.loads(resp.read().decode())
+        except urllib.error.HTTPError as exc:
+            logger.warning('Google userinfo request failed: %s', exc)
+            return error_response(_('Invalid or expired Google access token.'), status.HTTP_401_UNAUTHORIZED)
+        except Exception as exc:
+            logger.error('Google userinfo error: %s', exc, exc_info=True)
+            return error_response(_('Could not verify Google token.'), status.HTTP_400_BAD_REQUEST)
+
+        email = id_info.get('email', '').lower()
+        if not email:
+            return error_response(_('Google account has no email address.'), status.HTTP_400_BAD_REQUEST)
+
+        if not id_info.get('email_verified', False):
+            return error_response(_('Google email address is not verified.'), status.HTTP_400_BAD_REQUEST)
+
+        full_name = (id_info.get('name') or
+                     (id_info.get('given_name', '') + ' ' + id_info.get('family_name', '')).strip()
+                     or email.split('@')[0])
+
+        # Find or create the user
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            # New user — register as student (lecturers must go through manual approval)
+            user = User.objects.create_user(
+                email=email,
+                full_name=full_name or email.split('@')[0],
+                user_type='student',
+                password=None,  # no password — Google auth only
+            )
+            user.is_active = True
+            user.is_approved = True
+            user.save(update_fields=['is_active', 'is_approved'])
+            logger.info('New Google user created: %s', email)
+
+        # Block inactive accounts
+        if not user.is_active:
+            return error_response(
+                _('Your account is inactive. Please contact support.'),
+                status.HTTP_403_FORBIDDEN,
+            )
+
+        # Block unapproved lecturers
+        if user.user_type == 'lecturer' and not user.is_approved:
+            return error_response(
+                _('Your lecturer account is pending admin approval. You will be notified once approved.'),
+                status.HTTP_403_FORBIDDEN,
+            )
+
+        refresh = RefreshToken.for_user(user)
+        user_serializer = UserProfileSerializer(user, context={'request': request})
+        data = {
+            'user': user_serializer.data,
+            'tokens': {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            },
+        }
+        return success_response(data=data, message=_('Google login successful'))
+
+
+@extend_schema(tags=['Authentication'])
+class LecturerApprovalAPIView(APIView):
+    """Admin-only endpoint to list pending lecturers and approve or reject them."""
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    @extend_schema(
+        summary="List pending lecturer accounts",
+        description="Returns all lecturer accounts awaiting admin approval.",
+        responses={200: UserProfileSerializer(many=True)}
+    )
+    def get(self, request):
+        pending = User.objects.filter(user_type='lecturer', is_active=True, is_approved=False)
+        serializer = UserProfileSerializer(pending, many=True, context={'request': request})
+        return success_response(data=serializer.data)
+
+    @extend_schema(
+        summary="Approve or reject a lecturer",
+        description="Approve or reject a lecturer account. Send `{user_id, action}` where action is 'approve' or 'reject'.",
+        responses={200: None}
+    )
+    def post(self, request):
+        user_id = request.data.get('user_id')
+        action = request.data.get('action')
+
+        if not user_id or action not in ('approve', 'reject'):
+            return error_response(
+                message=_("Provide user_id and action ('approve' or 'reject')."),
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            lecturer = User.objects.get(id=user_id, user_type='lecturer')
+        except User.DoesNotExist:
+            return error_response(message=_('Lecturer not found'), status_code=status.HTTP_404_NOT_FOUND)
+
+        if action == 'approve':
+            lecturer.is_approved = True
+            lecturer.save(update_fields=['is_approved'])
+            EmailService.send_lecturer_approved(
+                email=lecturer.email,
+                user_name=lecturer.full_name or lecturer.email.split('@')[0]
+            )
+            return success_response(message=_('Lecturer approved and notified via email.'))
+        else:
+            # Reject: deactivate account
+            lecturer.is_active = False
+            lecturer.save(update_fields=['is_active'])
+            EmailService.send_lecturer_rejected(
+                email=lecturer.email,
+                user_name=lecturer.full_name or lecturer.email.split('@')[0]
+            )
+            return success_response(message=_('Lecturer rejected and notified via email.'))

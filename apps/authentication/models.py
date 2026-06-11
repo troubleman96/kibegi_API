@@ -59,6 +59,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff status'), default=False)
+    is_approved = models.BooleanField(
+        _('approved'),
+        default=True,
+        help_text=_(
+            'Lecturers must be approved by an admin before they can log in. '
+            'Students are approved automatically.'
+        ),
+    )
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
     objects = UserManager()
