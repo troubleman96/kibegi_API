@@ -642,41 +642,81 @@ class GoogleLoginAPIView(APIView):
     @extend_schema(
         summary="Login or register with Google",
         description=(
-            "Post the Google OAuth2 `credential` (ID token) obtained from the "
-            "Google Sign-In button. Returns JWT tokens and user profile on success."
+            "Post the Google OAuth2 `access_token` or `credential` obtained from "
+            "Google Sign-In. Returns JWT tokens and user profile on success."
         ),
         responses={200: UserProfileSerializer},
     )
     def post(self, request):
-        access_token = request.data.get('access_token', '').strip()
-        if not access_token:
-            return error_response(_('Google access_token is required.'), status.HTTP_400_BAD_REQUEST)
+        token = (
+            request.data.get('access_token')
+            or request.data.get('credential')
+            or request.data.get('id_token')
+            or ''
+        ).strip()
+        if not token:
+            return error_response(
+                message=_('Google access_token or credential is required.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         client_id = getattr(settings, 'GOOGLE_CLIENT_ID', '')
 
-        # Verify the access token via Google's tokeninfo endpoint and fetch user info
+        # Verify the token via Google's API and fetch user info.
         try:
             import json as _json
-            import urllib.request, urllib.error
-            userinfo_req = urllib.request.Request(
-                'https://www.googleapis.com/oauth2/v3/userinfo',
-            )
-            userinfo_req.add_header('Authorization', f'Bearer {access_token}')
-            with urllib.request.urlopen(userinfo_req, timeout=10) as resp:
-                id_info = _json.loads(resp.read().decode())
+            import urllib.error
+            import urllib.parse
+            import urllib.request
+
+            if request.data.get('credential') or request.data.get('id_token'):
+                tokeninfo_url = (
+                    'https://oauth2.googleapis.com/tokeninfo?'
+                    + urllib.parse.urlencode({'id_token': token})
+                )
+                tokeninfo_req = urllib.request.Request(tokeninfo_url)
+                with urllib.request.urlopen(tokeninfo_req, timeout=10) as resp:
+                    id_info = _json.loads(resp.read().decode())
+            else:
+                userinfo_req = urllib.request.Request(
+                    'https://www.googleapis.com/oauth2/v3/userinfo',
+                )
+                userinfo_req.add_header('Authorization', f'Bearer {token}')
+                with urllib.request.urlopen(userinfo_req, timeout=10) as resp:
+                    id_info = _json.loads(resp.read().decode())
         except urllib.error.HTTPError as exc:
             logger.warning('Google userinfo request failed: %s', exc)
-            return error_response(_('Invalid or expired Google access token.'), status.HTTP_401_UNAUTHORIZED)
+            return error_response(
+                message=_('Invalid or expired Google access token.'),
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
         except Exception as exc:
             logger.error('Google userinfo error: %s', exc, exc_info=True)
-            return error_response(_('Could not verify Google token.'), status.HTTP_400_BAD_REQUEST)
+            return error_response(
+                message=_('Could not verify Google token.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         email = id_info.get('email', '').lower()
         if not email:
-            return error_response(_('Google account has no email address.'), status.HTTP_400_BAD_REQUEST)
+            return error_response(
+                message=_('Google account has no email address.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         if not id_info.get('email_verified', False):
-            return error_response(_('Google email address is not verified.'), status.HTTP_400_BAD_REQUEST)
+            return error_response(
+                message=_('Google email address is not verified.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if client_id:
+            token_audience = id_info.get('aud')
+            if token_audience and token_audience != client_id:
+                return error_response(
+                    message=_('Google token was issued for a different client.'),
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                )
 
         full_name = (id_info.get('name') or
                      (id_info.get('given_name', '') + ' ' + id_info.get('family_name', '')).strip()

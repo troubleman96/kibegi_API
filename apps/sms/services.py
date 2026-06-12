@@ -5,7 +5,7 @@ from django.db import transaction
 from django.utils import timezone
 from django.conf import settings
 
-from apps.core.utils.sms import AfricasTalkingSmsClient
+from apps.core.utils.sms import SendAfricaSmsClient as AfricasTalkingSmsClient
 from .models import SmsAccount, SmsDelivery
 
 logger = logging.getLogger('kibegi')
@@ -137,6 +137,7 @@ class SmsService:
 
         Returns summary dict and list of created SmsDelivery objects.
         """
+        recipients = list(recipients)
         account = cls.get_account_for_owner(owner)
         cost = cost_per_message or getattr(settings, 'CLASS_COMMS_SMS_COST_PER_MESSAGE', 1)
         results = []
@@ -157,6 +158,6 @@ class SmsService:
             'failed': failed,
             'skipped': skipped,
             'credits_used': credits_used,
-            'total': len(list(recipients)),
+            'total': len(recipients),
         }
         return summary, results

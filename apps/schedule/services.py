@@ -263,11 +263,23 @@ class ScheduleSmsService:
         delivery = SmsService.send_single(account=central_account, phone_number=central_account.phone_number, message=message, context=event, dry_run=dry_run, cost=cost_per_message, client=client)
 
         # Map the central delivery record into the legacy ScheduleSmsDeliveryLog shape
-        sms_account_obj = None
-        try:
-            sms_account_obj = ScheduleSmsAccount.objects.get(owner=owner)
-        except ScheduleSmsAccount.DoesNotExist:
-            sms_account_obj = ScheduleSmsAccount.objects.create(owner=owner, phone_number=account.phone_number, balance_credits=account.balance_credits, sender_id=account.sender_id, provider_name=account.provider_name, is_active=account.is_active)
+        sms_account_obj, created = ScheduleSmsAccount.objects.get_or_create(
+            owner=owner,
+            defaults={
+                "phone_number": central_account.phone_number,
+                "balance_credits": central_account.balance_credits,
+                "sender_id": central_account.sender_id,
+                "provider_name": central_account.provider_name,
+                "is_active": central_account.is_active,
+            },
+        )
+        if created:
+            sms_account_obj.phone_number = central_account.phone_number
+            sms_account_obj.balance_credits = central_account.balance_credits
+            sms_account_obj.sender_id = central_account.sender_id
+            sms_account_obj.provider_name = central_account.provider_name
+            sms_account_obj.is_active = central_account.is_active
+            sms_account_obj.save()
 
         # refresh central account (it may have been updated inside SmsService)
         try:
@@ -319,4 +331,3 @@ class ScheduleSmsService:
                 results["skipped"] += 1
 
         return results
-

@@ -228,7 +228,7 @@ SENDAFRICA_API_KEY = config('SENDAFRICA_API_KEY', default='')
 SENDAFRICA_SENDER_ID = config('SENDAFRICA_SENDER_ID', default='')
 
 # Africa's Talking (legacy — kept for test compatibility)
-+SCHEDULE_SMS_LOOKAHEAD_DAYS = config('SCHEDULE_SMS_LOOKAHEAD_DAYS', default=7, cast=int)
+SCHEDULE_SMS_LOOKAHEAD_DAYS = config('SCHEDULE_SMS_LOOKAHEAD_DAYS', default=7, cast=int)
 CLASS_COMMS_SMS_COST_PER_MESSAGE = config('CLASS_COMMS_SMS_COST_PER_MESSAGE', default=1, cast=int)
 SMS_COST_PER_MESSAGE = config('SMS_COST_PER_MESSAGE', default=CLASS_COMMS_SMS_COST_PER_MESSAGE, cast=int)
 
