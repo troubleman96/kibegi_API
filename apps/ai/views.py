@@ -1,0 +1,161 @@
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+
+from apps.classes.models import Class, Membership
+from apps.core.utils.responses import success_response, error_response
+
+from .models import AIConversation, AIMessage, AIUsage
+from .chat import chat
+
+
+class AIChatView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        class_id = request.data.get('class_id')
+        message = (request.data.get('message') or '').strip()
+        conversation_id = request.data.get('conversation_id')
+
+        if not class_id:
+            return error_response("class_id is required", status_code=status.HTTP_400_BAD_REQUEST)
+        if not message:
+            return error_response("message is required", status_code=status.HTTP_400_BAD_REQUEST)
+        if len(message) > 2000:
+            return error_response("Message too long (max 2000 characters)", status_code=status.HTTP_400_BAD_REQUEST)
+
+        class_obj = get_object_or_404(Class, id=class_id)
+        if not Membership.objects.filter(user=user, class_obj=class_obj).exists():
+            return error_response(
+                "You are not a member of this class",
+                status_code=status.HTTP_403_FORBIDDEN,
+            )
+
+        usage, _ = AIUsage.objects.get_or_create(user=user)
+        if not usage.can_use_ai():
+            return error_response(
+                f"Daily AI limit reached ({usage.daily_limit:,} tokens). Resets at midnight.",
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+
+        conversation = None
+        if conversation_id:
+            try:
+                conversation = AIConversation.objects.get(
+                    id=conversation_id, user=user, class_obj=class_obj
+                )
+            except AIConversation.DoesNotExist:
+                pass
+
+        if not conversation:
+            title = message[:80] + ('…' if len(message) > 80 else '')
+            conversation = AIConversation.objects.create(
+                user=user, class_obj=class_obj, title=title
+            )
+
+        AIMessage.objects.create(
+            conversation=conversation,
+            role=AIMessage.ROLE_USER,
+            content=message,
+        )
+
+        result = chat(message, class_obj, conversation, user)
+
+        AIMessage.objects.create(
+            conversation=conversation,
+            role=AIMessage.ROLE_ASSISTANT,
+            content=result['response'],
+            sources=result['sources'],
+            tokens_used=result['tokens_used'],
+        )
+
+        if result['tokens_used'] > 0:
+            usage.record_usage(result['tokens_used'])
+
+        conversation.save(update_fields=['updated_at'])
+
+        return success_response(
+            message="AI response generated",
+            data={
+                "conversation_id": str(conversation.id),
+                "response": result['response'],
+                "sources": result['sources'],
+                "tokens_used": result['tokens_used'],
+                "usage": {
+                    "tokens_today": usage.tokens_used_today,
+                    "daily_limit": usage.daily_limit,
+                },
+            },
+        )
+
+
+class AIConversationListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        class_id = request.query_params.get('class_id')
+        qs = AIConversation.objects.filter(user=request.user)
+        if class_id:
+            qs = qs.filter(class_obj_id=class_id)
+        data = [
+            {
+                "id": str(c.id),
+                "title": c.title or "Untitled conversation",
+                "class_name": c.class_obj.name,
+                "class_id": str(c.class_obj.id),
+                "updated_at": c.updated_at.isoformat(),
+                "message_count": c.messages.count(),
+            }
+            for c in qs[:20]
+        ]
+        return success_response(message="Conversations retrieved", data=data)
+
+
+class AIConversationDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, conversation_id):
+        conv = get_object_or_404(AIConversation, id=conversation_id, user=request.user)
+        data = {
+            "id": str(conv.id),
+            "title": conv.title,
+            "class_name": conv.class_obj.name,
+            "class_id": str(conv.class_obj.id),
+            "messages": [
+                {
+                    "id": str(m.id),
+                    "role": m.role,
+                    "content": m.content,
+                    "sources": m.sources,
+                    "created_at": m.created_at.isoformat(),
+                }
+                for m in conv.messages.order_by('created_at')
+            ],
+        }
+        return success_response(message="Conversation retrieved", data=data)
+
+    def delete(self, request, conversation_id):
+        conv = get_object_or_404(AIConversation, id=conversation_id, user=request.user)
+        conv.delete()
+        return success_response(message="Conversation deleted")
+
+
+class AIUsageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        usage, _ = AIUsage.objects.get_or_create(user=request.user)
+        usage.reset_if_needed()
+        remaining = max(0, usage.daily_limit - usage.tokens_used_today)
+        return success_response(
+            message="AI usage retrieved",
+            data={
+                "tokens_today": usage.tokens_used_today,
+                "tokens_total": usage.tokens_used_total,
+                "daily_limit": usage.daily_limit,
+                "remaining_today": remaining,
+                "percentage_used": round((usage.tokens_used_today / usage.daily_limit) * 100, 1),
+            },
+        )

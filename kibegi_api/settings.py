@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'apps.classcomms',
     'apps.sms',
     'apps.assignments',
+    'apps.ai',
 ]
 
 MIDDLEWARE = [
@@ -498,3 +499,9 @@ LOGGING = {
         },
     }
 }
+
+# ── Kibegi AI (OpenRouter) ─────────────────────────────────────────────────
+OPENROUTER_API_KEY = config('OPENROUTER_API_KEY', default='')
+OPENROUTER_BASE_URL = config('OPENROUTER_BASE_URL', default='https://openrouter.ai/api/v1')
+AI_CHAT_MODEL = config('AI_CHAT_MODEL', default='openai/gpt-4o-mini')
+AI_DAILY_TOKEN_LIMIT = config('AI_DAILY_TOKEN_LIMIT', default=50000, cast=int)
