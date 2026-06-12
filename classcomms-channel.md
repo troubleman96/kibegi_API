@@ -1,6 +1,6 @@
-# Kibegi Channel Workflow
+# ClassComms Channel Update
 
-This document describes how class communications work in Kibegi after the channel update.
+This document describes the member-only broadcast channel used for Kibegi class communications.
 
 ## What the channel is
 
@@ -16,8 +16,8 @@ This document describes how class communications work in Kibegi after the channe
 
 ## How a student joins
 
-- A class rep or lecturer can share the channel registration link from the Channel page.
-- The invite page explains the class code and points students to create a Kibegi account first if they do not have one.
+- A class rep or lecturer can share the channel join link from the Channel page.
+- The invite page explains the class code and points classmates to create a Kibegi account first if they do not have one.
 - After they create an account and join the class, they can be added as a channel member.
 
 ## Broadcast flow
@@ -32,4 +32,3 @@ This document describes how class communications work in Kibegi after the channe
 - Pull the latest `API` and `UI` changes.
 - Run migrations for the new `classcomms` contact member link.
 - Restart the API after deployment so the new member-only validation is active.
-
