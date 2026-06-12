@@ -95,7 +95,7 @@ class DocumentChunk(models.Model):
     class Meta:
         ordering = ['upload', 'chunk_index']
         indexes = [
-            models.Index(fields=['upload', 'chunk_index']),
+            models.Index(fields=['upload', 'chunk_index'], name='ai_docchunk_upload_idx'),
         ]
 
     def __str__(self):
