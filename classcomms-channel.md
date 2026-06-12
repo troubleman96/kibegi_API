@@ -6,6 +6,7 @@ This document describes the member-only broadcast channel used for Kibegi class 
 
 - Every class can have a channel for announcements and venue updates.
 - Lecturers and class representatives can manage the channel.
+- The channel profile is created automatically when a class is selected in the UI.
 - Broadcasts are sent as SMS through SendAfrica.
 
 ## Who can receive broadcasts
