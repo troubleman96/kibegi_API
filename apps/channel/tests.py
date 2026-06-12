@@ -70,34 +70,36 @@ class ChannelAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(ChannelMember.objects.filter(channel=self.channel, user=self.member, is_active=True).exists())
 
-    @patch('apps.sms.services.AfricasTalkingSmsClient.send_sms')
+    @patch('apps.core.utils.sms.SendAfricaSmsClient.send_sms')
     def test_broadcast_sends_sms_and_deducts_credits(self, mock_send_sms):
-        mock_send_sms.side_effect = [
-            {'provider_message_id': 'msg-1', 'raw_response': {'ok': True}},
-            {'provider_message_id': 'msg-2', 'raw_response': {'ok': True}},
-            {'provider_message_id': 'msg-3', 'raw_response': {'ok': True}},
-        ]
-        ChannelService.add_member(self.channel, identifier=self.member.email, actor=self.creator)
-        extra = User.objects.create_user(
-            email='extra@kibegi.test',
+        mock_send_sms.return_value = {
+            'provider_message_id': 'msg-1',
+            'raw_response': {'ok': True},
+        }
+        recipient = User.objects.create_user(
+            email='recipient@kibegi.test',
             password='StrongPass123!',
-            full_name='Extra Member',
+            full_name='Venue Recipient',
             user_type='student',
-            phone_number='+255700000003',
+            phone_number='+255628587749',
         )
-        ChannelService.add_member(self.channel, identifier=extra.email, actor=self.creator)
+        ChannelService.add_member(self.channel, identifier=recipient.email, actor=self.creator)
 
         response = self.client.post(
             reverse('channel_broadcasts', kwargs={'channel_id': self.channel.pk}),
-            {'subject': 'Venue update', 'message': 'Lecture moved to Main Hall.', 'venue': 'Main Hall'},
+            {'subject': 'Venue update', 'message': 'Lecture moved to the new room.', 'venue': 'Mezzanie'},
             format='json',
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         broadcast = ChannelBroadcast.objects.get(pk=response.data['data']['id'])
         self.assertEqual(broadcast.status, ChannelBroadcast.STATUS_SENT)
-        self.assertEqual(broadcast.sent_count, 3)
-        self.assertEqual(broadcast.credits_used, 3)
+        self.assertEqual(broadcast.sent_count, 2)
+        self.assertEqual(broadcast.credits_used, 2)
         account = SmsService.get_account_for_owner(self.channel)
-        self.assertEqual(account.balance_credits, 2)
-        self.assertEqual(broadcast.deliveries.count(), 3)
+        self.assertEqual(account.balance_credits, 3)
+        self.assertEqual(broadcast.deliveries.count(), 2)
+        self.assertEqual(mock_send_sms.call_count, 2)
+        expected_message = 'Kibegi channel update | Venue update | Venue: Mezzanie | Lecture moved to the new room.'
+        mock_send_sms.assert_any_call(phone_number='+255628587749', message=expected_message, sender_id='')
+        self.assertIn('Venue: Mezzanie', expected_message)
