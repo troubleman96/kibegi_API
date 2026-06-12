@@ -935,7 +935,7 @@ class PhoneSendOTPView(APIView):
             expires_at=expires_at,
         )
 
-        message = f"Your Kibegi verification code is {otp_code}. Valid for {PhoneOTP.EXPIRY_MINUTES} minutes. Do not share it."
+        message = f"Kibegi code: {otp_code}. Expires in {PhoneOTP.EXPIRY_MINUTES} min."
 
         client = SendAfricaSmsClient()
         if not client.is_configured():
