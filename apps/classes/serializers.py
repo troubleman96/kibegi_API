@@ -177,10 +177,11 @@ class ClassListSerializer(serializers.ModelSerializer):
     creator_profile_image = serializers.ImageField(source='creator.profile_image', read_only=True)
     creator_profile_image_url = serializers.SerializerMethodField()
     member_count = serializers.IntegerField(source='total_members', read_only=True)
-    
+    file_count = serializers.IntegerField(source='total_files', read_only=True, default=0)
+
     class Meta:
         model = Class
-        fields = ['id', 'name', 'class_code', 'is_public', 'is_verified', 'creator_name', 'creator_type', 'creator_profile_image', 'creator_profile_image_url', 'member_count', 'created_at']
+        fields = ['id', 'name', 'class_code', 'is_public', 'is_verified', 'creator_name', 'creator_type', 'creator_profile_image', 'creator_profile_image_url', 'member_count', 'file_count', 'created_at']
 
     def get_creator_profile_image_url(self, obj):
         return UserSummarySerializer(context=self.context).get_profile_image_url(obj.creator)

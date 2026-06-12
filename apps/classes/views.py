@@ -30,7 +30,10 @@ class ClassListCreateAPIView(generics.ListCreateAPIView):
         user = self.request.user
         return Class.objects.filter(
             members=user
-        ).annotate(total_members=Count('members')).distinct()
+        ).annotate(
+            total_members=Count('members', distinct=True),
+            total_files=Count('uploads', distinct=True),
+        ).distinct()
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'request': request})

@@ -18,7 +18,10 @@ class ClassService:
         else:
             qs = qs.filter(is_public=True)
         
-        return qs.annotate(total_members=Count('members')).order_by('-created_at')
+        return qs.annotate(
+            total_members=Count('members', distinct=True),
+            total_files=Count('uploads', distinct=True),
+        ).order_by('-created_at')
     
     @staticmethod
     def user_can_access_class(user, class_obj):
