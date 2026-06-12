@@ -480,12 +480,15 @@ class ScheduleAPITests(TestCase):
             reminder_minutes=60,
         )
 
-        with patch("apps.schedule.management.commands.send_schedule_sms_reminders.AfricasTalkingSmsClient") as mock_client_class:
+        with patch("apps.schedule.management.commands.send_schedule_sms_reminders.AfricasTalkingSmsClient") as mock_client_class, patch(
+            "apps.schedule.services.EmailMultiAlternatives"
+        ) as mock_email_class:
             mock_client = mock_client_class.return_value
             mock_client.send_sms.return_value = {
                 "provider_message_id": "msg-123",
                 "raw_response": {"ok": True},
             }
+            mock_email = mock_email_class.return_value
             call_command("send_schedule_sms_reminders")
 
         account.refresh_from_db()
@@ -494,6 +497,9 @@ class ScheduleAPITests(TestCase):
         self.assertEqual(log.status, ScheduleSmsDeliveryLog.STATUS_SENT)
         self.assertEqual(log.provider_message_id, "msg-123")
         self.assertEqual(log.recipient_phone, "+254700000000")
+        mock_email_class.assert_called_once()
+        mock_email.attach_alternative.assert_called_once()
+        mock_email.send.assert_called_once()
 
     @override_settings(
         AFRICASTALKING_USERNAME="test-user",
@@ -518,8 +524,12 @@ class ScheduleAPITests(TestCase):
             reminder_minutes=60,
         )
 
-        call_command("send_schedule_sms_reminders", dry_run=False)
+        with patch("apps.schedule.services.EmailMultiAlternatives") as mock_email_class:
+            mock_email = mock_email_class.return_value
+            call_command("send_schedule_sms_reminders", dry_run=False)
 
         log = ScheduleSmsDeliveryLog.objects.get(event=event)
         self.assertEqual(log.status, ScheduleSmsDeliveryLog.STATUS_SKIPPED)
         self.assertIn("Insufficient SMS credits", log.error_message)
+        mock_email_class.assert_called_once()
+        mock_email.send.assert_called_once()

@@ -4,6 +4,7 @@ from typing import Iterable
 import io
 
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
 from django.utils import timezone
 from django.urls import reverse
@@ -213,6 +214,90 @@ class ScheduleSmsService:
         return " | ".join(parts)
 
     @staticmethod
+    def build_reminder_email(event: ScheduleEvent):
+        start_time = timezone.localtime(event.start_at)
+        end_time = timezone.localtime(event.end_at)
+        owner = event.calendar.owner
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None)
+        subject = f"Kibegi reminder: {event.title}"
+        preview = f"{event.title} starts at {start_time.strftime('%I:%M %p')}."
+        location = event.location or "No location added"
+        duration = f"{start_time.strftime('%a, %d %b %Y at %I:%M %p')} - {end_time.strftime('%I:%M %p')}"
+        body = (
+            f"Hi {owner.full_name},\n\n"
+            f"This is a reminder for your Kibegi {event.calendar.get_calendar_type_display().lower()} event.\n\n"
+            f"Title: {event.title}\n"
+            f"When: {duration}\n"
+            f"Location: {location}\n"
+            f"Reminder window: {event.reminder_minutes} minutes before start\n\n"
+            f"Open Kibegi to review or update the event.\n\n"
+            f"— The Kibegi Team"
+        )
+        html = f"""
+<!DOCTYPE html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#F8FAFC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <div style="max-width:600px;margin:0 auto;padding:40px 16px;">
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:20px;overflow:hidden;">
+        <div style="background:#0F172A;color:#fff;padding:28px 32px;text-align:center;">
+          <div style="font-size:24px;font-weight:800;">Kibegi</div>
+          <div style="margin-top:6px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.75;">Schedule reminder</div>
+        </div>
+        <div style="padding:32px;">
+          <p style="margin:0 0 12px;font-size:15px;color:#334155;">Hi <strong>{owner.full_name}</strong>,</p>
+          <h1 style="margin:0 0 16px;font-size:24px;line-height:1.3;color:#0F172A;">Your event is coming up</h1>
+          <p style="margin:0 0 24px;font-size:15px;line-height:1.8;color:#475569;">
+            This is a reminder for your Kibegi schedule item.
+          </p>
+          <div style="background:#ECFEFF;border:1px solid #A5F3FC;border-radius:16px;padding:20px 24px;margin-bottom:24px;">
+            <p style="margin:0 0 10px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0891B2;">Event details</p>
+            <p style="margin:0 0 8px;font-size:16px;font-weight:700;color:#0F172A;">{event.title}</p>
+            <p style="margin:0 0 6px;font-size:14px;color:#334155;"><strong>When:</strong> {duration}</p>
+            <p style="margin:0 0 6px;font-size:14px;color:#334155;"><strong>Location:</strong> {location}</p>
+            <p style="margin:0;font-size:14px;color:#334155;"><strong>Reminder:</strong> {event.reminder_minutes} minutes before start</p>
+          </div>
+          <p style="margin:0;font-size:14px;color:#64748B;line-height:1.7;">
+            Open Kibegi to review the class, exam, or study session details.
+          </p>
+        </div>
+        <div style="padding:18px 32px 28px;border-top:1px solid #E2E8F0;background:#F8FAFC;text-align:center;">
+          <p style="margin:0;font-size:12px;color:#64748B;">This is an automated reminder from Kibegi.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+"""
+        return from_email, subject, body, html, preview
+
+    @classmethod
+    def send_reminder_email(cls, event: ScheduleEvent, dry_run=False) -> bool:
+        owner = event.calendar.owner
+        email = getattr(owner, "email", "") or ""
+        if not email:
+            logger.info("Skipping schedule reminder email for %s: no email address", owner)
+            return False
+
+        from_email, subject, body, html, preview = cls.build_reminder_email(event)
+        if not from_email:
+            logger.warning("DEFAULT_FROM_EMAIL not configured. Cannot send schedule reminder email.")
+            return False
+
+        if dry_run:
+            logger.info("Dry-run schedule reminder email prepared for %s: %s", email, preview)
+            return True
+
+        try:
+            message = EmailMultiAlternatives(subject=subject, body=body, from_email=from_email, to=[email])
+            message.attach_alternative(html, "text/html")
+            message.send(fail_silently=False)
+            logger.info("Schedule reminder email sent to %s", email)
+            return True
+        except Exception as exc:
+            logger.error("Failed to send schedule reminder email to %s: %s", email, exc)
+            return False
+
+    @staticmethod
     def get_due_events(now=None):
         now = now or timezone.now()
         grace_minutes = getattr(settings, "SCHEDULE_SMS_GRACE_MINUTES", 10)
@@ -261,6 +346,9 @@ class ScheduleSmsService:
 
         # Use SmsService to perform the send; it returns an apps.sms.models.SmsDelivery
         delivery = SmsService.send_single(account=central_account, phone_number=central_account.phone_number, message=message, context=event, dry_run=dry_run, cost=cost_per_message, client=client)
+
+        # Send the matching email reminder as a best-effort companion channel.
+        cls.send_reminder_email(event, dry_run=dry_run)
 
         # Map the central delivery record into the legacy ScheduleSmsDeliveryLog shape
         sms_account_obj, created = ScheduleSmsAccount.objects.get_or_create(

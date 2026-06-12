@@ -5,7 +5,7 @@ from apps.core.utils.sms import SendAfricaSmsClient as AfricasTalkingSmsClient  
 
 
 class Command(BaseCommand):
-    help = "Send due schedule reminders as SMS messages."
+    help = "Send due schedule reminders as SMS and email messages."
 
     def add_arguments(self, parser):
         parser.add_argument(
