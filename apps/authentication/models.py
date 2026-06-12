@@ -59,6 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     university = models.CharField(_('university'), max_length=255, blank=True, default='')
     phone_number = models.CharField(_('phone number'), max_length=20, blank=True, default='')
+    phone_verified = models.BooleanField(_('phone verified'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_approved = models.BooleanField(
@@ -109,3 +110,35 @@ class PasswordResetOTP(models.Model):
 
     def __str__(self):
         return f"OTP for {self.email} (used={self.is_used})"
+
+
+class PhoneOTP(models.Model):
+    """OTP for verifying a user's Tanzania phone number via SMS."""
+
+    MAX_ATTEMPTS = 5
+    EXPIRY_MINUTES = 10
+
+    user = models.ForeignKey(
+        'authentication.User',
+        on_delete=models.CASCADE,
+        related_name='phone_otps',
+    )
+    phone = models.CharField(max_length=20)
+    otp = models.CharField(max_length=6)
+    attempts = models.IntegerField(default=0)
+    verified = models.BooleanField(default=False)
+    expires_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"PhoneOTP {self.phone} verified={self.verified}"
+
+    def is_expired(self):
+        from django.utils import timezone
+        return timezone.now() > self.expires_at
+
+    def is_valid(self):
+        return not self.verified and not self.is_expired() and self.attempts < self.MAX_ATTEMPTS

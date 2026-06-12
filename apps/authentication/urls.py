@@ -14,6 +14,8 @@ from .views import (
     LogoutAPIView,
     ChangePasswordAPIView,
     LecturerApprovalAPIView,
+    PhoneSendOTPView,
+    PhoneVerifyOTPView,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -35,4 +37,6 @@ urlpatterns = [
     path('profile/', UserProfileAPIView.as_view(), name='profile'),
     path('profile/image/', ProfileImageUploadAPIView.as_view(), name='profile_image'),
     path('lecturers/pending/', LecturerApprovalAPIView.as_view(), name='lecturer_approval'),
+    path('phone/send-otp/', PhoneSendOTPView.as_view(), name='phone_send_otp'),
+    path('phone/verify/', PhoneVerifyOTPView.as_view(), name='phone_verify'),
 ]

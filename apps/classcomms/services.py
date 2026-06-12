@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from apps.sms.services import SmsService
-from apps.core.utils.sms import AfricasTalkingSmsClient
+from apps.core.utils.sms import SendAfricaSmsClient as AfricasTalkingSmsClient
 from apps.classes.models import Class, Membership
 
 from .models import ClassBroadcast, ClassBroadcastDelivery, ClassCommsProfile, ClassCommsWallet, ClassContact

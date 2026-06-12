@@ -223,7 +223,11 @@ MINIO_SECURE = config(
 )
 MINIO_PUBLIC_BASE_URL = config('MINIO_PUBLIC_BASE_URL', default='')
 
-# Schedule SMS reminder settings
+# SendAfrica SMS (primary provider — sendafrica.online)
+SENDAFRICA_API_KEY = config('SENDAFRICA_API_KEY', default='')
+SENDAFRICA_SENDER_ID = config('SENDAFRICA_SENDER_ID', default='Kibegi')
+
+# Africa's Talking (legacy — kept for test compatibility)
 AFRICASTALKING_USERNAME = config('AFRICASTALKING_USERNAME', default='')
 AFRICASTALKING_API_KEY = config('AFRICASTALKING_API_KEY', default='')
 AFRICASTALKING_SENDER_ID = config('AFRICASTALKING_SENDER_ID', default='')

@@ -107,8 +107,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'username', 'user_type', 'is_approved', 'university', 'phone_number', 'profile_image', 'profile_image_url', 'date_joined']
-        read_only_fields = ['id', 'email', 'is_approved', 'date_joined', 'profile_image_url']
+        fields = ['id', 'email', 'username', 'user_type', 'is_approved', 'university', 'phone_number', 'phone_verified', 'profile_image', 'profile_image_url', 'date_joined']
+        read_only_fields = ['id', 'email', 'is_approved', 'date_joined', 'profile_image_url', 'phone_verified']
     
     def get_profile_image_url(self, obj):
         """Get full URL for profile image"""

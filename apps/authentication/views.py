@@ -786,3 +786,132 @@ class LecturerApprovalAPIView(APIView):
                 user_name=lecturer.full_name or lecturer.email.split('@')[0]
             )
             return success_response(message=_('Lecturer rejected and notified via email.'))
+
+
+class PhoneSendOTPView(APIView):
+    """Send a 6-digit OTP to the user's phone number via SMS."""
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        import random
+        import re
+        from django.utils import timezone
+        from datetime import timedelta
+        from apps.core.utils.sms import SendAfricaSmsClient
+        from .models import PhoneOTP
+
+        raw_phone = (request.data.get('phone_number') or '').strip()
+        if not raw_phone:
+            return error_response(_('phone_number is required'), status_code=status.HTTP_400_BAD_REQUEST)
+
+        # Normalise Tanzania number
+        digits = re.sub(r'\D', '', raw_phone)
+        if digits.startswith('255') and len(digits) == 12:
+            phone = f'+{digits}'
+        elif digits.startswith('0') and len(digits) == 10:
+            phone = f'+255{digits[1:]}'
+        elif len(digits) == 9 and digits[0] in '7':
+            phone = f'+255{digits}'
+        else:
+            return error_response(
+                _('Invalid Tanzania phone number. Use format 07XXXXXXXX or +255XXXXXXXXX'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Valid Tanzania mobile prefixes: 071-078
+        prefix = phone[4:7]
+        if prefix not in {'071', '072', '073', '074', '075', '076', '077', '078', '065', '066', '067', '068', '069'}:
+            return error_response(
+                _('Invalid Tanzania mobile number prefix.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Rate limit: max 3 OTPs per phone per hour
+        one_hour_ago = timezone.now() - timedelta(hours=1)
+        recent = PhoneOTP.objects.filter(user=request.user, phone=phone, created_at__gte=one_hour_ago).count()
+        if recent >= 3:
+            return error_response(
+                _('Too many OTP requests. Please wait before trying again.'),
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+
+        otp_code = f"{random.SystemRandom().randint(100000, 999999)}"
+        expires_at = timezone.now() + timedelta(minutes=PhoneOTP.EXPIRY_MINUTES)
+
+        PhoneOTP.objects.create(
+            user=request.user,
+            phone=phone,
+            otp=otp_code,
+            expires_at=expires_at,
+        )
+
+        message = f"Your Kibegi verification code is {otp_code}. Valid for {PhoneOTP.EXPIRY_MINUTES} minutes. Do not share it."
+
+        client = SendAfricaSmsClient()
+        if not client.is_configured():
+            # In dev/staging without API key: log OTP for testing
+            import logging
+            logging.getLogger('kibegi').warning('SENDAFRICA not configured — OTP %s for %s', otp_code, phone)
+            return success_response(message=_('OTP sent (dev mode — check server logs)'), data={'phone': phone})
+
+        try:
+            client.send_sms(phone_number=phone, message=message)
+        except Exception as exc:
+            return error_response(f'Could not send SMS: {exc}', status_code=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        return success_response(message=_('OTP sent to your phone number'), data={'phone': phone})
+
+
+class PhoneVerifyOTPView(APIView):
+    """Verify OTP and mark phone number as verified on the user's account."""
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        from django.utils import timezone
+        from .models import PhoneOTP
+
+        phone = (request.data.get('phone_number') or '').strip()
+        code = (request.data.get('otp') or '').strip()
+
+        if not phone or not code:
+            return error_response(_('phone_number and otp are required'), status_code=status.HTTP_400_BAD_REQUEST)
+
+        # Find latest OTP for this user+phone
+        try:
+            otp_obj = PhoneOTP.objects.filter(
+                user=request.user,
+                phone=phone,
+                verified=False,
+            ).latest('created_at')
+        except PhoneOTP.DoesNotExist:
+            return error_response(_('No pending OTP for this number. Please request a new one.'), status_code=status.HTTP_400_BAD_REQUEST)
+
+        if otp_obj.is_expired():
+            return error_response(_('OTP has expired. Please request a new one.'), status_code=status.HTTP_400_BAD_REQUEST)
+
+        if otp_obj.attempts >= PhoneOTP.MAX_ATTEMPTS:
+            return error_response(_('Too many failed attempts. Please request a new OTP.'), status_code=status.HTTP_400_BAD_REQUEST)
+
+        if otp_obj.otp != code:
+            otp_obj.attempts += 1
+            otp_obj.save(update_fields=['attempts'])
+            remaining = PhoneOTP.MAX_ATTEMPTS - otp_obj.attempts
+            return error_response(
+                _('Incorrect OTP.') + (f' {remaining} attempt(s) remaining.' if remaining > 0 else ' Please request a new OTP.'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Mark OTP verified
+        otp_obj.verified = True
+        otp_obj.save(update_fields=['verified'])
+
+        # Update user
+        user = request.user
+        user.phone_number = phone
+        user.phone_verified = True
+        user.save(update_fields=['phone_number', 'phone_verified'])
+
+        return success_response(
+            message=_('Phone number verified successfully'),
+            data={'phone_number': phone, 'phone_verified': True},
+        )
