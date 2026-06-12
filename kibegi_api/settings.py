@@ -225,16 +225,10 @@ MINIO_PUBLIC_BASE_URL = config('MINIO_PUBLIC_BASE_URL', default='')
 
 # SendAfrica SMS (primary provider — sendafrica.online)
 SENDAFRICA_API_KEY = config('SENDAFRICA_API_KEY', default='')
-SENDAFRICA_SENDER_ID = config('SENDAFRICA_SENDER_ID', default='Kibegi')
+SENDAFRICA_SENDER_ID = config('SENDAFRICA_SENDER_ID', default='')
 
 # Africa's Talking (legacy — kept for test compatibility)
-AFRICASTALKING_USERNAME = config('AFRICASTALKING_USERNAME', default='')
-AFRICASTALKING_API_KEY = config('AFRICASTALKING_API_KEY', default='')
-AFRICASTALKING_SENDER_ID = config('AFRICASTALKING_SENDER_ID', default='')
-AFRICASTALKING_SMS_URL = config('AFRICASTALKING_SMS_URL', default='https://api.africastalking.com/version1/messaging')
-SCHEDULE_SMS_COST_PER_MESSAGE = config('SCHEDULE_SMS_COST_PER_MESSAGE', default=1, cast=int)
-SCHEDULE_SMS_GRACE_MINUTES = config('SCHEDULE_SMS_GRACE_MINUTES', default=10, cast=int)
-SCHEDULE_SMS_LOOKAHEAD_DAYS = config('SCHEDULE_SMS_LOOKAHEAD_DAYS', default=7, cast=int)
++SCHEDULE_SMS_LOOKAHEAD_DAYS = config('SCHEDULE_SMS_LOOKAHEAD_DAYS', default=7, cast=int)
 CLASS_COMMS_SMS_COST_PER_MESSAGE = config('CLASS_COMMS_SMS_COST_PER_MESSAGE', default=1, cast=int)
 SMS_COST_PER_MESSAGE = config('SMS_COST_PER_MESSAGE', default=CLASS_COMMS_SMS_COST_PER_MESSAGE, cast=int)
 

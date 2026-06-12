@@ -21,7 +21,7 @@ class SendAfricaSmsClient:
 
     def __init__(self):
         self.api_key = getattr(settings, "SENDAFRICA_API_KEY", "")
-        self.sender_id = getattr(settings, "SENDAFRICA_SENDER_ID", "Kibegi")
+        self.sender_id = getattr(settings, "SENDAFRICA_SENDER_ID", "")
 
     def is_configured(self) -> bool:
         return bool(self.api_key)
