@@ -1,6 +1,6 @@
 # Schedule App
 
-This app powers the Kibegi student schedule experience. It combines calendar management, ICS feeds, QR handoff, and SMS reminders in one backend area.
+This app powers the Kibegi student schedule experience. It combines calendar management, ICS feeds, QR handoff, SMS reminders, and email reminders in one backend area.
 
 What the app does:
 
@@ -8,7 +8,8 @@ What the app does:
 - stores user-owned class and exam events
 - exposes public ICS subscribe/download feeds for calendar clients
 - generates QR codes that point users to subscription links
-- supports a reminder SMS wallet with Africa's Talking credits
+- supports a reminder SMS wallet with SendAfrica credits
+- sends reminder email messages for scheduled events
 - records public feed access for basic observability
 
 ## Folder Map
@@ -16,7 +17,7 @@ What the app does:
 - [apps/schedule/models.py](models.py) defines calendars, events, public access logs, and SMS wallet/delivery models.
 - [apps/schedule/serializers.py](serializers.py) defines the API payloads for calendars, events, share payloads, and SMS wallets.
 - [apps/schedule/views.py](views.py) exposes authenticated and public API endpoints.
-- [apps/schedule/services.py](services.py) contains ICS generation, QR generation, SMS dispatch, and reminder scanning.
+- [apps/schedule/services.py](services.py) contains ICS generation, QR generation, SMS/email dispatch, and reminder scanning.
 - [apps/schedule/urls.py](urls.py) mounts the authenticated routes.
 - [apps/schedule/public_urls.py](public_urls.py) mounts the public feed routes.
 - [apps/schedule/management/commands/send_schedule_sms_reminders.py](management/commands/send_schedule_sms_reminders.py) is the cron-friendly SMS runner.
@@ -167,7 +168,7 @@ The SMS feature is built around three ideas:
 
 1. a user stores one phone number in their schedule SMS wallet
 2. reminder messages cost credits, not raw airtime from the user profile
-3. a management command scans due events and sends the reminder through Africa's Talking
+3. a management command scans due events and sends the reminder through the configured SMS provider
 
 The runner command is:
 
@@ -194,10 +195,10 @@ Frontend and SMS-related settings live in the environment.
 
 ```env
 SCHEDULE_FRONTEND_URL=https://app.kibegi.com/schedule
-AFRICASTALKING_USERNAME=
-AFRICASTALKING_API_KEY=
-AFRICASTALKING_SENDER_ID=
-AFRICASTALKING_SMS_URL=https://api.africastalking.com/version1/messaging
+SEND_AFRICA_API_URL=https://sendafrica.online/api
+SEND_AFRICA_USERNAME=
+SEND_AFRICA_API_KEY=
+SEND_AFRICA_SENDER_ID=
 SCHEDULE_SMS_COST_PER_MESSAGE=1
 SCHEDULE_SMS_GRACE_MINUTES=10
 SCHEDULE_SMS_LOOKAHEAD_DAYS=7
@@ -206,8 +207,8 @@ SCHEDULE_SMS_LOOKAHEAD_DAYS=7
 What they do:
 
 - `SCHEDULE_FRONTEND_URL` builds the front-end subscription URL used by QR and share responses
-- `AFRICASTALKING_USERNAME` and `AFRICASTALKING_API_KEY` authenticate provider calls
-- `AFRICASTALKING_SENDER_ID` is optional and used when the provider account allows it
+- `SEND_AFRICA_USERNAME` and `SEND_AFRICA_API_KEY` authenticate provider calls
+- `SEND_AFRICA_SENDER_ID` is optional and used when the provider account allows it
 - `SCHEDULE_SMS_COST_PER_MESSAGE` defines how many credits one reminder consumes
 - `SCHEDULE_SMS_GRACE_MINUTES` defines the acceptable send window around the reminder time
 - `SCHEDULE_SMS_LOOKAHEAD_DAYS` limits how far ahead the reminder scanner looks
@@ -285,7 +286,7 @@ If reminders do not send:
 
 - confirm the SMS account has a phone number
 - confirm `balance_credits > 0`
-- confirm Africa's Talking credentials are set
+- confirm SendAfrica credentials are set
 - confirm the cron job is running the command on schedule
 - confirm the event falls within the reminder window defined by `reminder_minutes` and `SCHEDULE_SMS_GRACE_MINUTES`
 
@@ -320,7 +321,7 @@ Notes:
 
 - reminders are skipped when the wallet is inactive, the phone number is missing, or credits are exhausted
 - reminder attempts are logged in the admin as SMS delivery records
-- Africa's Talking responses are stored for audit when delivery succeeds
+- SendAfrica responses are stored for audit when delivery succeeds
 
 ## Integration Notes
 
