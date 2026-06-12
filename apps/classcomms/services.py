@@ -15,6 +15,26 @@ from .models import ClassBroadcast, ClassBroadcastDelivery, ClassCommsProfile, C
 logger = logging.getLogger('kibegi')
 
 
+def normalize_tz_phone_number(raw_phone: str) -> str | None:
+    """Normalize Tanzania phone numbers to +255XXXXXXXXX."""
+    import re
+
+    digits = re.sub(r"\D", "", raw_phone or "")
+    if digits.startswith("255") and len(digits) == 12:
+        national = digits[3:]
+    elif digits.startswith("0") and len(digits) == 10:
+        national = digits[1:]
+    elif len(digits) == 9:
+        national = digits
+    else:
+        return None
+
+    if len(national) != 9 or national[0] not in {"6", "7"}:
+        return None
+
+    return f"+255{national}"
+
+
 class ClassCommsService:
     """Business logic for class contact management and SMS broadcasts."""
 
@@ -54,6 +74,7 @@ class ClassCommsService:
             'public_token': profile.public_token,
             'public_info_url': info_url,
             'public_register_url': register_url,
+            'class_join_url': request.build_absolute_uri('/classes/'),
         }
 
     @staticmethod
@@ -70,19 +91,29 @@ class ClassCommsService:
     @staticmethod
     def upsert_contact(class_obj: Class, *, full_name: str, phone_number: str, consent_granted=True, consent_source=ClassContact.SOURCE_MANUAL, notes='', registered_by=None, created_by=None):
         """Create a new contact or refresh an existing one for the same phone number."""
+        normalized_phone = normalize_tz_phone_number(phone_number)
+        if not normalized_phone:
+            raise ValueError("Enter a valid Tanzania phone number.")
+
+        member = class_obj.members.filter(phone_number=normalized_phone, is_active=True).first()
+        if not member:
+            raise ValueError("This channel only accepts registered Kibegi members. Ask them to create an account and join the class first.")
+
         defaults = {
             'full_name': full_name.strip(),
+            'phone_number': normalized_phone,
             'consent_granted': consent_granted,
             'consent_source': consent_source,
             'notes': notes,
             'registered_by': registered_by,
             'created_by': created_by,
+            'member': member,
             'verified_at': timezone.now() if consent_granted else None,
             'is_active': True,
         }
         contact, created = ClassContact.objects.update_or_create(
             class_obj=class_obj,
-            phone_number=phone_number.strip(),
+            phone_number=normalized_phone,
             defaults=defaults,
         )
         if not created and contact.consent_granted != consent_granted:
@@ -114,7 +145,12 @@ class ClassCommsService:
         message = cls.build_broadcast_message(broadcast)
         central_account = SmsService.get_account_for_owner(broadcast.class_obj)
         contacts = list(
-            ClassContact.objects.filter(class_obj=broadcast.class_obj, is_active=True, consent_granted=True).order_by('full_name')
+            ClassContact.objects.filter(
+                class_obj=broadcast.class_obj,
+                is_active=True,
+                consent_granted=True,
+                member__isnull=False,
+            ).select_related('member').order_by('full_name')
         )
 
         broadcast.status = ClassBroadcast.STATUS_SENDING
@@ -195,7 +231,6 @@ class ClassCommsService:
             # ensure central account has funds mirrored from legacy wallet if needed
             if legacy_wallet and central_account.balance_credits < cost_per_message and legacy_wallet.balance_credits >= cost_per_message:
                 central_account.balance_credits = legacy_wallet.balance_credits
-                central_account.phone_number = legacy_wallet.sender_id or central_account.phone_number
                 central_account.sender_id = legacy_wallet.sender_id or central_account.sender_id
                 central_account.provider_name = legacy_wallet.provider_name or central_account.provider_name
                 central_account.save(update_fields=['balance_credits', 'phone_number', 'sender_id', 'provider_name', 'updated_at'])

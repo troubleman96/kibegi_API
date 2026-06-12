@@ -126,16 +126,19 @@ class ClassContactListCreateAPIView(ClassCommsPermissionMixin, APIView):
 
         serializer = ClassContactUpsertSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        contact, created = ClassCommsService.upsert_contact(
-            class_obj,
-            full_name=serializer.validated_data['full_name'],
-            phone_number=serializer.validated_data['phone_number'],
-            consent_granted=serializer.validated_data.get('consent_granted', True),
-            consent_source=ClassContact.SOURCE_MANUAL,
-            notes=serializer.validated_data.get('notes', ''),
-            registered_by=request.user,
-            created_by=request.user,
-        )
+        try:
+            contact, created = ClassCommsService.upsert_contact(
+                class_obj,
+                full_name=serializer.validated_data['full_name'],
+                phone_number=serializer.validated_data['phone_number'],
+                consent_granted=serializer.validated_data.get('consent_granted', True),
+                consent_source=ClassContact.SOURCE_MANUAL,
+                notes=serializer.validated_data.get('notes', ''),
+                registered_by=request.user,
+                created_by=request.user,
+            )
+        except ValueError as exc:
+            return error_response(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
         contact_serializer = ClassContactSerializer(contact, context={'request': request})
         return success_response(
             message='Class contact created successfully' if created else 'Class contact updated successfully',
@@ -291,6 +294,7 @@ class PublicRegistrationInfoAPIView(APIView):
             'class_code': class_obj.class_code,
             'description': class_obj.description,
             'registration_hint': profile.registration_hint,
+            'join_hint': 'Create a Kibegi account, then join the class to receive channel messages.',
             'public_registration_enabled': profile.public_registration_enabled,
             'default_sender_name': profile.default_sender_name,
             'credits_remaining': wallet.balance_credits,
@@ -313,16 +317,19 @@ class PublicRegistrationAPIView(APIView):
 
         serializer = ClassContactUpsertSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        contact, created = ClassCommsService.upsert_contact(
-            profile.class_obj,
-            full_name=serializer.validated_data['full_name'],
-            phone_number=serializer.validated_data['phone_number'],
-            consent_granted=serializer.validated_data.get('consent_granted', True),
-            consent_source=ClassContact.SOURCE_PUBLIC,
-            notes=serializer.validated_data.get('notes', ''),
-            registered_by=None,
-            created_by=None,
-        )
+        try:
+            contact, created = ClassCommsService.upsert_contact(
+                profile.class_obj,
+                full_name=serializer.validated_data['full_name'],
+                phone_number=serializer.validated_data['phone_number'],
+                consent_granted=serializer.validated_data.get('consent_granted', True),
+                consent_source=ClassContact.SOURCE_PUBLIC,
+                notes=serializer.validated_data.get('notes', ''),
+                registered_by=None,
+                created_by=None,
+            )
+        except ValueError as exc:
+            return error_response(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
         response_serializer = ClassContactSerializer(contact, context={'request': request})
         return success_response(
             message='Contact registered successfully' if created else 'Contact updated successfully',

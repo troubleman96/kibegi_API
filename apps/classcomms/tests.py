@@ -22,18 +22,21 @@ class ClassCommsAPITests(TestCase):
             password='StrongPass123!',
             full_name='Lead Lecturer',
             user_type='lecturer',
+            phone_number='+255700000001',
         )
         self.representative = User.objects.create_user(
             email='rep@classcomms.test',
             password='StrongPass123!',
             full_name='Class Rep',
             user_type='student',
+            phone_number='+255700000002',
         )
         self.other_student = User.objects.create_user(
             email='student@classcomms.test',
             password='StrongPass123!',
             full_name='Other Student',
             user_type='student',
+            phone_number='+255700000003',
         )
 
         self.class_obj = Class.objects.create(
@@ -77,7 +80,7 @@ class ClassCommsAPITests(TestCase):
             reverse('classcomms_contacts', kwargs={'class_id': self.class_obj.pk}),
             {
                 'full_name': 'Alice Student',
-                'phone_number': '+255700000001',
+                'phone_number': '+255700000003',
                 'consent_granted': True,
                 'notes': 'Prefers SMS updates',
             },
@@ -85,23 +88,41 @@ class ClassCommsAPITests(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(ClassContact.objects.filter(class_obj=self.class_obj, phone_number='+255700000001').exists())
+        self.assertTrue(ClassContact.objects.filter(class_obj=self.class_obj, phone_number='+255700000003', member=self.other_student).exists())
+
+    def test_representative_cannot_add_non_member_contact(self):
+        self.promote_representative()
+        self.client.force_authenticate(self.representative)
+
+        response = self.client.post(
+            reverse('classcomms_contacts', kwargs={'class_id': self.class_obj.pk}),
+            {
+                'full_name': 'Outside Number',
+                'phone_number': '+255700000009',
+                'consent_granted': True,
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('registered Kibegi members', response.data['message'])
 
     def test_public_registration_creates_contact(self):
         response = self.public_client.post(
             reverse('classcomms_public_register', kwargs={'public_token': self.profile.public_token}),
             {
                 'full_name': 'Public Registrant',
-                'phone_number': '+255700000002',
+                'phone_number': '+255700000003',
                 'consent_granted': True,
             },
             format='json',
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        contact = ClassContact.objects.get(class_obj=self.class_obj, phone_number='+255700000002')
+        contact = ClassContact.objects.get(class_obj=self.class_obj, phone_number='+255700000003')
         self.assertEqual(contact.consent_source, ClassContact.SOURCE_PUBLIC)
         self.assertEqual(contact.full_name, 'Public Registrant')
+        self.assertEqual(contact.member, self.other_student)
 
     @patch('apps.classcomms.services.AfricasTalkingSmsClient.send_sms')
     def test_broadcast_sends_sms_and_deducts_credits(self, mock_send_sms):
@@ -112,7 +133,7 @@ class ClassCommsAPITests(TestCase):
         ClassCommsService.upsert_contact(
             self.class_obj,
             full_name='Alice Student',
-            phone_number='+255700000003',
+            phone_number='+255700000002',
             consent_granted=True,
             consent_source=ClassContact.SOURCE_MANUAL,
             registered_by=self.creator,
@@ -121,7 +142,7 @@ class ClassCommsAPITests(TestCase):
         ClassCommsService.upsert_contact(
             self.class_obj,
             full_name='Bob Student',
-            phone_number='+255700000004',
+            phone_number='+255700000003',
             consent_granted=True,
             consent_source=ClassContact.SOURCE_MANUAL,
             registered_by=self.creator,

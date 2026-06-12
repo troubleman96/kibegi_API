@@ -85,6 +85,8 @@ class ClassContactSerializer(serializers.ModelSerializer):
     """Serializer for class contact records."""
 
     class_name = serializers.CharField(source='class_obj.name', read_only=True)
+    member_name = serializers.CharField(source='member.full_name', read_only=True)
+    member_email = serializers.CharField(source='member.email', read_only=True)
     added_by_name = serializers.CharField(source='created_by.full_name', read_only=True)
     added_by_email = serializers.CharField(source='created_by.email', read_only=True)
     registered_by_name = serializers.CharField(source='registered_by.full_name', read_only=True)
@@ -96,6 +98,9 @@ class ClassContactSerializer(serializers.ModelSerializer):
             'id',
             'class_obj',
             'class_name',
+            'member',
+            'member_name',
+            'member_email',
             'full_name',
             'phone_number',
             'consent_granted',
@@ -112,7 +117,7 @@ class ClassContactSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['id', 'class_obj', 'registered_by', 'created_by', 'verified_at', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'class_obj', 'member', 'registered_by', 'created_by', 'verified_at', 'created_at', 'updated_at']
 
     def get_user_profile_image_url(self, obj):
         if obj.registered_by:
@@ -129,9 +134,11 @@ class ClassContactUpsertSerializer(serializers.Serializer):
     notes = serializers.CharField(required=False, allow_blank=True, default='')
 
     def validate_phone_number(self, value):
-        cleaned = value.strip()
+        from .services import normalize_tz_phone_number
+
+        cleaned = normalize_tz_phone_number(value)
         if not cleaned:
-            raise serializers.ValidationError('Phone number is required.')
+            raise serializers.ValidationError('Enter a valid Tanzania phone number.')
         return cleaned
 
 

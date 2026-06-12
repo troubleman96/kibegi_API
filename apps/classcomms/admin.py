@@ -35,14 +35,17 @@ class ClassCommsWalletAdmin(admin.ModelAdmin):
 
 @admin.register(ClassContact)
 class ClassContactAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'phone_number', 'class_name', 'consent_badge', 'is_active', 'consent_source', 'created_at']
-    search_fields = ['full_name', 'phone_number', 'class_obj__name', 'class_obj__class_code']
+    list_display = ['full_name', 'phone_number', 'member_email', 'class_name', 'consent_badge', 'is_active', 'consent_source', 'created_at']
+    search_fields = ['full_name', 'phone_number', 'member__email', 'class_obj__name', 'class_obj__class_code']
     list_filter = ['consent_granted', 'is_active', 'consent_source', 'created_at']
     readonly_fields = ['created_at', 'updated_at', 'verified_at']
-    autocomplete_fields = ['class_obj', 'registered_by', 'created_by']
+    autocomplete_fields = ['class_obj', 'member', 'registered_by', 'created_by']
 
     def class_name(self, obj):
         return f'{obj.class_obj.name} ({obj.class_obj.class_code})'
+
+    def member_email(self, obj):
+        return obj.member.email if obj.member else '-'
 
     def consent_badge(self, obj):
         color = '#10B981' if obj.consent_granted else '#EF4444'

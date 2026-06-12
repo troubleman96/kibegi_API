@@ -87,6 +87,13 @@ class ClassContact(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class_obj = models.ForeignKey('classes.Class', on_delete=models.CASCADE, related_name='comms_contacts')
+    member = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='class_comms_contacts',
+    )
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=32)
     consent_granted = models.BooleanField(default=True)
