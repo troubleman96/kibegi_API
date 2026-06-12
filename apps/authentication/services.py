@@ -73,22 +73,20 @@ class EmailService:
 
         <!-- ── header ── -->
         <tr>
-          <td style="background:{P};padding:28px 40px;text-align:center;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-              <tr><td align="center">
-                <!-- wordmark -->
-                <table role="presentation" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td style="background:{A};border-radius:6px;padding:5px 10px;vertical-align:middle;">
-                      <span style="font-size:14px;font-weight:700;color:{P};letter-spacing:0.5px;font-family:Georgia,serif;">K</span>
-                    </td>
-                    <td style="padding-left:10px;vertical-align:middle;">
-                      <span style="font-size:22px;font-weight:700;color:{W};letter-spacing:0.3px;font-family:Georgia,serif;">Kibegi</span>
-                    </td>
-                  </tr>
-                </table>
-              </td></tr>
+          <td style="background:{P};padding:32px 40px 28px 40px;text-align:center;">
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+              <tr>
+                <td style="vertical-align:middle;padding-right:12px;">
+                  <img src="https://www.kibegi.com/favicon/web-app-manifest-512x512.png"
+                       alt="Kibegi" width="40" height="40"
+                       style="display:block;border-radius:8px;border:0;" />
+                </td>
+                <td style="vertical-align:middle;">
+                  <span style="font-size:24px;font-weight:700;color:{W};letter-spacing:0.3px;font-family:Georgia,'Times New Roman',serif;">Kibegi</span>
+                </td>
+              </tr>
             </table>
+            <p style="margin:10px 0 0 0;font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase;">Your Digital School Bag</p>
           </td>
         </tr>
 
@@ -97,12 +95,26 @@ class EmailService:
 
         <!-- ── footer ── -->
         <tr>
-          <td style="background:{BG};border-top:1px solid {B};padding:24px 40px;text-align:center;">
-            <p style="margin:0 0 6px 0;font-size:13px;color:{M};line-height:1.6;">
-              This is an automated message — please do not reply directly to this email.
+          <td style="background:{BG};border-top:1px solid {B};padding:28px 40px;text-align:center;">
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 14px auto;">
+              <tr>
+                <td style="vertical-align:middle;padding-right:8px;">
+                  <img src="https://www.kibegi.com/favicon/web-app-manifest-512x512.png"
+                       alt="Kibegi" width="20" height="20"
+                       style="display:block;border-radius:4px;border:0;opacity:0.7;" />
+                </td>
+                <td style="vertical-align:middle;">
+                  <span style="font-size:14px;font-weight:700;color:{M};font-family:Georgia,'Times New Roman',serif;">Kibegi</span>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:0 0 6px 0;font-size:12px;color:{M};line-height:1.6;">
+              This is an automated message — please do not reply to this email.
             </p>
             <p style="margin:0;font-size:12px;color:{M};">
-              &copy; {y} Kibegi &nbsp;·&nbsp; All rights reserved
+              &copy; {y} Kibegi &nbsp;·&nbsp;
+              <a href="https://www.kibegi.com" style="color:{M};text-decoration:underline;">kibegi.com</a>
+              &nbsp;·&nbsp; All rights reserved
             </p>
           </td>
         </tr>
