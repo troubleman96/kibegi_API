@@ -1,0 +1,103 @@
+from unittest.mock import patch
+
+from django.contrib.auth import get_user_model
+from django.test import TestCase, override_settings
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
+
+from apps.sms.services import SmsService
+
+from .models import Channel, ChannelBroadcast, ChannelMember
+from .services import ChannelService
+
+User = get_user_model()
+
+
+@override_settings(ALLOWED_HOSTS=['testserver'])
+class ChannelAPITests(TestCase):
+    def setUp(self):
+        self.creator = User.objects.create_user(
+            email='creator@kibegi.test',
+            password='StrongPass123!',
+            full_name='Campaign Owner',
+            user_type='lecturer',
+            phone_number='+255700000001',
+        )
+        self.member = User.objects.create_user(
+            email='member@kibegi.test',
+            password='StrongPass123!',
+            full_name='Channel Member',
+            user_type='student',
+            phone_number='+255700000002',
+        )
+        self.client = APIClient()
+        self.client.force_authenticate(self.creator)
+        self.channel = ChannelService.create_channel(
+            creator=self.creator,
+            name='Exam Updates',
+            description='Broadcast channel for exam announcements',
+            visibility=Channel.VISIBILITY_PUBLIC,
+        )
+        wallet = ChannelService.get_wallet(self.channel)
+        wallet.balance_credits = 5
+        wallet.save(update_fields=['balance_credits', 'updated_at'])
+
+    def test_creator_can_create_channel(self):
+        response = self.client.post(
+            reverse('channel_list_create'),
+            {'name': 'Freshers Updates', 'description': 'New student channel', 'visibility': 'private'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(Channel.objects.filter(name='Freshers Updates').exists())
+
+    def test_member_can_join_public_channel(self):
+        self.client.force_authenticate(self.member)
+        response = self.client.post(reverse('channel_join', kwargs={'channel_id': self.channel.pk}))
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(ChannelMember.objects.filter(channel=self.channel, user=self.member, is_active=True).exists())
+
+    def test_creator_can_add_member_by_email(self):
+        response = self.client.post(
+            reverse('channel_members', kwargs={'channel_id': self.channel.pk}),
+            {'identifier': self.member.email, 'role': 'member'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(ChannelMember.objects.filter(channel=self.channel, user=self.member, is_active=True).exists())
+
+    @patch('apps.sms.services.AfricasTalkingSmsClient.send_sms')
+    def test_broadcast_sends_sms_and_deducts_credits(self, mock_send_sms):
+        mock_send_sms.side_effect = [
+            {'provider_message_id': 'msg-1', 'raw_response': {'ok': True}},
+            {'provider_message_id': 'msg-2', 'raw_response': {'ok': True}},
+            {'provider_message_id': 'msg-3', 'raw_response': {'ok': True}},
+        ]
+        ChannelService.add_member(self.channel, identifier=self.member.email, actor=self.creator)
+        extra = User.objects.create_user(
+            email='extra@kibegi.test',
+            password='StrongPass123!',
+            full_name='Extra Member',
+            user_type='student',
+            phone_number='+255700000003',
+        )
+        ChannelService.add_member(self.channel, identifier=extra.email, actor=self.creator)
+
+        response = self.client.post(
+            reverse('channel_broadcasts', kwargs={'channel_id': self.channel.pk}),
+            {'subject': 'Venue update', 'message': 'Lecture moved to Main Hall.', 'venue': 'Main Hall'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        broadcast = ChannelBroadcast.objects.get(pk=response.data['data']['id'])
+        self.assertEqual(broadcast.status, ChannelBroadcast.STATUS_SENT)
+        self.assertEqual(broadcast.sent_count, 3)
+        self.assertEqual(broadcast.credits_used, 3)
+        account = SmsService.get_account_for_owner(self.channel)
+        self.assertEqual(account.balance_credits, 2)
+        self.assertEqual(broadcast.deliveries.count(), 3)

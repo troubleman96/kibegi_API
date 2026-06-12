@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'apps.schedule',
     'apps.marketplace',
     'apps.library',
+    'apps.channel',
     'apps.classcomms',
     'apps.sms',
     'apps.assignments',
