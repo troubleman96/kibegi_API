@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from apps.classes.models import Class, Membership
 from apps.core.utils.responses import success_response, error_response
 
-from .models import AIConversation, AIMessage, AIUsage
+from .models import AIConversation, AIMessage, AIUsage, AIProcessingJob
 from .chat import chat
 
 
@@ -83,6 +83,7 @@ class AIChatView(APIView):
                 "response": result['response'],
                 "sources": result['sources'],
                 "tokens_used": result['tokens_used'],
+                "practice_mode": result.get('practice_mode', False),
                 "usage": {
                     "tokens_today": usage.tokens_used_today,
                     "daily_limit": usage.daily_limit,
@@ -158,4 +159,75 @@ class AIUsageView(APIView):
                 "remaining_today": remaining,
                 "percentage_used": round((usage.tokens_used_today / usage.daily_limit) * 100, 1),
             },
+        )
+
+
+class AIProcessingStatusView(APIView):
+    """Return processing status for an uploaded file."""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, upload_id):
+        from apps.uploads.models import Upload
+        upload = get_object_or_404(Upload, id=upload_id, is_deleted=False)
+
+        # Only class members can check
+        if not Membership.objects.filter(
+            user=request.user, class_obj=upload.class_obj
+        ).exists():
+            return error_response("Not a member of this class", status_code=status.HTTP_403_FORBIDDEN)
+
+        try:
+            job = upload.ai_job
+            return success_response(
+                message="Processing status",
+                data={
+                    "upload_id": str(upload.id),
+                    "file_name": upload.file_name,
+                    "status": job.status,
+                    "chunks_created": job.chunks_created,
+                    "error_message": job.error_message or None,
+                    "updated_at": job.updated_at.isoformat(),
+                },
+            )
+        except AIProcessingJob.DoesNotExist:
+            return success_response(
+                message="Processing status",
+                data={
+                    "upload_id": str(upload.id),
+                    "file_name": upload.file_name,
+                    "status": "not_started",
+                    "chunks_created": 0,
+                    "error_message": None,
+                    "updated_at": None,
+                },
+            )
+
+    def post(self, request, upload_id):
+        """Manually trigger (re)processing of a file."""
+        from apps.uploads.models import Upload
+        from .processing import process_upload_async, should_process
+
+        upload = get_object_or_404(Upload, id=upload_id, is_deleted=False)
+        if not Membership.objects.filter(
+            user=request.user, class_obj=upload.class_obj
+        ).exists():
+            return error_response("Not a member of this class", status_code=status.HTTP_403_FORBIDDEN)
+
+        if not should_process(upload):
+            return error_response(
+                "This file type is not supported for AI processing",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Reset job so it re-runs
+        job, _ = AIProcessingJob.objects.get_or_create(upload=upload)
+        job.status = AIProcessingJob.STATUS_PENDING
+        job.error_message = ''
+        job.save(update_fields=['status', 'error_message'])
+
+        process_upload_async(str(upload.id))
+
+        return success_response(
+            message="Processing started",
+            data={"upload_id": str(upload.id), "status": "pending"},
         )
