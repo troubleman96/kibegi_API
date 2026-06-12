@@ -4,9 +4,10 @@ from .models import SmsAccount, SmsDelivery
 
 @admin.register(SmsAccount)
 class SmsAccountAdmin(admin.ModelAdmin):
-    list_display = ['owner', 'phone_number', 'balance_credits', 'is_active', 'provider_name', 'sender_id']
+    list_display = ['owner', 'phone_number', 'balance_credits', 'is_active', 'provider_name', 'sender_id', 'last_topup_at']
     search_fields = ['owner_object_id', 'phone_number']
     list_filter = ['is_active', 'provider_name']
+    readonly_fields = ['last_topup_at']
 
 
 @admin.register(SmsDelivery)
