@@ -339,10 +339,24 @@ class ScheduleSmsService:
 
         if legacy and central_account.balance_credits < cost_per_message and legacy.balance_credits >= cost_per_message:
             central_account.balance_credits = legacy.balance_credits
-            central_account.phone_number = legacy.phone_number or central_account.phone_number
-            central_account.sender_id = legacy.sender_id or central_account.sender_id
-            central_account.provider_name = legacy.provider_name or central_account.provider_name
             central_account.save(update_fields=["balance_credits", "phone_number", "sender_id", "provider_name", "updated_at"])
+
+        if legacy:
+            updated = False
+            if legacy.phone_number and central_account.phone_number != legacy.phone_number:
+                central_account.phone_number = legacy.phone_number
+                updated = True
+            if legacy.sender_id != central_account.sender_id:
+                central_account.sender_id = legacy.sender_id
+                updated = True
+            if legacy.provider_name != central_account.provider_name:
+                central_account.provider_name = legacy.provider_name
+                updated = True
+            if legacy.is_active != central_account.is_active:
+                central_account.is_active = legacy.is_active
+                updated = True
+            if updated:
+                central_account.save(update_fields=["phone_number", "sender_id", "provider_name", "is_active", "updated_at"])
 
         # Use SmsService to perform the send; it returns an apps.sms.models.SmsDelivery
         delivery = SmsService.send_single(account=central_account, phone_number=central_account.phone_number, message=message, context=event, dry_run=dry_run, cost=cost_per_message, client=client)
