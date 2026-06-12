@@ -10,6 +10,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 from drf_spectacular.types import OpenApiTypes
 import uuid
 import random
+import re
 from datetime import timedelta
 
 from .serializers import (
@@ -33,6 +34,40 @@ logger = logging.getLogger('kibegi')
 from apps.core.utils.api_cache import build_cache_key, get_cached_response, cache_response, invalidate_cache_namespaces
 
 User = get_user_model()
+
+
+def normalize_tz_phone_number(raw_phone: str) -> str | None:
+    """Normalize Tanzania numbers to +255XXXXXXXXX or return None if invalid."""
+    digits = re.sub(r"\D", "", raw_phone or "")
+    if digits.startswith("255") and len(digits) == 12:
+        national = digits[3:]
+    elif digits.startswith("0") and len(digits) == 10:
+        national = digits[1:]
+    elif len(digits) == 9:
+        national = digits
+    else:
+        return None
+
+    if len(national) != 9 or national[0] not in {"6", "7"}:
+        return None
+
+    return f"+255{national}"
+
+
+def phone_number_in_use(phone_number: str, *, exclude_user_id=None) -> bool:
+    query = User.objects.filter(phone_number=phone_number).exclude(phone_number="")
+    if exclude_user_id is not None:
+        query = query.exclude(pk=exclude_user_id)
+    return query.exists()
+
+
+def ensure_unique_phone_number(phone_number: str, *, exclude_user_id=None):
+    if phone_number_in_use(phone_number, exclude_user_id=exclude_user_id):
+        return error_response(
+            _('This phone number is already linked to another account.'),
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+    return None
 
 
 @extend_schema(tags=['Authentication'])
@@ -401,13 +436,22 @@ class RegisterVerifyAPIView(APIView):
         # Apply profile data submitted alongside the OTP
         new_type = request.data.get('user_type', '').strip()
         university = request.data.get('university', '').strip()[:255]
-        phone_number = request.data.get('phone_number', '').strip()[:20]
+        raw_phone_number = request.data.get('phone_number', '').strip()
+        phone_number = normalize_tz_phone_number(raw_phone_number) if raw_phone_number else ''
 
         if new_type in ('student', 'lecturer'):
             user.user_type = new_type
         if university:
             user.university = university
+        if raw_phone_number and not phone_number:
+            return error_response(
+                _('Invalid Tanzania phone number. Use 0XXXXXXXXX, 7XXXXXXXX, or +255XXXXXXXXX'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
         if phone_number:
+            duplicate_response = ensure_unique_phone_number(phone_number, exclude_user_id=user.id)
+            if duplicate_response:
+                return duplicate_response
             user.phone_number = phone_number
 
         user.is_active = True
@@ -728,7 +772,8 @@ class GoogleLoginAPIView(APIView):
         if requested_type not in ('student', 'lecturer'):
             requested_type = 'student'
         university = request.data.get('university', '').strip()[:255]
-        phone_number = request.data.get('phone_number', '').strip()[:20]
+        raw_phone_number = request.data.get('phone_number', '').strip()
+        phone_number = normalize_tz_phone_number(raw_phone_number) if raw_phone_number else ''
 
         # Find or create the user
         try:
@@ -744,7 +789,16 @@ class GoogleLoginAPIView(APIView):
             user.is_active = True
             user.is_approved = not is_lecturer  # lecturers need admin approval
             user.university = university
-            user.phone_number = phone_number
+            if raw_phone_number and not phone_number:
+                return error_response(
+                    _('Invalid Tanzania phone number. Use 0XXXXXXXXX, 7XXXXXXXX, or +255XXXXXXXXX'),
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
+            if phone_number:
+                duplicate_response = ensure_unique_phone_number(phone_number, exclude_user_id=user.id)
+                if duplicate_response:
+                    return duplicate_response
+                user.phone_number = phone_number
             user.save(update_fields=['is_active', 'is_approved', 'university', 'phone_number'])
             logger.info('New Google user created: %s (type=%s)', email, requested_type)
 
@@ -844,27 +898,23 @@ class PhoneSendOTPView(APIView):
         if not raw_phone:
             return error_response(_('phone_number is required'), status_code=status.HTTP_400_BAD_REQUEST)
 
-        # Normalise Tanzania number to +255XXXXXXXXX
-        digits = re.sub(r'\D', '', raw_phone)
-        if digits.startswith('255') and len(digits) == 12:
-            phone = f'+{digits}'
-        elif digits.startswith('0') and len(digits) == 10:
-            phone = f'+255{digits[1:]}'
-        elif len(digits) == 9 and digits[0] in '7':
-            phone = f'+255{digits}'
-        else:
+        phone = normalize_tz_phone_number(raw_phone)
+        if not phone:
             return error_response(
-                _('Invalid Tanzania phone number. Use format 06XXXXXXXX, 07XXXXXXXX, or +255XXXXXXXXX'),
+                _('Invalid Tanzania phone number. Use 0XXXXXXXXX, 7XXXXXXXX, or +255XXXXXXXXX'),
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
         national = phone[4:]
-        prefix = national[:2]
-        if len(national) != 9 or prefix not in {'61', '62', '63', '64', '65', '66', '67', '68', '69', '71', '72', '73', '74', '75', '76', '77', '78', '79'}:
+        if len(national) != 9:
             return error_response(
                 _('Invalid Tanzania mobile number prefix.'),
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
+
+        duplicate_response = ensure_unique_phone_number(phone, exclude_user_id=request.user.id)
+        if duplicate_response:
+            return duplicate_response
 
         # Rate limit: max 3 OTPs per phone per hour
         one_hour_ago = timezone.now() - timedelta(hours=1)
@@ -916,6 +966,13 @@ class PhoneVerifyOTPView(APIView):
         if not phone or not code:
             return error_response(_('phone_number and otp are required'), status_code=status.HTTP_400_BAD_REQUEST)
 
+        phone = normalize_tz_phone_number(phone)
+        if not phone:
+            return error_response(
+                _('Invalid Tanzania phone number. Use 0XXXXXXXXX, 7XXXXXXXX, or +255XXXXXXXXX'),
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
         # Find latest OTP for this user+phone
         try:
             otp_obj = PhoneOTP.objects.filter(
@@ -947,6 +1004,9 @@ class PhoneVerifyOTPView(APIView):
 
         # Update user
         user = request.user
+        duplicate_response = ensure_unique_phone_number(phone, exclude_user_id=user.id)
+        if duplicate_response:
+            return duplicate_response
         user.phone_number = phone
         user.phone_verified = True
         user.save(update_fields=['phone_number', 'phone_verified'])

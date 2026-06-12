@@ -140,3 +140,39 @@ class PhoneVerificationTests(TestCase):
         self.assertTrue(
             PhoneOTP.objects.filter(user=self.user, phone="+255628587749").exists()
         )
+
+    @override_settings(SENDAFRICA_API_KEY="")
+    def test_send_phone_otp_accepts_zero_prefix_number(self):
+        response = self.client.post(
+            "/api/v1/auth/phone/send-otp/",
+            {"phone_number": "0628587749"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["data"]["phone"], "+255628587749")
+
+    @override_settings(SENDAFRICA_API_KEY="")
+    def test_send_phone_otp_rejects_phone_number_already_used_by_another_user(self):
+        other_user = User.objects.create_user(
+            email="other@test.com",
+            password="StrongPass123!",
+            full_name="Other User",
+            user_type="student",
+            phone_number="+255628587749",
+            phone_verified=True,
+        )
+
+        response = self.client.post(
+            "/api/v1/auth/phone/send-otp/",
+            {"phone_number": "0628587749"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(response.data["success"])
+        self.assertIn("already linked", response.data["message"].lower())
+
+        other_user.refresh_from_db()
+        self.assertEqual(other_user.phone_number, "+255628587749")

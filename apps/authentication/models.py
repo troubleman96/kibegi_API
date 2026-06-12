@@ -3,6 +3,7 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 
 
 def profile_image_path(instance, filename):
@@ -80,6 +81,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['phone_number'],
+                condition=Q(phone_number__gt=''),
+                name='unique_non_empty_user_phone_number',
+            ),
+        ]
 
     def __str__(self):
         return self.email
