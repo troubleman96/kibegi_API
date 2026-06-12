@@ -110,3 +110,33 @@ class GoogleLoginTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data["success"])
         self.assertEqual(response.data["data"]["user"]["email"], "credential-user@test.com")
+
+
+class PhoneVerificationTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(
+            email="phone@test.com",
+            password="StrongPass123!",
+            full_name="Phone User",
+            user_type="student",
+        )
+        self.client.force_authenticate(self.user)
+
+    @override_settings(SENDAFRICA_API_KEY="")
+    def test_send_phone_otp_accepts_plus255_six_prefix_number(self):
+        response = self.client.post(
+            "/api/v1/auth/phone/send-otp/",
+            {"phone_number": "+255628587749"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["success"])
+        self.assertEqual(response.data["data"]["phone"], "+255628587749")
+
+        from apps.authentication.models import PhoneOTP
+
+        self.assertTrue(
+            PhoneOTP.objects.filter(user=self.user, phone="+255628587749").exists()
+        )

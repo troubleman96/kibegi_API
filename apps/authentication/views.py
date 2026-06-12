@@ -840,11 +840,11 @@ class PhoneSendOTPView(APIView):
         from apps.core.utils.sms import SendAfricaSmsClient
         from .models import PhoneOTP
 
-        raw_phone = (request.data.get('phone_number') or '').strip()
+        raw_phone = (request.data.get('phone_number') or request.data.get('phone') or '').strip()
         if not raw_phone:
             return error_response(_('phone_number is required'), status_code=status.HTTP_400_BAD_REQUEST)
 
-        # Normalise Tanzania number
+        # Normalise Tanzania number to +255XXXXXXXXX
         digits = re.sub(r'\D', '', raw_phone)
         if digits.startswith('255') and len(digits) == 12:
             phone = f'+{digits}'
@@ -854,13 +854,13 @@ class PhoneSendOTPView(APIView):
             phone = f'+255{digits}'
         else:
             return error_response(
-                _('Invalid Tanzania phone number. Use format 07XXXXXXXX or +255XXXXXXXXX'),
+                _('Invalid Tanzania phone number. Use format 06XXXXXXXX, 07XXXXXXXX, or +255XXXXXXXXX'),
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Valid Tanzania mobile prefixes: 071-078
-        prefix = phone[4:7]
-        if prefix not in {'071', '072', '073', '074', '075', '076', '077', '078', '065', '066', '067', '068', '069'}:
+        national = phone[4:]
+        prefix = national[:2]
+        if len(national) != 9 or prefix not in {'61', '62', '63', '64', '65', '66', '67', '68', '69', '71', '72', '73', '74', '75', '76', '77', '78', '79'}:
             return error_response(
                 _('Invalid Tanzania mobile number prefix.'),
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -910,7 +910,7 @@ class PhoneVerifyOTPView(APIView):
         from django.utils import timezone
         from .models import PhoneOTP
 
-        phone = (request.data.get('phone_number') or '').strip()
+        phone = (request.data.get('phone_number') or request.data.get('phone') or '').strip()
         code = (request.data.get('otp') or '').strip()
 
         if not phone or not code:
