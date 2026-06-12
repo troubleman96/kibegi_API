@@ -3,6 +3,7 @@ from unittest.mock import patch
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -90,6 +91,18 @@ class ChannelAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(ChannelMember.objects.filter(channel=self.channel, user=self.member, is_active=True).exists())
+
+    def test_channel_wallet_syncs_from_sms_account_topup(self):
+        account = SmsService.get_account_for_owner(self.channel)
+        account.balance_credits = 8
+        account.last_topup_at = timezone.now()
+        account.save(update_fields=['balance_credits', 'last_topup_at', 'updated_at'])
+
+        wallet = ChannelService.get_wallet(self.channel)
+        wallet.refresh_from_db()
+
+        self.assertEqual(wallet.balance_credits, 8)
+        self.assertEqual(wallet.last_topup_at, account.last_topup_at)
 
     @patch('apps.core.utils.sms.SendAfricaSmsClient.send_sms')
     def test_broadcast_sends_sms_and_deducts_credits(self, mock_send_sms):

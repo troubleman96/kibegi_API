@@ -46,12 +46,43 @@ class ChannelService:
     def get_wallet(channel: Channel):
         wallet, _ = ChannelWallet.objects.get_or_create(channel=channel)
         account = SmsService.get_account_for_owner(channel)
-        if account.balance_credits != wallet.balance_credits or account.provider_name != wallet.provider_name or account.sender_id != wallet.sender_id or account.is_active != wallet.is_active:
+
+        sync_account_to_wallet = False
+        sync_wallet_to_account = False
+
+        if account.last_topup_at and (not wallet.last_topup_at or account.last_topup_at >= wallet.last_topup_at):
+            sync_account_to_wallet = True
+        elif wallet.last_topup_at and (not account.last_topup_at or wallet.last_topup_at > account.last_topup_at):
+            sync_wallet_to_account = True
+        elif account.balance_credits != wallet.balance_credits:
+            if account.balance_credits > wallet.balance_credits:
+                sync_account_to_wallet = True
+            else:
+                sync_wallet_to_account = True
+        elif (
+            account.provider_name != wallet.provider_name
+            or account.sender_id != wallet.sender_id
+            or account.is_active != wallet.is_active
+        ):
+            sync_account_to_wallet = True
+
+        if sync_account_to_wallet:
+            wallet.balance_credits = account.balance_credits
+            wallet.provider_name = account.provider_name
+            wallet.sender_id = account.sender_id
+            wallet.is_active = account.is_active
+            wallet.last_topup_reference = account.last_topup_reference
+            wallet.last_topup_at = account.last_topup_at
+            wallet.save(update_fields=['balance_credits', 'provider_name', 'sender_id', 'is_active', 'last_topup_reference', 'last_topup_at', 'updated_at'])
+
+        if sync_wallet_to_account:
             account.balance_credits = wallet.balance_credits
             account.provider_name = wallet.provider_name
             account.sender_id = wallet.sender_id
             account.is_active = wallet.is_active
-            account.save(update_fields=['balance_credits', 'provider_name', 'sender_id', 'is_active', 'updated_at'])
+            account.last_topup_reference = wallet.last_topup_reference
+            account.last_topup_at = wallet.last_topup_at
+            account.save(update_fields=['balance_credits', 'provider_name', 'sender_id', 'is_active', 'last_topup_reference', 'last_topup_at', 'updated_at'])
         return wallet
 
     @staticmethod
