@@ -34,6 +34,15 @@ def normalize_phone_number(raw_phone: str) -> str | None:
 
 class ChannelService:
     @staticmethod
+    def ensure_phone_verified(user):
+        if not user or not user.is_authenticated:
+            raise PermissionError("You need to sign in before using channel features.")
+        if not getattr(user, 'phone_number', ''):
+            raise ValueError("Please add a phone number to your Kibegi profile first.")
+        if not getattr(user, 'phone_verified', False):
+            raise ValueError("Please verify your phone number in your Kibegi profile first.")
+
+    @staticmethod
     def get_wallet(channel: Channel):
         wallet, _ = ChannelWallet.objects.get_or_create(channel=channel)
         account = SmsService.get_account_for_owner(channel)
@@ -100,6 +109,7 @@ class ChannelService:
 
     @classmethod
     def create_channel(cls, *, creator, name: str, description: str = '', visibility: str = Channel.VISIBILITY_PUBLIC):
+        cls.ensure_phone_verified(creator)
         channel = Channel.objects.create(
             name=name.strip(),
             description=description.strip(),
@@ -125,6 +135,8 @@ class ChannelService:
             raise ValueError("Only registered Kibegi users can join a channel.")
         if not user.phone_number:
             raise ValueError("This user must add a phone number to receive channel SMS.")
+        if not user.phone_verified:
+            raise ValueError("This user must verify their phone number before joining the channel.")
 
         member, _ = ChannelMember.objects.update_or_create(
             channel=channel,
@@ -143,10 +155,7 @@ class ChannelService:
 
     @classmethod
     def join_channel(cls, channel: Channel, user, invited_by=None):
-        if not user or not user.is_authenticated:
-            raise PermissionError("You need to sign in before joining a channel.")
-        if not user.phone_number:
-            raise ValueError("Your Kibegi account needs a phone number before you can join a channel.")
+        cls.ensure_phone_verified(user)
 
         existing = channel.memberships.filter(user=user).first()
         role = existing.role if existing and existing.role == ChannelMember.ROLE_OWNER else ChannelMember.ROLE_MEMBER

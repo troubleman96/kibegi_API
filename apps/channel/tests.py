@@ -23,6 +23,7 @@ class ChannelAPITests(TestCase):
             full_name='Campaign Owner',
             user_type='lecturer',
             phone_number='+255700000001',
+            phone_verified=True,
         )
         self.member = User.objects.create_user(
             email='member@kibegi.test',
@@ -30,6 +31,7 @@ class ChannelAPITests(TestCase):
             full_name='Channel Member',
             user_type='student',
             phone_number='+255700000002',
+            phone_verified=True,
         )
         self.client = APIClient()
         self.client.force_authenticate(self.creator)
@@ -52,6 +54,25 @@ class ChannelAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(Channel.objects.filter(name='Freshers Updates').exists())
+
+    def test_unverified_user_cannot_create_channel(self):
+        unverified = User.objects.create_user(
+            email='unverified@kibegi.test',
+            password='StrongPass123!',
+            full_name='Unverified User',
+            user_type='student',
+            phone_number='+255700000099',
+            phone_verified=False,
+        )
+        self.client.force_authenticate(unverified)
+        response = self.client.post(
+            reverse('channel_list_create'),
+            {'name': 'Blocked Channel', 'description': 'Should not be created', 'visibility': 'public'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn('verify your phone number', response.data['message'].lower())
 
     def test_member_can_join_public_channel(self):
         self.client.force_authenticate(self.member)
@@ -82,6 +103,7 @@ class ChannelAPITests(TestCase):
             full_name='Venue Recipient',
             user_type='student',
             phone_number='+255628587749',
+            phone_verified=True,
         )
         ChannelService.add_member(self.channel, identifier=recipient.email, actor=self.creator)
 
@@ -116,6 +138,7 @@ class ChannelAPITests(TestCase):
             full_name='Fallback Member',
             user_type='student',
             phone_number='+255628587749',
+            phone_verified=True,
         )
         ChannelService.add_member(self.channel, identifier=recipient.email, actor=self.creator)
         member = ChannelMember.objects.get(channel=self.channel, user=recipient)

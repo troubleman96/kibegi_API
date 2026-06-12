@@ -24,6 +24,15 @@ class ChannelAccessMixin:
     def get_object(self):
         return get_object_or_404(Channel, pk=self.kwargs.get('channel_id'))
 
+    def ensure_phone_verified(self, request):
+        if not request.user.is_authenticated:
+            return error_response(message='You need to sign in before using channels.', status_code=status.HTTP_401_UNAUTHORIZED)
+        if not request.user.phone_number:
+            return error_response(message='Please add your phone number in Profile first.', status_code=status.HTTP_400_BAD_REQUEST)
+        if not request.user.phone_verified:
+            return error_response(message='Please verify your phone number in Profile before using channels.', status_code=status.HTTP_403_FORBIDDEN)
+        return None
+
     def ensure_member_access(self, request, channel):
         if channel.visibility == Channel.VISIBILITY_PUBLIC:
             return None
@@ -38,7 +47,7 @@ class ChannelAccessMixin:
 
 
 @extend_schema(tags=['Channels'])
-class ChannelListCreateAPIView(APIView):
+class ChannelListCreateAPIView(ChannelAccessMixin, APIView):
     permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
 
@@ -66,14 +75,20 @@ class ChannelListCreateAPIView(APIView):
         return success_response(message='Channels retrieved successfully', data=serializer.data)
 
     def post(self, request):
+        verified = self.ensure_phone_verified(request)
+        if verified:
+            return verified
         serializer = ChannelCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        channel = ChannelService.create_channel(
-            creator=request.user,
-            name=serializer.validated_data['name'],
-            description=serializer.validated_data.get('description', ''),
-            visibility=serializer.validated_data.get('visibility', Channel.VISIBILITY_PUBLIC),
-        )
+        try:
+            channel = ChannelService.create_channel(
+                creator=request.user,
+                name=serializer.validated_data['name'],
+                description=serializer.validated_data.get('description', ''),
+                visibility=serializer.validated_data.get('visibility', Channel.VISIBILITY_PUBLIC),
+            )
+        except (PermissionError, ValueError) as exc:
+            return error_response(message=str(exc), status_code=status.HTTP_400_BAD_REQUEST)
         out = ChannelSerializer(channel, context={'request': request})
         return success_response(message='Channel created successfully', data=out.data, status_code=status.HTTP_201_CREATED)
 
@@ -125,6 +140,9 @@ class ChannelMemberListCreateAPIView(ChannelAccessMixin, APIView):
 
     def post(self, request, channel_id):
         channel = self.get_object()
+        verified = self.ensure_phone_verified(request)
+        if verified:
+            return verified
         denied = self.ensure_manage_access(request, channel)
         if denied:
             return denied
@@ -168,6 +186,9 @@ class ChannelJoinAPIView(ChannelAccessMixin, APIView):
 
     def post(self, request, channel_id):
         channel = self.get_object()
+        verified = self.ensure_phone_verified(request)
+        if verified:
+            return verified
         if channel.visibility == Channel.VISIBILITY_PRIVATE:
             return error_response(message='This channel is private. Use the invite link to join.', status_code=status.HTTP_403_FORBIDDEN)
         try:
@@ -191,6 +212,9 @@ class ChannelWalletAPIView(ChannelAccessMixin, APIView):
 
     def patch(self, request, channel_id):
         channel = self.get_object()
+        verified = self.ensure_phone_verified(request)
+        if verified:
+            return verified
         denied = self.ensure_manage_access(request, channel)
         if denied:
             return denied
@@ -225,6 +249,9 @@ class ChannelBroadcastListCreateAPIView(ChannelAccessMixin, APIView):
 
     def post(self, request, channel_id):
         channel = self.get_object()
+        verified = self.ensure_phone_verified(request)
+        if verified:
+            return verified
         denied = self.ensure_manage_access(request, channel)
         if denied:
             return denied
