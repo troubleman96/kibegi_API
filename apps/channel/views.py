@@ -1,5 +1,9 @@
+import logging
+from functools import wraps
+
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.db import DatabaseError, OperationalError, ProgrammingError
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
@@ -18,6 +22,31 @@ from .serializers import (
     ChannelWalletSerializer,
 )
 from .services import ChannelService
+
+
+logger = logging.getLogger('kibegi')
+
+
+def channel_api_guard(view_name):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(self, request, *args, **kwargs):
+            try:
+                return func(self, request, *args, **kwargs)
+            except (OperationalError, ProgrammingError, DatabaseError) as exc:
+                logger.exception('Channel database error in %s', view_name)
+                return error_response(
+                    message='Channel data is temporarily unavailable on the server. Please run database migrations and restart the backend.',
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+            except Exception:
+                logger.exception('Unhandled channel error in %s', view_name)
+                return error_response(
+                    message='Channel service encountered an unexpected error.',
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+        return wrapper
+    return decorator
 
 
 class ChannelAccessMixin:
@@ -64,6 +93,7 @@ class ChannelListCreateAPIView(ChannelAccessMixin, APIView):
             own_or_joined = own_or_joined.filter(name__icontains=q)
         return own_or_joined.distinct().order_by('name')
 
+    @channel_api_guard('ChannelListCreateAPIView.get')
     def get(self, request):
         queryset = self.get_queryset(request)
         paginator = self.pagination_class()
@@ -74,6 +104,7 @@ class ChannelListCreateAPIView(ChannelAccessMixin, APIView):
             return success_response(message='Channels retrieved successfully', data=payload.data)
         return success_response(message='Channels retrieved successfully', data=serializer.data)
 
+    @channel_api_guard('ChannelListCreateAPIView.post')
     def post(self, request):
         verified = self.ensure_phone_verified(request)
         if verified:
@@ -97,6 +128,7 @@ class ChannelListCreateAPIView(ChannelAccessMixin, APIView):
 class ChannelDetailAPIView(ChannelAccessMixin, APIView):
     permission_classes = [IsAuthenticated]
 
+    @channel_api_guard('ChannelDetailAPIView.get')
     def get(self, request, channel_id):
         channel = self.get_object()
         denied = self.ensure_member_access(request, channel)
@@ -105,6 +137,7 @@ class ChannelDetailAPIView(ChannelAccessMixin, APIView):
         serializer = ChannelSerializer(channel, context={'request': request})
         return success_response(message='Channel retrieved successfully', data=serializer.data)
 
+    @channel_api_guard('ChannelDetailAPIView.patch')
     def patch(self, request, channel_id):
         channel = self.get_object()
         denied = self.ensure_manage_access(request, channel)
@@ -124,6 +157,7 @@ class ChannelMemberListCreateAPIView(ChannelAccessMixin, APIView):
     def get_queryset(self, channel):
         return channel.memberships.select_related('user', 'invited_by').filter(is_active=True).order_by('display_name')
 
+    @channel_api_guard('ChannelMemberListCreateAPIView.get')
     def get(self, request, channel_id):
         channel = self.get_object()
         denied = self.ensure_member_access(request, channel)
@@ -138,6 +172,7 @@ class ChannelMemberListCreateAPIView(ChannelAccessMixin, APIView):
             return success_response(message='Channel members retrieved successfully', data=payload.data)
         return success_response(message='Channel members retrieved successfully', data=serializer.data)
 
+    @channel_api_guard('ChannelMemberListCreateAPIView.post')
     def post(self, request, channel_id):
         channel = self.get_object()
         verified = self.ensure_phone_verified(request)
@@ -167,6 +202,7 @@ class ChannelMemberDetailAPIView(ChannelAccessMixin, APIView):
     def get_object(self):
         return get_object_or_404(ChannelMember, pk=self.kwargs.get('member_id'))
 
+    @channel_api_guard('ChannelMemberDetailAPIView.delete')
     def delete(self, request, member_id):
         member = self.get_object()
         denied = self.ensure_manage_access(request, member.channel)
@@ -184,6 +220,7 @@ class ChannelMemberDetailAPIView(ChannelAccessMixin, APIView):
 class ChannelJoinAPIView(ChannelAccessMixin, APIView):
     permission_classes = [IsAuthenticated]
 
+    @channel_api_guard('ChannelJoinAPIView.post')
     def post(self, request, channel_id):
         channel = self.get_object()
         verified = self.ensure_phone_verified(request)
@@ -202,6 +239,7 @@ class ChannelJoinAPIView(ChannelAccessMixin, APIView):
 class ChannelWalletAPIView(ChannelAccessMixin, APIView):
     permission_classes = [IsAuthenticated]
 
+    @channel_api_guard('ChannelWalletAPIView.get')
     def get(self, request, channel_id):
         channel = self.get_object()
         denied = self.ensure_member_access(request, channel)
@@ -210,6 +248,7 @@ class ChannelWalletAPIView(ChannelAccessMixin, APIView):
         wallet = ChannelService.get_wallet(channel)
         return success_response(message='Channel wallet retrieved successfully', data=ChannelWalletSerializer(wallet, context={'request': request}).data)
 
+    @channel_api_guard('ChannelWalletAPIView.patch')
     def patch(self, request, channel_id):
         channel = self.get_object()
         verified = self.ensure_phone_verified(request)
@@ -233,6 +272,7 @@ class ChannelBroadcastListCreateAPIView(ChannelAccessMixin, APIView):
     def get_queryset(self, channel):
         return channel.broadcasts.select_related('sender').prefetch_related('deliveries').order_by('-created_at')
 
+    @channel_api_guard('ChannelBroadcastListCreateAPIView.get')
     def get(self, request, channel_id):
         channel = self.get_object()
         denied = self.ensure_member_access(request, channel)
@@ -247,6 +287,7 @@ class ChannelBroadcastListCreateAPIView(ChannelAccessMixin, APIView):
             return success_response(message='Channel broadcasts retrieved successfully', data=payload.data)
         return success_response(message='Channel broadcasts retrieved successfully', data=serializer.data)
 
+    @channel_api_guard('ChannelBroadcastListCreateAPIView.post')
     def post(self, request, channel_id):
         channel = self.get_object()
         verified = self.ensure_phone_verified(request)
@@ -269,6 +310,7 @@ class ChannelBroadcastDetailAPIView(ChannelAccessMixin, APIView):
     def get_object(self):
         return get_object_or_404(ChannelBroadcast, pk=self.kwargs.get('broadcast_id'))
 
+    @channel_api_guard('ChannelBroadcastDetailAPIView.get')
     def get(self, request, broadcast_id):
         broadcast = self.get_object()
         denied = self.ensure_member_access(request, broadcast.channel)
