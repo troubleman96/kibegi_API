@@ -75,6 +75,12 @@ class ChannelService:
         return ' | '.join(part for part in parts if part)
 
     @staticmethod
+    def resolve_member_phone(member: ChannelMember) -> str:
+        phone = member.phone_number or getattr(member.user, 'phone_number', '') or ''
+        normalized = normalize_phone_number(phone)
+        return normalized or phone.strip()
+
+    @staticmethod
     def resolve_user(identifier: str):
         from apps.authentication.models import User
 
@@ -181,29 +187,35 @@ class ChannelService:
                 channel=broadcast.channel,
                 is_active=True,
                 user__is_active=True,
-                phone_number__gt='',
             ).select_related('user').order_by('display_name')
         )
+        deliverable_members = []
+        for member in members:
+            recipient_phone = cls.resolve_member_phone(member)
+            if recipient_phone:
+                deliverable_members.append((member, recipient_phone))
 
         broadcast.status = ChannelBroadcast.STATUS_SENDING
-        broadcast.recipient_count = len(members)
+        broadcast.recipient_count = len(deliverable_members)
         broadcast.sent_count = 0
         broadcast.failed_count = 0
         broadcast.skipped_count = 0
         broadcast.credits_used = 0
         broadcast.save(update_fields=['status', 'recipient_count', 'sent_count', 'failed_count', 'skipped_count', 'credits_used', 'updated_at'])
 
-        if not members:
+        if not deliverable_members:
             broadcast.status = ChannelBroadcast.STATUS_FAILED
+            broadcast.failed_count = 0
+            broadcast.skipped_count = len(members)
             broadcast.save(update_fields=['status', 'updated_at'])
             return broadcast
 
         if not wallet.is_active:
-            for member in members:
+            for member, recipient_phone in deliverable_members:
                 ChannelBroadcastDelivery.objects.create(
                     broadcast=broadcast,
                     member=member,
-                    recipient_phone=member.phone_number,
+                    recipient_phone=recipient_phone,
                     provider_name=wallet.provider_name,
                     status=ChannelBroadcastDelivery.STATUS_SKIPPED,
                     message=message,
@@ -219,12 +231,12 @@ class ChannelService:
         cost_per_message = getattr(settings, 'CHANNEL_SMS_COST_PER_MESSAGE', 1)
         sent_count = failed_count = skipped_count = credits_used = 0
 
-        for member in members:
+        for member, recipient_phone in deliverable_members:
             if account.balance_credits < cost_per_message:
                 ChannelBroadcastDelivery.objects.create(
                     broadcast=broadcast,
                     member=member,
-                    recipient_phone=member.phone_number,
+                    recipient_phone=recipient_phone,
                     provider_name=wallet.provider_name,
                     status=ChannelBroadcastDelivery.STATUS_SKIPPED,
                     message=message,
@@ -239,7 +251,7 @@ class ChannelService:
                 ChannelBroadcastDelivery.objects.create(
                     broadcast=broadcast,
                     member=member,
-                    recipient_phone=member.phone_number,
+                    recipient_phone=recipient_phone,
                     provider_name=wallet.provider_name,
                     status=ChannelBroadcastDelivery.STATUS_PENDING,
                     message=message,
@@ -254,7 +266,7 @@ class ChannelService:
             try:
                 delivery = SmsService.send_single(
                     account=account,
-                    phone_number=member.phone_number,
+                    phone_number=recipient_phone,
                     message=message,
                     context=broadcast,
                     dry_run=False,
@@ -265,7 +277,7 @@ class ChannelService:
                 ChannelBroadcastDelivery.objects.create(
                     broadcast=broadcast,
                     member=member,
-                    recipient_phone=member.phone_number,
+                    recipient_phone=recipient_phone,
                     provider_name=wallet.provider_name,
                     status=ChannelBroadcastDelivery.STATUS_FAILED,
                     message=message,
@@ -279,7 +291,7 @@ class ChannelService:
             ChannelBroadcastDelivery.objects.create(
                 broadcast=broadcast,
                 member=member,
-                recipient_phone=member.phone_number,
+                recipient_phone=recipient_phone,
                 provider_name=delivery.provider_name,
                 provider_message_id=delivery.provider_message_id,
                 status=delivery.status,

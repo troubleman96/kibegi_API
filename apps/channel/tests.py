@@ -103,3 +103,33 @@ class ChannelAPITests(TestCase):
         expected_message = 'Kibegi channel update | Venue update | Venue: Mezzanie | Lecture moved to the new room.'
         mock_send_sms.assert_any_call(phone_number='+255628587749', message=expected_message, sender_id='')
         self.assertIn('Venue: Mezzanie', expected_message)
+
+    @patch('apps.core.utils.sms.SendAfricaSmsClient.send_sms')
+    def test_broadcast_uses_registered_user_phone_when_membership_phone_missing(self, mock_send_sms):
+        mock_send_sms.return_value = {
+            'provider_message_id': 'msg-1',
+            'raw_response': {'ok': True},
+        }
+        recipient = User.objects.create_user(
+            email='fallback@kibegi.test',
+            password='StrongPass123!',
+            full_name='Fallback Member',
+            user_type='student',
+            phone_number='+255628587749',
+        )
+        ChannelService.add_member(self.channel, identifier=recipient.email, actor=self.creator)
+        member = ChannelMember.objects.get(channel=self.channel, user=recipient)
+        member.phone_number = ''
+        member.save(update_fields=['phone_number', 'updated_at'])
+
+        response = self.client.post(
+            reverse('channel_broadcasts', kwargs={'channel_id': self.channel.pk}),
+            {'subject': 'Venue update', 'message': 'Room moved.', 'venue': 'Mezzanie'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(mock_send_sms.called)
+        self.assertTrue(any(call.kwargs['phone_number'] == '+255628587749' for call in mock_send_sms.call_args_list))
+        broadcast = ChannelBroadcast.objects.get(pk=response.data['data']['id'])
+        self.assertEqual(broadcast.deliveries.first().recipient_phone, '+255628587749')
