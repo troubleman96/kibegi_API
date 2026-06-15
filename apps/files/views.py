@@ -429,40 +429,40 @@ class PermanentDeleteFileAPIView(APIView):
     )
     def delete(self, request, file_code):
         user = request.user
-        import logging
-        logger = logging.getLogger(__name__)
-
-        # First, check if it's user's upload
+        upload = None
         try:
             upload = Upload.objects.get(
                 file_code=file_code,
                 uploader=user,
-                is_deleted=True  # Must be in trash
+                is_deleted=True
             )
-            
-            # Store file info before deletion
+        except Upload.DoesNotExist:
+            pass
+
+        if upload is not None:
+            if not upload.is_permanently_deletable():
+                msg = "File must remain in trash for 21 days before permanent deletion."
+                return error_response(
+                    message=msg,
+                    status_code=status.HTTP_403_FORBIDDEN
+                )
             file_name = upload.file_name
             storage = upload.file.storage if upload.file else None
             file_name_in_storage = upload.file.name if upload.file else None
-
-            # Delete physical file from storage in a backend-safe way (local, S3, MinIO)
             if storage and file_name_in_storage:
                 try:
                     storage.delete(file_name_in_storage)
                 except Exception as e:
-                    logger.error(f"Failed to delete physical file {file_name_in_storage}: {e}")
-            
-            # Delete database record
+                    import logging as _logging
+                    _logging.getLogger(__name__).error(
+                        "Failed to delete physical file %s: %s", file_name_in_storage, e
+                    )
             upload.delete()
             invalidate_cache_namespaces('files', 'uploads', 'sharing', 'storage', 'search', 'classes')
-            
             return success_response(
                 message=f"'{file_name}' permanently deleted",
                 status_code=status.HTTP_200_OK
             )
-        
-        except Upload.DoesNotExist:
-            pass
 
         # If not user's upload, check if it's a shared file
         try:

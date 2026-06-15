@@ -99,22 +99,6 @@ class StorageService:
         except Exception as e:
             logger.error(f"Error calculating storage for {user.email}: {e}")
         
-        # Also check files app if it exists
-        try:
-            from apps.files.models import File
-            
-            result = File.objects.filter(uploader=user).aggregate(
-                total=Sum('file_size')
-            )
-            
-            if result['total']:
-                total_bytes += int(result['total'])
-                
-        except ImportError:
-            logger.debug("Files app not found, skipping files app storage calculation")
-        except Exception as e:
-            logger.error(f"Error calculating storage from files app for {user.email}: {e}")
-        
         return total_bytes
     
     @staticmethod

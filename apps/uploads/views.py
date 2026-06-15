@@ -61,33 +61,7 @@ class UploadListCreateAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         upload = serializer.save()
-        invalidate_cache_namespaces('uploads', 'files', 'storage', 'search', 'classes', 'notifications')
-
-        # Notify other class members about the new upload
-        try:
-            from apps.notifications.services import NotificationService
-
-            class_obj = upload.class_obj
-            uploader = upload.uploader
-            recipients = class_obj.members.exclude(id=uploader.id)
-            uploader_name = getattr(uploader, "full_name", "Someone")
-            file_name = getattr(upload, "file_name", "a file")
-            class_name = getattr(class_obj, "name", "your class")
-            content = f"{uploader_name} uploaded \"{file_name}\" in {class_name}"
-
-            NotificationService.create_bulk(
-                [
-                    {
-                        "user": member,
-                        "notification_type": "upload_created",
-                        "content": content,
-                        "related_id": str(upload.id),
-                    }
-                    for member in recipients
-                ]
-            )
-        except Exception:
-            pass
+        invalidate_cache_namespaces('uploads', 'files', 'storage', 'search', 'classes')
         
         return success_response(
             message="File uploaded successfully",

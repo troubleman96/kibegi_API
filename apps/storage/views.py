@@ -59,25 +59,14 @@ class UserStorageViewSet(viewsets.ReadOnlyModelViewSet):
         if cached_response is not None:
             return cached_response
         try:
-            # Get or create storage record and update it
-            storage = StorageService.update_user_storage(request.user, recalculate=True)
-            
-            # Serialize the storage data
+            storage = StorageService.update_user_storage(request.user, recalculate=False)
             serializer = self.get_serializer(storage)
-            
-            # Get the serialized data as a plain dict
             data = dict(serializer.data)
-            
-            # Return response directly - success_response returns a Response object
-            # Make sure data is a plain dict/list, not a Response object
-            response = success_response(
+            return cache_response(cache_key, success_response(
                 message="Storage information retrieved successfully",
                 data=data
-            )
-            return cache_response(cache_key, response, 'storage')
-        
+            ), 'storage')
         except Exception as e:
-            # Return error response directly
             return error_response(
                 message="Failed to retrieve storage information",
                 errors={"detail": str(e)},
