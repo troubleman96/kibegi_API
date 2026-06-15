@@ -52,7 +52,7 @@ class AIUsage(models.Model):
     tokens_used_today = models.IntegerField(default=0)
     tokens_used_total = models.BigIntegerField(default=0)
     daily_limit = models.IntegerField(default=50000)
-    last_reset = models.DateField(default=timezone.now)
+    last_reset = models.DateField(default=timezone.localdate)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -63,8 +63,11 @@ class AIUsage(models.Model):
         return f"{self.user} — {self.tokens_used_today}/{self.daily_limit} tokens today"
 
     def reset_if_needed(self):
-        today = timezone.now().date()
-        if self.last_reset < today:
+        today = timezone.localdate()
+        last_reset = self.last_reset
+        if hasattr(last_reset, "date"):
+            last_reset = last_reset.date()
+        if last_reset < today:
             self.tokens_used_today = 0
             self.last_reset = today
             self.save(update_fields=['tokens_used_today', 'last_reset', 'updated_at'])

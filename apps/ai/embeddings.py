@@ -8,6 +8,8 @@ import numpy as np
 from openai import OpenAI
 from django.conf import settings
 
+AI_REQUEST_TIMEOUT = 30
+
 logger = logging.getLogger(__name__)
 
 EMBEDDING_MODEL = 'openai/text-embedding-3-small'
@@ -19,6 +21,7 @@ def get_client() -> OpenAI:
     return OpenAI(
         base_url=getattr(settings, 'OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
         api_key=settings.OPENROUTER_API_KEY,
+        timeout=AI_REQUEST_TIMEOUT,
         default_headers={
             "HTTP-Referer": "https://kibegi.com",
             "X-Title": "Kibegi AI",

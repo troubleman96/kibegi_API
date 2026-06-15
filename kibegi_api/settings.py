@@ -271,6 +271,15 @@ AWS_QUERYSTRING_EXPIRE = config('AWS_QUERYSTRING_EXPIRE', default=3600, cast=int
 AWS_S3_ADDRESSING_STYLE = 'path'
 AWS_LOCATION = ''
 
+from botocore.config import Config
+
+AWS_S3_CLIENT_CONFIG = Config(
+    connect_timeout=config('AWS_S3_CONNECT_TIMEOUT', default=10, cast=int),
+    read_timeout=config('AWS_S3_READ_TIMEOUT', default=30, cast=int),
+    retries={'max_attempts': config('AWS_S3_MAX_ATTEMPTS', default=2, cast=int)},
+    s3={'addressing_style': AWS_S3_ADDRESSING_STYLE},
+)
+
 if MINIO_PUBLIC_BASE_URL:
     MEDIA_URL = MINIO_PUBLIC_BASE_URL.rstrip('/') + '/'
 
@@ -492,6 +501,11 @@ LOGGING = {
             'propagate': False,
         },
         'django.request': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'apps.ai': {
             'handlers': ['file', 'console'],
             'level': 'INFO',
             'propagate': False,

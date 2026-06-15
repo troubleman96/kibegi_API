@@ -1,4 +1,5 @@
 from django.db.models.signals import post_save
+from django.db import transaction
 from django.dispatch import receiver
 
 
@@ -7,7 +8,7 @@ def _trigger_ai_processing(sender, instance, created, **kwargs):
         return
     from .processing import should_process, process_upload_async
     if should_process(instance):
-        process_upload_async(str(instance.pk))
+        transaction.on_commit(lambda: process_upload_async(str(instance.pk)))
 
 
 def connect():

@@ -125,21 +125,30 @@ def chunk_text(text: str, chunk_size: int = 1200, overlap: int = 150) -> list[st
 
     chunks = []
     start = 0
-    while start < len(text):
-        end = start + chunk_size
+    text_length = len(text)
+    while start < text_length:
+        end = min(start + chunk_size, text_length)
         chunk = text[start:end]
 
-        # Try to break at a sentence or paragraph boundary
-        if end < len(text):
+        # Try to break at a sentence or paragraph boundary when there is more
+        # text after this chunk. For the final chunk, append and stop.
+        if end < text_length:
             for boundary in ('\n\n', '\n', '. ', '? ', '! '):
                 pos = chunk.rfind(boundary)
                 if pos > chunk_size // 2:
                     chunk = chunk[:pos + len(boundary)]
                     break
 
-        chunks.append(chunk.strip())
-        start += len(chunk) - overlap
-        if start >= len(text):
+        cleaned = chunk.strip()
+        if cleaned:
+            chunks.append(cleaned)
+
+        if end >= text_length:
             break
 
-    return [c for c in chunks if c]
+        next_start = start + len(chunk) - overlap
+        if next_start <= start:
+            next_start = end
+        start = next_start
+
+    return chunks

@@ -5,6 +5,8 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+AI_REQUEST_TIMEOUT = 30
+
 PRACTICE_PATTERNS = re.compile(
     r'\b(quiz\s*me|test\s*me|practice|flashcard|examine\s*me|drill|question\s*me|give\s*me\s*(a\s*)?(test|quiz|question))\b',
     re.IGNORECASE,
@@ -15,6 +17,7 @@ def get_client() -> OpenAI:
     return OpenAI(
         base_url=getattr(settings, 'OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
         api_key=settings.OPENROUTER_API_KEY,
+        timeout=AI_REQUEST_TIMEOUT,
         default_headers={
             "HTTP-Referer": "https://kibegi.com",
             "X-Title": "Kibegi AI",
@@ -24,6 +27,35 @@ def get_client() -> OpenAI:
 
 def is_practice_request(message: str) -> bool:
     return bool(PRACTICE_PATTERNS.search(message))
+
+
+def _keyword_search_chunks(user_message: str, class_obj, top_k: int = 6):
+    from .models import DocumentChunk
+
+    terms = [
+        term.lower()
+        for term in re.findall(r"[A-Za-z0-9]{3,}", user_message)
+        if term.lower() not in {"the", "and", "for", "that", "this", "with", "from"}
+    ]
+    chunks = list(
+        DocumentChunk.objects.filter(
+            upload__class_obj=class_obj,
+            upload__is_deleted=False,
+        ).select_related("upload").order_by("upload", "chunk_index")[:200]
+    )
+    if not chunks:
+        return []
+    if not terms:
+        return chunks[:top_k]
+
+    scored = []
+    for chunk in chunks:
+        content = chunk.content.lower()
+        score = sum(content.count(term) for term in terms)
+        if score:
+            scored.append((score, chunk))
+    scored.sort(key=lambda item: item[0], reverse=True)
+    return [chunk for _, chunk in scored[:top_k]]
 
 
 def build_rag_context(user_message: str, class_obj) -> tuple[str, list[str]]:
@@ -62,11 +94,16 @@ def build_rag_context(user_message: str, class_obj) -> tuple[str, list[str]]:
         logger.warning("Vector search failed, falling back to file list: %s", exc)
         similar = []
 
+    if not similar or all(score <= 0 for score, _ in similar):
+        keyword_chunks = _keyword_search_chunks(user_message, class_obj, top_k=6)
+        if keyword_chunks:
+            similar = [(0.0, chunk) for chunk in keyword_chunks]
+
     if not similar:
         return (
             base_context
             + f"\nFiles in this class:\n{file_list}\n\n"
-            + "(No indexed content yet — students can ask about files by name once processed.)"
+            + "(No indexed content yet - students can ask about files by name once processed.)"
         ), [u.file_name for u in uploads[:5]]
 
     # Build context blocks from top chunks
