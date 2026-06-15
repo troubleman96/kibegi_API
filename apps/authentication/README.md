@@ -1,6 +1,6 @@
 # Authentication App
 
-Complete JWT-based authentication system with email verification, password reset, and user profile management.
+Complete JWT-based authentication system with email verification, password reset, phone verification, and user profile management.
 
 ## 📋 Table of Contents
 
@@ -19,6 +19,7 @@ Complete JWT-based authentication system with email verification, password reset
 The authentication app provides a secure, production-ready authentication system with:
 - JWT token-based authentication
 - Email verification with OTP
+- Phone verification with SMS OTP
 - Password reset functionality
 - User profile management
 - **Beautiful HTML email templates** with clear OTP display
@@ -46,6 +47,8 @@ Extended Django's AbstractUser with custom fields.
 | `full_name` | CharField | User's full name | Max 255 chars, Required |
 | `user_type` | CharField | Type of user | Choices: 'student', 'lecturer' |
 | `is_verified` | Boolean | Email verification status | Default: False |
+| `phone_number` | CharField | Tanzania phone number stored on the profile | Optional |
+| `phone_verified` | Boolean | Phone verification status | Default: False |
 | `created_at` | DateTime | Account creation timestamp | Auto-generated |
 | `updated_at` | DateTime | Last update timestamp | Auto-updated |
 
@@ -53,6 +56,7 @@ Extended Django's AbstractUser with custom fields.
 - Username field is removed (email is used for authentication)
 - Email must be unique across the system
 - Users cannot access most features until `is_verified = True`
+- Channel creation, public join, member management, and broadcasts also require `phone_verified = True`
 
 **Model Methods:**
 ```python
@@ -734,6 +738,7 @@ In production with real SMTP configured, OTPs are sent to actual email addresses
 
 ### 4. Email Verification
 - **Required:** Users cannot access features until verified
+- **Channel access:** channel actions require both email verification and phone verification
 - **Prevents Spam:** Fake emails cannot access system
 - **Resend Option:** Can request new OTP if expired
 

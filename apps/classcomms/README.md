@@ -1,9 +1,11 @@
 # Class Communications App
 
-This app handles class representative announcements that need to reach students even when they are not online.
-It is designed for low-internet environments where SMS is the most reliable way to broadcast urgent venue changes, reminders, and class updates.
+Legacy documentation only.
 
-## What It Does
+The project has moved to the standalone [`apps/channel`](../channel/README.md) app for broadcast campaigns.
+Keep this page as a historical reference for the old class-linked messaging design.
+
+## What It Used To Do
 
 - stores class-specific SMS contacts
 - lets a lecturer or class representative manage the contact list
@@ -13,7 +15,7 @@ It is designed for low-internet environments where SMS is the most reliable way 
 - records one delivery log per recipient for audit and troubleshooting
 - promotes a class member to representative so they can manage communications
 
-## Why It Exists
+## Why It Existed
 
 The existing `notifications` app is for in-app notifications only. That is not enough for students who may not be online when a venue changes.
 This app adds an explicit SMS workflow with consent, credits, and delivery history so the communication channel is controlled and auditable.
@@ -137,8 +139,8 @@ Use this to inspect and top up the class SMS credits.
 - `POST /api/v1/class-comms/classes/{class_id}/broadcasts/`
 - `GET /api/v1/class-comms/broadcasts/{broadcast_id}/`
 
-Broadcasts are sent immediately when created.
-The backend checks the wallet balance before each send and writes a delivery log for every contact.
+Broadcasts were sent immediately when created.
+The backend checked the wallet balance before each send and wrote a delivery log for every contact.
 
 ### Representative Management
 
