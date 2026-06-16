@@ -47,17 +47,7 @@ class UploadListCreateAPIView(generics.ListCreateAPIView):
         else:
             return queryset.filter(uploader=user)
     
-    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
-
     def create(self, request, *args, **kwargs):
-        file_obj = request.FILES.get('file')
-        if file_obj and file_obj.size > self.MAX_FILE_SIZE:
-            size_mb = file_obj.size / (1024 * 1024)
-            return error_response(
-                message=f"File too large ({size_mb:.1f} MB). Maximum allowed size is 5 MB.",
-                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-            )
-
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         upload = serializer.save()
