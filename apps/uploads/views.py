@@ -41,9 +41,11 @@ class UploadListCreateAPIView(generics.ListCreateAPIView):
         if class_id:
             queryset = queryset.filter(class_obj_id=class_id)
         
-        # Students see all uploads, lecturers see only their own
+        # Students see uploads from classes they are members of; lecturers see only their own
         if user.user_type == 'student':
-            return queryset
+            from apps.classes.models import Membership
+            member_class_ids = Membership.objects.filter(user=user).values_list('class_obj_id', flat=True)
+            return queryset.filter(class_obj_id__in=member_class_ids)
         else:
             return queryset.filter(uploader=user)
     
@@ -260,9 +262,9 @@ class PermanentDeleteAPIView(APIView):
         try:
             upload = Upload.objects.get(pk=pk, uploader=request.user, is_deleted=True)
         except Upload.DoesNotExist:
-            return Response(
-                error_response("File not found in trash"),
-                status=status.HTTP_404_NOT_FOUND
+            return error_response(
+                message="File not found in trash",
+                status_code=status.HTTP_404_NOT_FOUND
             )
         
         # Store file info before deletion

@@ -474,6 +474,8 @@ class UploadsFilesAndStorageEndpointTests(BaseAPITestCase):
     def test_permanent_delete_endpoints_use_storage_backend_delete(self, delete_file):
         upload = self.make_upload(uploader=self.student)
         upload.soft_delete()
+        # Backdate deleted_at past the 21-day retention window so is_permanently_deletable() returns True
+        Upload.objects.filter(id=upload.id).update(deleted_at=timezone.now() - timedelta(days=22))
 
         student_client = self.api_client_for(self.student)
         response = student_client.delete(f"/api/v1/files/{upload.file_code}/permanent-delete/")
