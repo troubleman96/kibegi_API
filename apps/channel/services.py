@@ -269,10 +269,11 @@ class ChannelService:
             return broadcast
 
         cost_per_message = getattr(settings, 'CHANNEL_SMS_COST_PER_MESSAGE', 1)
+        provider_manages_balance = getattr(settings, 'SMS_PROVIDER_MANAGES_BALANCE', True)
         sent_count = failed_count = skipped_count = credits_used = 0
 
         for member, recipient_phone in deliverable_members:
-            if account.balance_credits < cost_per_message:
+            if not provider_manages_balance and account.balance_credits < cost_per_message:
                 ChannelBroadcastDelivery.objects.create(
                     broadcast=broadcast,
                     member=member,
@@ -300,7 +301,7 @@ class ChannelService:
                 )
                 sent_count += 1
                 credits_used += cost_per_message
-                account.balance_credits -= cost_per_message
+                account.balance_credits = max(0, account.balance_credits - cost_per_message)
                 continue
 
             try:

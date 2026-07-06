@@ -42,6 +42,7 @@ class SmsService:
     def send_single(cls, account: SmsAccount, phone_number: str, message: str, context=None, dry_run=False, cost=1, client=None):
         now = timezone.now()
         client = client or AfricasTalkingSmsClient()
+        provider_manages_balance = getattr(settings, 'SMS_PROVIDER_MANAGES_BALANCE', True)
 
         if not account.is_active:
             return SmsDelivery.objects.create(
@@ -57,7 +58,7 @@ class SmsService:
                 sent_at=now,
             )
 
-        if account.balance_credits < cost:
+        if not provider_manages_balance and account.balance_credits < cost:
             return SmsDelivery.objects.create(
                 context_content_type=ContentType.objects.get_for_model(context.__class__) if context is not None else ContentType.objects.get_for_model(account.owner.__class__),
                 context_object_id=str(getattr(context, 'id', '')),
@@ -102,7 +103,7 @@ class SmsService:
 
         with transaction.atomic():
             locked = SmsAccount.objects.select_for_update().get(pk=account.pk)
-            if locked.balance_credits < cost:
+            if not provider_manages_balance and locked.balance_credits < cost:
                 return SmsDelivery.objects.create(
                     context_content_type=ContentType.objects.get_for_model(context.__class__) if context is not None else ContentType.objects.get_for_model(account.owner.__class__),
                     context_object_id=str(getattr(context, 'id', '')),
@@ -115,7 +116,9 @@ class SmsService:
                     error_message='Insufficient SMS credits.',
                     sent_at=now,
                 )
-            locked.balance_credits -= cost
+            # Clamp at zero so the ledger never goes negative when the provider
+            # is the source of truth for the real balance.
+            locked.balance_credits = max(0, locked.balance_credits - cost)
             locked.save(update_fields=['balance_credits', 'updated_at'])
             return SmsDelivery.objects.create(
                 context_content_type=ContentType.objects.get_for_model(context.__class__) if context is not None else ContentType.objects.get_for_model(account.owner.__class__),

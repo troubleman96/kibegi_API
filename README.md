@@ -97,6 +97,19 @@ Credits are tracked in two places for compatibility:
 
 The channel wallet now syncs with the latest top-up source so the UI and admin pages show the same balance.
 
+### Balance source of truth
+
+By default `SMS_PROVIDER_MANAGES_BALANCE=True`, which makes SendAfrica
+(the provider) the source of truth for the real credit balance. In this mode
+the local `balance_credits` ledger is used only for usage tracking and never
+blocks a send — messages are handed to SendAfrica, which accepts or rejects
+them based on the real account balance. This means a broadcast succeeds as long
+as your SendAfrica account is funded, even if the local ledger has not been
+topped up in Django admin.
+
+Set `SMS_PROVIDER_MANAGES_BALANCE=False` to enforce the local prepaid ledger
+instead, requiring a manual top-up of `balance_credits` before sending.
+
 ## Testing
 
 ```bash

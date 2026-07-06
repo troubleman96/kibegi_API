@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from apps.authentication.serializers import UserSummarySerializer
@@ -47,6 +48,7 @@ class ChannelWalletSerializer(serializers.ModelSerializer):
     channel_name = serializers.CharField(source='channel.name', read_only=True)
     member_count = serializers.SerializerMethodField()
     broadcast_count = serializers.SerializerMethodField()
+    provider_manages_balance = serializers.SerializerMethodField()
 
     class Meta:
         model = ChannelWallet
@@ -62,10 +64,14 @@ class ChannelWalletSerializer(serializers.ModelSerializer):
             'last_topup_at',
             'member_count',
             'broadcast_count',
+            'provider_manages_balance',
             'created_at',
             'updated_at',
         ]
         read_only_fields = ['id', 'channel', 'created_at', 'updated_at']
+
+    def get_provider_manages_balance(self, obj):
+        return bool(getattr(settings, 'SMS_PROVIDER_MANAGES_BALANCE', True))
 
     def get_member_count(self, obj):
         return obj.channel.memberships.filter(is_active=True).count()

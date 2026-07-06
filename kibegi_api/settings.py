@@ -228,6 +228,13 @@ MINIO_PUBLIC_BASE_URL = config('MINIO_PUBLIC_BASE_URL', default='')
 SENDAFRICA_API_KEY = config('SENDAFRICA_API_KEY', default='')
 SENDAFRICA_SENDER_ID = config('SENDAFRICA_SENDER_ID', default='')
 
+# When True, the SMS provider (SendAfrica) is the source of truth for the
+# credit balance. The local `balance_credits` ledger is then used only for
+# usage tracking and never blocks a send — SendAfrica accepts or rejects the
+# message based on the real account balance. Set to False to enforce the local
+# prepaid ledger and require top-ups in Django admin before sending.
+SMS_PROVIDER_MANAGES_BALANCE = config('SMS_PROVIDER_MANAGES_BALANCE', default=True, cast=bool)
+
 # Africa's Talking (legacy — kept for test compatibility)
 SCHEDULE_SMS_LOOKAHEAD_DAYS = config('SCHEDULE_SMS_LOOKAHEAD_DAYS', default=7, cast=int)
 CLASS_COMMS_SMS_COST_PER_MESSAGE = config('CLASS_COMMS_SMS_COST_PER_MESSAGE', default=1, cast=int)

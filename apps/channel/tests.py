@@ -46,6 +46,16 @@ class ChannelAPITests(TestCase):
         wallet.balance_credits = 5
         wallet.save(update_fields=['balance_credits', 'updated_at'])
 
+    def _zero_local_ledger(self):
+        """Drain both the channel wallet and the underlying SmsAccount so the
+        two-way sync in get_wallet cannot restore a non-zero balance."""
+        wallet = ChannelService.get_wallet(self.channel)
+        wallet.balance_credits = 0
+        wallet.save(update_fields=['balance_credits', 'updated_at'])
+        account = SmsService.get_account_for_owner(self.channel)
+        account.balance_credits = 0
+        account.save(update_fields=['balance_credits', 'updated_at'])
+
     def test_creator_can_create_channel(self):
         response = self.client.post(
             reverse('channel_list_create'),
@@ -169,3 +179,77 @@ class ChannelAPITests(TestCase):
         self.assertTrue(any(call.kwargs['phone_number'] == '+255628587749' for call in mock_send_sms.call_args_list))
         broadcast = ChannelBroadcast.objects.get(pk=response.data['data']['id'])
         self.assertEqual(broadcast.deliveries.first().recipient_phone, '+255628587749')
+
+    @override_settings(SMS_PROVIDER_MANAGES_BALANCE=True)
+    @patch('apps.core.utils.sms.SendAfricaSmsClient.send_sms')
+    def test_broadcast_sends_when_provider_manages_balance_despite_low_local_ledger(self, mock_send_sms):
+        """SendAfrica is the source of truth for balance, so a low/zero local
+        ledger must not skip recipients with 'Insufficient SMS credits.'"""
+        mock_send_sms.return_value = {
+            'provider_message_id': 'msg-1',
+            'raw_response': {'ok': True},
+        }
+        recipient = User.objects.create_user(
+            email='provider-balance@kibegi.test',
+            password='StrongPass123!',
+            full_name='Provider Balance Member',
+            user_type='student',
+            phone_number='+255628587749',
+            phone_verified=True,
+        )
+        ChannelService.add_member(self.channel, identifier=recipient.email, actor=self.creator)
+
+        # Local ledger has zero credits, but SendAfrica has real balance.
+        self._zero_local_ledger()
+
+        response = self.client.post(
+            reverse('channel_broadcasts', kwargs={'channel_id': self.channel.pk}),
+            {'subject': 'Exam', 'message': 'Exam starts at 9am.'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        broadcast = ChannelBroadcast.objects.get(pk=response.data['data']['id'])
+        self.assertEqual(broadcast.status, ChannelBroadcast.STATUS_SENT)
+        self.assertEqual(broadcast.sent_count, 2)
+        self.assertEqual(broadcast.skipped_count, 0)
+        self.assertFalse(
+            broadcast.deliveries.filter(error_message='Insufficient SMS credits.').exists()
+        )
+        # Ledger clamps at zero rather than going negative.
+        account = SmsService.get_account_for_owner(self.channel)
+        self.assertEqual(account.balance_credits, 0)
+
+    @override_settings(SMS_PROVIDER_MANAGES_BALANCE=False)
+    @patch('apps.core.utils.sms.SendAfricaSmsClient.send_sms')
+    def test_broadcast_skips_when_local_ledger_enforced_and_empty(self, mock_send_sms):
+        """With the local prepaid ledger enforced, a zero balance still skips."""
+        mock_send_sms.return_value = {
+            'provider_message_id': 'msg-1',
+            'raw_response': {'ok': True},
+        }
+        recipient = User.objects.create_user(
+            email='enforced-balance@kibegi.test',
+            password='StrongPass123!',
+            full_name='Enforced Balance Member',
+            user_type='student',
+            phone_number='+255628587749',
+            phone_verified=True,
+        )
+        ChannelService.add_member(self.channel, identifier=recipient.email, actor=self.creator)
+
+        self._zero_local_ledger()
+
+        response = self.client.post(
+            reverse('channel_broadcasts', kwargs={'channel_id': self.channel.pk}),
+            {'subject': 'Exam', 'message': 'Exam starts at 9am.'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        broadcast = ChannelBroadcast.objects.get(pk=response.data['data']['id'])
+        self.assertEqual(broadcast.sent_count, 0)
+        self.assertTrue(
+            broadcast.deliveries.filter(error_message='Insufficient SMS credits.').exists()
+        )
+        self.assertFalse(mock_send_sms.called)
