@@ -17,7 +17,7 @@ from django.conf import settings
 class SendAfricaSmsClient:
     """Adapter for the SendAfrica SMS API (sendafrica.online)."""
 
-    BASE_URL = "https://sendafrica.online"
+    BASE_URL = "https://api.sendafrica.online"
 
     def __init__(self):
         self.api_key = getattr(settings, "SENDAFRICA_API_KEY", "")
