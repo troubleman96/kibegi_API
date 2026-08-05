@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -6,8 +7,8 @@ from rest_framework.views import APIView
 from apps.classes.models import Class, Membership
 from apps.core.utils.responses import success_response, error_response
 
-from .models import AIConversation, AIMessage, AIUsage, AIProcessingJob
-from .chat import chat
+from .models import AIConversation, AIMessage, AIUsage, AIProcessingJob, UserAIProfile
+from .chat import chat, resolve_api_key
 
 
 class AIChatView(APIView):
@@ -15,22 +16,29 @@ class AIChatView(APIView):
 
     def post(self, request):
         user = request.user
-        class_id = request.data.get('class_id')
+        class_id = request.data.get('class_id') or None
         message = (request.data.get('message') or '').strip()
         conversation_id = request.data.get('conversation_id')
 
-        if not class_id:
-            return error_response("class_id is required", status_code=status.HTTP_400_BAD_REQUEST)
         if not message:
             return error_response("message is required", status_code=status.HTTP_400_BAD_REQUEST)
         if len(message) > 2000:
             return error_response("Message too long (max 2000 characters)", status_code=status.HTTP_400_BAD_REQUEST)
 
-        class_obj = get_object_or_404(Class, id=class_id)
-        if not Membership.objects.filter(user=user, class_obj=class_obj).exists():
+        class_obj = None
+        if class_id:
+            class_obj = get_object_or_404(Class, id=class_id)
+            if not Membership.objects.filter(user=user, class_obj=class_obj).exists():
+                return error_response(
+                    "You are not a member of this class",
+                    status_code=status.HTTP_403_FORBIDDEN,
+                )
+
+        api_key, _ = resolve_api_key(user)
+        if not api_key:
             return error_response(
-                "You are not a member of this class",
-                status_code=status.HTTP_403_FORBIDDEN,
+                "No AI API key configured. Add your Ngamia API key in Settings to use Kibegi AI.",
+                status_code=status.HTTP_400_BAD_REQUEST,
             )
 
         usage, _ = AIUsage.objects.get_or_create(user=user)
@@ -42,10 +50,13 @@ class AIChatView(APIView):
 
         conversation = None
         if conversation_id:
+            filters = {"id": conversation_id, "user": user}
+            if class_obj:
+                filters["class_obj"] = class_obj
+            else:
+                filters["class_obj__isnull"] = True
             try:
-                conversation = AIConversation.objects.get(
-                    id=conversation_id, user=user, class_obj=class_obj
-                )
+                conversation = AIConversation.objects.get(**filters)
             except AIConversation.DoesNotExist:
                 pass
 
@@ -104,8 +115,8 @@ class AIConversationListView(APIView):
             {
                 "id": str(c.id),
                 "title": c.title or "Untitled conversation",
-                "class_name": c.class_obj.name,
-                "class_id": str(c.class_obj.id),
+                "class_name": c.class_obj.name if c.class_obj else "General",
+                "class_id": str(c.class_obj.id) if c.class_obj else None,
                 "updated_at": c.updated_at.isoformat(),
                 "message_count": c.messages.count(),
             }
@@ -122,8 +133,8 @@ class AIConversationDetailView(APIView):
         data = {
             "id": str(conv.id),
             "title": conv.title,
-            "class_name": conv.class_obj.name,
-            "class_id": str(conv.class_obj.id),
+            "class_name": conv.class_obj.name if conv.class_obj else "General",
+            "class_id": str(conv.class_obj.id) if conv.class_obj else None,
             "messages": [
                 {
                     "id": str(m.id),
@@ -141,6 +152,50 @@ class AIConversationDetailView(APIView):
         conv = get_object_or_404(AIConversation, id=conversation_id, user=request.user)
         conv.delete()
         return success_response(message="Conversation deleted")
+
+
+class AISettingsView(APIView):
+    """Get / save / clear the user's own Ngamia API key and preferred model."""
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile, _ = UserAIProfile.objects.get_or_create(user=request.user)
+        return success_response(
+            message="AI settings retrieved",
+            data={
+                "has_key": profile.has_key,
+                "masked_key": profile.masked_key,
+                "chat_model": profile.chat_model or settings.AI_CHAT_MODEL,
+            },
+        )
+
+    def post(self, request):
+        api_key = (request.data.get('api_key') or '').strip()
+        chat_model = (request.data.get('chat_model') or '').strip() or settings.AI_CHAT_MODEL
+
+        if not api_key:
+            return error_response("api_key is required", status_code=status.HTTP_400_BAD_REQUEST)
+        if len(api_key) > 300:
+            return error_response("API key is too long", status_code=status.HTTP_400_BAD_REQUEST)
+
+        profile, _ = UserAIProfile.objects.get_or_create(user=request.user)
+        profile.api_key = api_key
+        profile.chat_model = chat_model
+        profile.save(update_fields=['api_key', 'chat_model', 'updated_at'])
+
+        return success_response(
+            message="AI settings saved",
+            data={
+                "has_key": True,
+                "masked_key": profile.masked_key,
+                "chat_model": profile.chat_model,
+            },
+        )
+
+    def delete(self, request):
+        UserAIProfile.objects.filter(user=request.user).delete()
+        return success_response(message="AI settings cleared")
 
 
 class AIUsageView(APIView):

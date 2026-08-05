@@ -1,6 +1,8 @@
 """
 Embedding generation and similarity search.
-Uses OpenRouter text-embedding-3-small (1536 dims).
+Uses the Ngamia gateway (https://api.ngamia.cc/v1) for embeddings. If the
+gateway/model doesn't support embeddings, failures are caught and chat falls
+back to keyword retrieval over stored chunk content.
 Similarity computed with numpy — no pgvector extension needed.
 """
 import logging
@@ -8,24 +10,19 @@ import numpy as np
 from openai import OpenAI
 from django.conf import settings
 
-AI_REQUEST_TIMEOUT = 30
+AI_REQUEST_TIMEOUT = 60
 
 logger = logging.getLogger(__name__)
 
-EMBEDDING_MODEL = 'openai/text-embedding-3-small'
 EMBEDDING_DIMS = 1536
 BATCH_SIZE = 20  # chunks per API call
 
 
-def get_client() -> OpenAI:
+def get_client(api_key: str | None = None) -> OpenAI:
     return OpenAI(
-        base_url=getattr(settings, 'OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
-        api_key=settings.OPENROUTER_API_KEY,
+        base_url=getattr(settings, 'NGAMIA_BASE_URL', 'https://api.ngamia.cc/v1'),
+        api_key=api_key or settings.NGAMIA_API_KEY,
         timeout=AI_REQUEST_TIMEOUT,
-        default_headers={
-            "HTTP-Referer": "https://kibegi.com",
-            "X-Title": "Kibegi AI",
-        },
     )
 
 
@@ -38,6 +35,7 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
         return []
 
     client = get_client()
+    model = getattr(settings, 'EMBEDDING_MODEL', 'openai/text-embedding-3-small')
     all_embeddings = []
 
     for i in range(0, len(texts), BATCH_SIZE):
@@ -46,7 +44,7 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
         batch = [t.replace('\n', ' ').strip() for t in batch]
         try:
             response = client.embeddings.create(
-                model=EMBEDDING_MODEL,
+                model=model,
                 input=batch,
             )
             batch_embeddings = [item.embedding for item in sorted(response.data, key=lambda x: x.index)]
@@ -76,17 +74,17 @@ def cosine_similarity(a: list[float], b: list[float]) -> float:
     return float(np.dot(va, vb) / (norm_a * norm_b))
 
 
-def find_similar_chunks(query_embedding: list[float], class_obj, top_k: int = 6):
+def find_similar_chunks(query_embedding: list[float], class_ids: list, top_k: int = 6):
     """
-    Find the most relevant DocumentChunks for a query within a class.
+    Find the most relevant DocumentChunks for a query within the given class ids.
     Returns list of (similarity_score, DocumentChunk) tuples, sorted descending.
     """
     from .models import DocumentChunk
 
-    # Load all chunks for non-deleted uploads in this class
+    # Load all chunks for non-deleted uploads in these classes
     chunks = list(
         DocumentChunk.objects.filter(
-            upload__class_obj=class_obj,
+            upload__class_obj_id__in=class_ids,
             upload__is_deleted=False,
         ).select_related('upload').order_by('upload', 'chunk_index')
     )

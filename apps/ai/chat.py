@@ -2,10 +2,15 @@ import logging
 import re
 from openai import OpenAI
 from django.conf import settings
+from django.db.models import Q
+
+from .context import build_platform_context
 
 logger = logging.getLogger(__name__)
 
-AI_REQUEST_TIMEOUT = 30
+AI_REQUEST_TIMEOUT = 60
+
+DEFAULT_MODEL = 'openai/gpt-4o-mini'
 
 PRACTICE_PATTERNS = re.compile(
     r'\b(quiz\s*me|test\s*me|practice|flashcard|examine\s*me|drill|question\s*me|give\s*me\s*(a\s*)?(test|quiz|question))\b',
@@ -13,15 +18,28 @@ PRACTICE_PATTERNS = re.compile(
 )
 
 
-def get_client() -> OpenAI:
+def resolve_api_key(user) -> tuple[str, str]:
+    """Return (api_key, model) for a user — their own pasted key wins over the shared one."""
+    from .models import UserAIProfile
+
+    try:
+        profile = getattr(user, 'ai_profile', None)
+        if profile is None:
+            profile = UserAIProfile.objects.filter(user=user).first()
+    except Exception:
+        profile = None
+
+    if profile and profile.has_key:
+        return profile.api_key, profile.chat_model.strip() or settings.AI_CHAT_MODEL
+
+    return settings.NGAMIA_API_KEY, settings.AI_CHAT_MODEL
+
+
+def get_client(api_key: str | None = None) -> OpenAI:
     return OpenAI(
-        base_url=getattr(settings, 'OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
-        api_key=settings.OPENROUTER_API_KEY,
+        base_url=getattr(settings, 'NGAMIA_BASE_URL', 'https://api.ngamia.cc/v1'),
+        api_key=api_key or settings.NGAMIA_API_KEY,
         timeout=AI_REQUEST_TIMEOUT,
-        default_headers={
-            "HTTP-Referer": "https://kibegi.com",
-            "X-Title": "Kibegi AI",
-        },
     )
 
 
@@ -29,7 +47,23 @@ def is_practice_request(message: str) -> bool:
     return bool(PRACTICE_PATTERNS.search(message))
 
 
-def _keyword_search_chunks(user_message: str, class_obj, top_k: int = 6):
+def _class_scope(class_obj, user) -> Q:
+    """Return a filter scope over the user's classes for Upload-level retrieval."""
+    if class_obj is not None:
+        return Q(class_obj=class_obj)
+    return Q(class_obj__memberships__user=user)
+
+
+def _class_ids_for(class_obj, user) -> list:
+    if class_obj is not None:
+        return [class_obj.id]
+    from apps.classes.models import Membership
+    return list(
+        Membership.objects.filter(user=user).values_list("class_obj_id", flat=True)
+    )
+
+
+def _keyword_search_chunks(user_message: str, class_ids: list, top_k: int = 6):
     from .models import DocumentChunk
 
     terms = [
@@ -39,7 +73,7 @@ def _keyword_search_chunks(user_message: str, class_obj, top_k: int = 6):
     ]
     chunks = list(
         DocumentChunk.objects.filter(
-            upload__class_obj=class_obj,
+            upload__class_obj_id__in=class_ids,
             upload__is_deleted=False,
         ).select_related("upload").order_by("upload", "chunk_index")[:200]
     )
@@ -58,26 +92,35 @@ def _keyword_search_chunks(user_message: str, class_obj, top_k: int = 6):
     return [chunk for _, chunk in scored[:top_k]]
 
 
-def build_rag_context(user_message: str, class_obj) -> tuple[str, list[str]]:
+def build_rag_context(user_message: str, user, class_obj=None) -> tuple[str, list[str]]:
     """
     Embed the user query, find similar chunks, return injected context + source names.
+    Scoped to one class when class_obj is given, otherwise across all the user's classes.
     Falls back to file-list-only context when no chunks exist yet.
     """
     from apps.uploads.models import Upload
     from .embeddings import embed_query, find_similar_chunks
 
+    class_ids = _class_ids_for(class_obj, user)
+    scope = _class_scope(class_obj, user)
+
     uploads = list(
-        Upload.objects.filter(class_obj=class_obj, is_deleted=False)
+        Upload.objects.filter(is_deleted=False)
+        .filter(scope)
         .select_related('uploader')
         .order_by('-created_at')[:30]
     )
 
-    # Base class info
-    base_context = (
-        f"Class: {class_obj.name}\n"
-        f"Description: {class_obj.description or 'None'}\n"
-        f"Total members: {class_obj.members.count()}\n"
-    )
+    if class_obj is not None:
+        base_context = (
+            f"Class: {class_obj.name}\n"
+            f"Description: {class_obj.description or 'None'}\n"
+            f"Total members: {class_obj.members.count()}\n"
+        )
+    else:
+        base_context = (
+            "General mode — searching across all the classes the student belongs to.\n"
+        )
 
     if not uploads:
         return base_context + "\nNo files uploaded yet.", []
@@ -89,20 +132,20 @@ def build_rag_context(user_message: str, class_obj) -> tuple[str, list[str]]:
 
     try:
         query_embedding = embed_query(user_message)
-        similar = find_similar_chunks(query_embedding, class_obj, top_k=6)
+        similar = find_similar_chunks(query_embedding, class_ids, top_k=6)
     except Exception as exc:
         logger.warning("Vector search failed, falling back to file list: %s", exc)
         similar = []
 
     if not similar or all(score <= 0 for score, _ in similar):
-        keyword_chunks = _keyword_search_chunks(user_message, class_obj, top_k=6)
+        keyword_chunks = _keyword_search_chunks(user_message, class_ids, top_k=6)
         if keyword_chunks:
             similar = [(0.0, chunk) for chunk in keyword_chunks]
 
     if not similar:
         return (
             base_context
-            + f"\nFiles in this class:\n{file_list}\n\n"
+            + f"\nFiles in the class:\n{file_list}\n\n"
             + "(No indexed content yet - students can ask about files by name once processed.)"
         ), [u.file_name for u in uploads[:5]]
 
@@ -123,7 +166,7 @@ def build_rag_context(user_message: str, class_obj) -> tuple[str, list[str]]:
 
     context = (
         base_context
-        + f"\nFiles in this class:\n{file_list}\n\n"
+        + f"\nFiles in the class:\n{file_list}\n\n"
         + "=== RELEVANT CONTENT FROM CLASS FILES ===\n\n"
         + rag_section
         + "\n\n=== END OF RETRIEVED CONTENT ==="
@@ -136,15 +179,24 @@ def get_history(conversation, limit: int = 12) -> list[dict]:
     return [{"role": m.role, "content": m.content} for m in reversed(msgs)]
 
 
-def build_system_prompt(class_context: str, practice_mode: bool) -> str:
+def build_system_prompt(platform_context: str, class_context: str | None, practice_mode: bool) -> str:
     base = (
         "You are Kibegi AI — a smart, friendly study assistant built into the Kibegi student platform.\n"
-        "You help students understand their class materials, answer academic questions, and explain concepts.\n\n"
-        f"{class_context}\n\n"
-        "Guidelines:\n"
+        "You help students with their schedule, reminders, assignments, timetables, and understanding "
+        "their class materials. You can read the student's Kibegi data below, so answer questions like "
+        "\"What's my timetable?\", \"What's due this week?\", or \"Any reminders?\" directly from it.\n"
+    )
+    if platform_context:
+        base += f"\n{platform_context}\n"
+    if class_context:
+        base += f"\n{class_context}\n"
+    base += (
+        "\nGuidelines:\n"
         "- Be concise, helpful, and friendly — like a smart study partner.\n"
+        "- Use the student's Kibegi data above when answering questions about their schedule, "
+        "timetable, assignments, reminders, or files.\n"
         "- Reference uploaded files by name when relevant.\n"
-        "- If something isn't in the class files, say so honestly — don't invent information.\n"
+        "- If something isn't in the data, say so honestly — don't invent information.\n"
         "- Kenyan/East African academic context is common here.\n"
         "- Respond in the same language the student uses (English or Swahili).\n"
         "- When content from files is provided above, use it directly in your answers.\n"
@@ -161,13 +213,16 @@ def build_system_prompt(class_context: str, practice_mode: bool) -> str:
 
 
 def chat(user_message: str, class_obj, conversation, user) -> dict:
-    """Call OpenRouter with RAG context and return the assistant reply."""
-    client = get_client()
+    """Call the Ngamia gateway with RAG + platform context and return the assistant reply."""
+    api_key, model = resolve_api_key(user)
+    client = get_client(api_key)
     practice_mode = is_practice_request(user_message)
-    class_context, source_files = build_rag_context(user_message, class_obj)
-    history = get_history(conversation)
 
-    system_prompt = build_system_prompt(class_context, practice_mode)
+    platform_context = build_platform_context(user, class_obj)
+    class_context, source_files = build_rag_context(user_message, user, class_obj)
+
+    history = get_history(conversation)
+    system_prompt = build_system_prompt(platform_context, class_context, practice_mode)
 
     messages = [{"role": "system", "content": system_prompt}]
     messages.extend(history)
@@ -175,7 +230,7 @@ def chat(user_message: str, class_obj, conversation, user) -> dict:
 
     try:
         resp = client.chat.completions.create(
-            model=getattr(settings, 'AI_CHAT_MODEL', 'openai/gpt-4o-mini'),
+            model=model or DEFAULT_MODEL,
             messages=messages,
             max_tokens=1200 if practice_mode else 800,
             temperature=0.7,
@@ -190,7 +245,7 @@ def chat(user_message: str, class_obj, conversation, user) -> dict:
             "practice_mode": practice_mode,
         }
     except Exception as exc:
-        logger.error("OpenRouter call failed: %s", exc)
+        logger.error("Ngamia gateway call failed: %s", exc, exc_info=True)
         return {
             "response": "I'm having trouble connecting right now. Please try again in a moment.",
             "tokens_used": 0,

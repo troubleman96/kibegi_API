@@ -10,7 +10,11 @@ class AIConversation(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ai_conversations'
     )
     class_obj = models.ForeignKey(
-        'classes.Class', on_delete=models.CASCADE, related_name='ai_conversations'
+        'classes.Class',
+        on_delete=models.CASCADE,
+        related_name='ai_conversations',
+        null=True,
+        blank=True,
     )
     title = models.CharField(max_length=200, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -20,7 +24,37 @@ class AIConversation(models.Model):
         ordering = ['-updated_at']
 
     def __str__(self):
-        return f"{self.user} | {self.class_obj.name} | {self.title or 'Untitled'}"
+        class_name = self.class_obj.name if self.class_obj else "General"
+        return f"{self.user} | {class_name} | {self.title or 'Untitled'}"
+
+
+class UserAIProfile(models.Model):
+    """Per-user AI provider config. Lets a user paste their own Ngamia API key
+    so AI requests are billed to their key instead of the shared one."""
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ai_profile'
+    )
+    api_key = models.CharField(max_length=300, blank=True, default='')
+    chat_model = models.CharField(max_length=200, blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user} — {'configured' if self.api_key else 'no key'}"
+
+    @property
+    def has_key(self) -> bool:
+        return bool(self.api_key)
+
+    @property
+    def masked_key(self) -> str:
+        key = self.api_key
+        if not key:
+            return ""
+        if len(key) <= 8:
+            return "*" * len(key)
+        return f"{key[:4]}••••{key[-4:]}"
 
 
 class AIMessage(models.Model):

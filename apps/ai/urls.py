@@ -5,10 +5,12 @@ from .views import (
     AIConversationDetailView,
     AIUsageView,
     AIProcessingStatusView,
+    AISettingsView,
 )
 
 urlpatterns = [
     path('chat/', AIChatView.as_view(), name='ai_chat'),
+    path('settings/', AISettingsView.as_view(), name='ai_settings'),
     path('conversations/', AIConversationListView.as_view(), name='ai_conversations'),
     path('conversations/<uuid:conversation_id>/', AIConversationDetailView.as_view(), name='ai_conversation_detail'),
     path('usage/', AIUsageView.as_view(), name='ai_usage'),

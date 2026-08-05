@@ -513,8 +513,13 @@ LOGGING = {
     }
 }
 
-# ── Kibegi AI (OpenRouter) ─────────────────────────────────────────────────
-OPENROUTER_API_KEY = config('OPENROUTER_API_KEY', default='')
-OPENROUTER_BASE_URL = config('OPENROUTER_BASE_URL', default='https://openrouter.ai/api/v1')
+# ── Kibegi AI (Ngamia gateway) ─────────────────────────────────────────────
+# https://docs.ngamia.cc — OpenAI-compatible gateway (https://api.ngamia.cc/v1)
+NGAMIA_API_KEY = config('NGAMIA_API_KEY', default='')
+NGAMIA_BASE_URL = config('NGAMIA_BASE_URL', default='https://api.ngamia.cc/v1')
 AI_CHAT_MODEL = config('AI_CHAT_MODEL', default='openai/gpt-4o-mini')
 AI_DAILY_TOKEN_LIMIT = config('AI_DAILY_TOKEN_LIMIT', default=50000, cast=int)
+
+# Embeddings — also routed through the Ngamia gateway. If the model isn't
+# available on Ngamia, file processing falls back to keyword retrieval.
+EMBEDDING_MODEL = config('EMBEDDING_MODEL', default='openai/text-embedding-3-small')
