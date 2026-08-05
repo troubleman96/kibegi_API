@@ -104,6 +104,53 @@ class ChannelAPITests(TestCase):
         self.assertEqual(wallet.balance_credits, 8)
         self.assertEqual(wallet.last_topup_at, account.last_topup_at)
 
+    @patch('apps.core.utils.sms.SendAfricaSmsClient.check_balance')
+    def test_wallet_uses_channel_api_key_for_live_balance(self, mock_check_balance):
+        wallet = ChannelService.get_wallet(self.channel)
+        wallet.api_key = 'SA-student-own-key'
+        wallet.save(update_fields=['api_key', 'updated_at'])
+
+        mock_check_balance.return_value = 250
+
+        refreshed = ChannelService.get_wallet(self.channel)
+        self.assertEqual(refreshed.balance_credits, 250)
+        mock_check_balance.assert_called_once_with()
+        account = SmsService.get_account_for_owner(self.channel)
+        self.assertEqual(account.balance_credits, 250)
+
+    @patch('apps.core.utils.sms.SendAfricaSmsClient.send_sms')
+    def test_broadcast_uses_channel_api_key_client(self, mock_send_sms):
+        mock_send_sms.return_value = {
+            'provider_message_id': 'msg-keyed',
+            'raw_response': {'ok': True},
+        }
+        wallet = ChannelService.get_wallet(self.channel)
+        wallet.api_key = 'SA-student-own-key'
+        wallet.balance_credits = 10
+        wallet.save(update_fields=['api_key', 'balance_credits', 'updated_at'])
+
+        recipient = User.objects.create_user(
+            email='keyed@kibegi.test',
+            password='StrongPass123!',
+            full_name='Keyed Recipient',
+            user_type='student',
+            phone_number='+255628587749',
+            phone_verified=True,
+        )
+        ChannelService.add_member(self.channel, identifier=recipient.email, actor=self.creator)
+
+        response = self.client.post(
+            reverse('channel_broadcasts', kwargs={'channel_id': self.channel.pk}),
+            {'subject': 'Keyed', 'message': 'Using my own key.'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(mock_send_sms.called)
+        wallet.refresh_from_db()
+        self.assertEqual(wallet.balance_credits, 8)
+
+
     @patch('apps.core.utils.sms.SendAfricaSmsClient.send_sms')
     def test_broadcast_sends_sms_and_deducts_credits(self, mock_send_sms):
         mock_send_sms.return_value = {

@@ -47,6 +47,20 @@ class ChannelService:
         wallet, _ = ChannelWallet.objects.get_or_create(channel=channel)
         account = SmsService.get_account_for_owner(channel)
 
+        if wallet.api_key:
+            client = SendAfricaSmsClient(api_key=wallet.api_key, sender_id=wallet.sender_id)
+            try:
+                wallet.balance_credits = client.check_balance()
+                wallet.save(update_fields=['balance_credits', 'updated_at'])
+            except Exception as exc:
+                logger.warning('SendAfrica balance check failed for %s: %s', channel.name, exc)
+            wallet.refresh_from_db()
+            sync_fields = ['balance_credits', 'provider_name', 'sender_id', 'is_active', 'last_topup_reference', 'last_topup_at', 'updated_at']
+            for field in sync_fields:
+                setattr(account, field, getattr(wallet, field))
+            account.save(update_fields=sync_fields)
+            return wallet
+
         sync_account_to_wallet = False
         sync_wallet_to_account = False
 
@@ -212,8 +226,8 @@ class ChannelService:
     @classmethod
     def dispatch_broadcast(cls, broadcast: ChannelBroadcast, client=None, now=None, dry_run=False):
         now = now or timezone.now()
-        client = client or SendAfricaSmsClient()
         wallet = cls.get_wallet(broadcast.channel)
+        client = client or SendAfricaSmsClient(api_key=wallet.api_key, sender_id=wallet.sender_id)
         message = cls.build_message(broadcast)
         account = SmsService.get_account_for_owner(broadcast.channel)
         account.balance_credits = wallet.balance_credits

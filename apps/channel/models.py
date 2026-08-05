@@ -94,6 +94,7 @@ class ChannelMember(models.Model):
 
 class ChannelWallet(models.Model):
     channel = models.OneToOneField(Channel, on_delete=models.CASCADE, related_name='wallet')
+    api_key = models.CharField(max_length=200, blank=True, default='')
     balance_credits = models.PositiveIntegerField(default=0)
     provider_name = models.CharField(max_length=40, default='sendafrica')
     sender_id = models.CharField(max_length=40, blank=True, default='')

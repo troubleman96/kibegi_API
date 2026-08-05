@@ -15,16 +15,49 @@ from django.conf import settings
 
 
 class SendAfricaSmsClient:
-    """Adapter for the SendAfrica SMS API (sendafrica.online)."""
+    """Adapter for the SendAfrica SMS API (sendafrica.online).
+
+    A per-call API key can be passed so channel owners can send with their own
+    SendAfrica account. Falls back to the global SENDAFRICA_API_KEY.
+    """
 
     BASE_URL = "https://api.sendafrica.online"
 
-    def __init__(self):
-        self.api_key = getattr(settings, "SENDAFRICA_API_KEY", "")
-        self.sender_id = getattr(settings, "SENDAFRICA_SENDER_ID", "")
+    def __init__(self, api_key: str = "", sender_id: str = ""):
+        self.api_key = api_key or getattr(settings, "SENDAFRICA_API_KEY", "")
+        self.sender_id = sender_id or getattr(settings, "SENDAFRICA_SENDER_ID", "")
 
     def is_configured(self) -> bool:
         return bool(self.api_key)
+
+    def check_balance(self) -> int:
+        """Return the number of SMS credits available for the configured API key."""
+        if not self.is_configured():
+            raise RuntimeError("SENDAFRICA_API_KEY is not configured.")
+
+        req = urllib.request.Request(f"{self.BASE_URL}/v1/credits/balance", method="GET")
+        req.add_header("X-API-Key", self.api_key)
+
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                raw = resp.read().decode("utf-8")
+        except urllib.error.HTTPError as exc:
+            error_body = exc.read().decode("utf-8", errors="ignore") if exc.fp else ""
+            raise RuntimeError(f"SendAfrica balance check failed: {exc.code} {error_body or exc.reason}") from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"SendAfrica balance connection error: {exc.reason}") from exc
+
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("SendAfrica returned invalid JSON.") from exc
+
+        if not data.get("success"):
+            err = data.get("error", {})
+            raise RuntimeError(f"[{err.get('code', 'error')}] {err.get('message', 'Unknown error')}")
+
+        result = data.get("data", {})
+        return int(result.get("balance", 0) or 0)
 
     def send_sms(self, phone_number: str, message: str, sender_id: str = "") -> dict:
         if not self.is_configured():

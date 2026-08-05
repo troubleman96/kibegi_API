@@ -54,6 +54,7 @@ class ChannelWalletSerializer(serializers.ModelSerializer):
             'id',
             'channel',
             'channel_name',
+            'api_key',
             'balance_credits',
             'provider_name',
             'sender_id',
