@@ -114,12 +114,17 @@ func main() {
 	mux.Handle("/api/v1/auth/password-reset/", authApp.PasswordResetRequestHandler(mailer))
 	mux.Handle("/api/v1/auth/password-reset/verify/", authApp.PasswordResetVerifyHandler())
 	mux.Handle("/api/v1/auth/password-reset/confirm/", authApp.PasswordResetConfirmHandler())
+	mux.Handle("/api/v1/auth/password-reset-confirm/", authApp.PasswordResetConfirmHandler())
 	mux.Handle("/api/v1/auth/password-reset/resend/", authApp.PasswordResetResendHandler(mailer))
 	mux.Handle("/api/v1/auth/login/", authApp.LoginHandler())
 	mux.Handle("/api/v1/auth/token/refresh/", authApp.TokenRefreshHandler())
 	mux.Handle("/api/v1/auth/logout/", authApp.LogoutHandler())
 	mux.Handle("/api/v1/auth/change-password/", authApp.ChangePasswordHandler())
 	mux.Handle("/api/v1/auth/profile/", authApp.ProfileHandler())
+	mux.Handle("/api/v1/auth/google/", authApp.GoogleLoginHandler())
+	mux.Handle("/api/v1/auth/lecturers/pending/", authApp.LecturerApprovalHandler(mailer))
+	mux.Handle("/api/v1/auth/phone/send-otp/", authApp.PhoneSendOTPHandler())
+	mux.Handle("/api/v1/auth/phone/verify/", authApp.PhoneVerifyOTPHandler())
 
 	classesApp := classes.App{
 		Repository: classes.Repository{DB: db},
