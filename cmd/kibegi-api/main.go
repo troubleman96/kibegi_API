@@ -13,10 +13,12 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
 	"github.com/troubleman96/kibegi_API/internal/apps/classes"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
+	"github.com/troubleman96/kibegi_API/internal/apps/uploads"
 	"github.com/troubleman96/kibegi_API/internal/config"
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
 	"github.com/troubleman96/kibegi_API/internal/platform/database"
 	"github.com/troubleman96/kibegi_API/internal/platform/middleware"
+	"github.com/troubleman96/kibegi_API/internal/platform/storage"
 )
 
 func main() {
@@ -50,6 +52,23 @@ func main() {
 		logger.Warn("REDIS_URL is not configured; cache and coordination features will be disabled")
 	}
 
+	objectStorage, err := storage.New(storage.Config{
+		Enabled:    cfg.MinioEnabled,
+		Endpoint:   cfg.MinioEndpoint,
+		AccessKey:  cfg.MinioAccessKey,
+		SecretKey:  cfg.MinioSecretKey,
+		Bucket:     cfg.MinioBucket,
+		Secure:     cfg.MinioSecure,
+		PublicBase: cfg.MediaPublicBaseURL,
+	})
+	if err != nil {
+		logger.Error("configure object storage", "error", err)
+		os.Exit(1)
+	}
+	if !objectStorage.Configured() {
+		logger.Warn("MinIO/S3 storage is not configured; upload endpoints will be unavailable")
+	}
+
 	mux := http.NewServeMux()
 	mux.Handle("/api/v1/health/", core.HealthHandler{
 		DB:           db,
@@ -78,6 +97,15 @@ func main() {
 		MediaBase:  cfg.MediaPublicBaseURL,
 	}
 	mux.Handle("/api/v1/classes/", classesApp.PathHandler())
+
+	uploadsApp := uploads.App{
+		Repository: uploads.Repository{DB: db},
+		Auth:       tokens,
+		Cache:      redisClient,
+		Storage:    objectStorage,
+		MediaBase:  cfg.MediaPublicBaseURL,
+	}
+	mux.Handle("/api/v1/uploads/", authentication.RequireAuth(tokens, uploadsApp.PathHandler()))
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)

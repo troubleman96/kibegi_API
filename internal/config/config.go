@@ -11,6 +11,12 @@ type Config struct {
 	HTTPAddr             string
 	DatabaseURL          string
 	MediaPublicBaseURL   string
+	MinioEnabled         bool
+	MinioEndpoint        string
+	MinioAccessKey       string
+	MinioSecretKey       string
+	MinioBucket          string
+	MinioSecure          bool
 	DBMaxOpenConns       int
 	DBMaxIdleConns       int
 	DBConnMaxLifetime    time.Duration
@@ -33,6 +39,12 @@ func FromEnv() Config {
 		HTTPAddr:             getenv("HTTP_ADDR", ":8080"),
 		DatabaseURL:          os.Getenv("DATABASE_URL"),
 		MediaPublicBaseURL:   os.Getenv("MINIO_PUBLIC_BASE_URL"),
+		MinioEnabled:         getBool("MINIO_ENABLED", true),
+		MinioEndpoint:        os.Getenv("MINIO_API_ENDPOINT"),
+		MinioAccessKey:       os.Getenv("MINIO_ACCESS_KEY"),
+		MinioSecretKey:       os.Getenv("MINIO_SECRET_KEY"),
+		MinioBucket:          getenv("MINIO_BUCKET", "kibegi-uploads"),
+		MinioSecure:          getBool("MINIO_SECURE", true),
 		DBMaxOpenConns:       getInt("DB_MAX_OPEN_CONNS", 50),
 		DBMaxIdleConns:       getInt("DB_MAX_IDLE_CONNS", 25),
 		DBConnMaxLifetime:    getDuration("DB_CONN_MAX_LIFETIME", 30*time.Minute),
@@ -55,6 +67,18 @@ func getenv(key, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+func getBool(key string, fallback bool) bool {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback
+	}
+	parsed, err := strconv.ParseBool(value)
+	if err != nil {
+		return fallback
+	}
+	return parsed
 }
 
 func getInt(key string, fallback int) int {
