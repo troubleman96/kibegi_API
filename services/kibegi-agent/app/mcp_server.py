@@ -62,4 +62,59 @@ def create_mcp(settings: Settings, client: KibegiAPI) -> FastMCP:
         """Read AI indexing status for an upload."""
         return await client.get_ai_status(upload_id, user_token)
 
+    @mcp.tool
+    async def list_notifications(user_token: str) -> dict[str, Any]:
+        """List notifications for the authenticated user."""
+        return await client.list_notifications(user_token)
+
+    @mcp.tool
+    async def list_friends(user_token: str) -> dict[str, Any]:
+        """List friendships and friend requests for the authenticated user."""
+        return await client.list_friends(user_token)
+
+    @mcp.tool
+    async def list_shares(user_token: str) -> dict[str, Any]:
+        """List file shares for the authenticated user."""
+        return await client.list_shares(user_token)
+
+    @mcp.tool
+    async def list_marketplace(user_token: str) -> dict[str, Any]:
+        """List marketplace listings visible to the authenticated user."""
+        return await client.list_marketplace(user_token)
+
+    @mcp.tool
+    async def list_library(user_token: str) -> dict[str, Any]:
+        """List library items visible to the authenticated user."""
+        return await client.list_library(user_token)
+
+    @mcp.tool
+    async def list_channels(user_token: str) -> dict[str, Any]:
+        """List channels visible to the authenticated user."""
+        return await client.list_channels(user_token)
+
+    @mcp.tool
+    async def list_class_comms(class_id: str, user_token: str) -> dict[str, Any]:
+        """List class communications contacts for a class."""
+        return await client.list_class_comms(class_id, user_token)
+
+    @mcp.tool
+    async def list_assignments(class_id: str, user_token: str) -> dict[str, Any]:
+        """List assignments for a class."""
+        return await client.list_assignments(class_id, user_token)
+
+    @mcp.tool
+    async def list_sms_deliveries(user_token: str) -> dict[str, Any]:
+        """List SMS delivery history for the authenticated user."""
+        return await client.list_sms_deliveries(user_token)
+
+    @mcp.tool
+    async def upload_file(file_name: str, content_base64: str, class_id: str, user_token: str, confirm: bool = False) -> dict[str, Any]:
+        """Upload a file through Go; requires confirm=true and base64 content."""
+        return await client.upload_file(file_name, content_base64, class_id, user_token, confirm)
+
+    @mcp.tool
+    async def download_file(file_code: str, user_token: str) -> dict[str, Any]:
+        """Download an accessible upload as base64 content."""
+        return await client.download_file(file_code, user_token)
+
     return mcp

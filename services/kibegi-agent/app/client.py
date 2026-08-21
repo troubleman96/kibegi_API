@@ -92,3 +92,73 @@ class KibegiAPI:
 
     async def get_storage(self, user_token: str) -> dict[str, Any]:
         return await self.request("GET", "/api/v1/storage/", user_token=user_token)
+
+
+    async def list_notifications(self, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", "/api/v1/notifications/", user_token=user_token)
+
+    async def list_friends(self, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", "/api/v1/friends/", user_token=user_token)
+
+    async def list_shares(self, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", "/api/v1/sharing/", user_token=user_token)
+
+    async def list_marketplace(self, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", "/api/v1/marketplace/listings/", user_token=user_token)
+
+    async def list_library(self, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", "/api/v1/library/items/", user_token=user_token)
+
+    async def list_channels(self, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", "/api/v1/channel/channels/", user_token=user_token)
+
+    async def list_class_comms(self, class_id: str, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", f"/api/v1/class-comms/classes/{class_id}/contacts/", user_token=user_token)
+
+    async def list_assignments(self, class_id: str, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", f"/api/v1/assignments/classes/{class_id}/", user_token=user_token)
+
+    async def list_sms_deliveries(self, user_token: str) -> dict[str, Any]:
+        return await self.request("GET", "/api/v1/sms/deliveries/", user_token=user_token)
+
+    async def upload_file(self, file_name: str, content_base64: str, class_id: str, user_token: str, confirm: bool = False) -> dict[str, Any]:
+        import base64
+
+        if not confirm:
+            raise ValueError("File upload requires confirm=true")
+        try:
+            content = base64.b64decode(content_base64, validate=True)
+        except Exception as exc:
+            raise ValueError("content_base64 is invalid") from exc
+        if len(content) > 50 * 1024 * 1024:
+            raise ValueError("File exceeds the 50MB Go API limit")
+        headers = {"Authorization": f"Bearer {user_token}", "Accept": "application/json"}
+        data = {"class_obj": class_id, "file_name": file_name}
+        files = {"file": (file_name, content)}
+        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+            response = await client.post(self._url("/api/v1/uploads/"), headers=headers, data=data, files=files)
+            try:
+                payload = response.json()
+            except ValueError:
+                payload = {"success": response.is_success, "message": response.text, "data": None, "errors": None}
+            return {"http_status": response.status_code, "response": payload}
+
+    async def download_file(self, file_code: str, user_token: str) -> dict[str, Any]:
+        import base64
+
+        path = f"/api/v1/uploads/{file_code}/download/"
+        headers = {"Authorization": f"Bearer {user_token}", "Accept": "application/octet-stream"}
+        async with httpx.AsyncClient(timeout=self.settings.request_timeout_seconds) as client:
+            response = await client.get(self._url(path), headers=headers)
+            if response.is_error:
+                try:
+                    payload = response.json()
+                except ValueError:
+                    payload = {"success": False, "message": response.text, "data": None, "errors": None}
+                return {"http_status": response.status_code, "response": payload}
+            return {
+                "http_status": response.status_code,
+                "file_name": response.headers.get("content-disposition", ""),
+                "content_type": response.headers.get("content-type", "application/octet-stream"),
+                "content_base64": base64.b64encode(response.content).decode("ascii"),
+            }
