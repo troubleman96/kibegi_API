@@ -84,3 +84,9 @@ The repository has been verified with Go unit tests, race-enabled Go tests, `go 
 ## Backup and rollback
 
 The approved cleanup was created from commit `6148d29`. The complete pre-cleanup source snapshot is available under the Git tag `pre-go-primary-cleanup-6148d29` and the archive `kibegi_API-pre-go-primary-cleanup-6148d29.tar.gz`. Restoring the historical implementation is therefore possible without changing the active Go-primary branch.
+
+## Documentation
+
+The detailed documentation hub is [`docs/README.md`](docs/README.md). It links to architecture, API contracts, data persistence, configuration, security, operations, deployment, testing, AI indexing, agent/MCP, and troubleshooting guides.
+
+Folder-level references are available at [`cmd/kibegi-api/README.md`](cmd/kibegi-api/README.md), [`internal/config/README.md`](internal/config/README.md), [`internal/apps/README.md`](internal/apps/README.md), [`internal/platform/README.md`](internal/platform/README.md), [`services/README.md`](services/README.md), [`services/ai-indexer/app/README.md`](services/ai-indexer/app/README.md), and [`services/kibegi-agent/app/README.md`](services/kibegi-agent/app/README.md). Each domain and infrastructure package also contains a local README describing its responsibility and extension rules.
