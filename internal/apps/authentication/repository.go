@@ -100,3 +100,38 @@ func (r UserRepository) find(ctx context.Context, query string, args ...any) (Us
 	}
 	return user, nil
 }
+
+func (r UserRepository) CreatePending(ctx context.Context, email, fullName, userType, encodedPassword string) (User, error) {
+	if r.DB == nil {
+		return User{}, errors.New("database is not configured")
+	}
+	var user User
+	err := r.DB.QueryRowContext(ctx, `
+INSERT INTO authentication_user (password, last_login, is_superuser, email, full_name, user_type, is_active, is_staff, is_approved, date_joined, university, phone_number, phone_verified)
+VALUES ($1, NULL, false, $2, $3, $4, false, false, $5, NOW(), '', '', false)
+RETURNING id, email, password, full_name, user_type, is_active, is_approved, university, phone_number, phone_verified, profile_image, date_joined`, encodedPassword, email, fullName, userType, userType != "lecturer").Scan(
+		&user.ID, &user.Email, &user.Password, &user.FullName, &user.UserType, &user.IsActive, &user.IsApproved, &user.University, &user.PhoneNumber, &user.PhoneVerified, &user.ProfileImage, &user.DateJoined)
+	return user, err
+}
+
+func (r UserRepository) SetVerifiedProfile(ctx context.Context, userID int64, userType, university, phoneNumber string, approved bool) error {
+	if r.DB == nil {
+		return errors.New("database is not configured")
+	}
+	_, err := r.DB.ExecContext(ctx, `
+UPDATE authentication_user
+SET user_type = $2, university = $3, phone_number = $4, is_active = true, is_approved = $5
+WHERE id = $1`, userID, userType, university, phoneNumber, approved)
+	return err
+}
+
+func (r UserRepository) UpdatePendingRegistration(ctx context.Context, userID int64, fullName, userType, encodedPassword string) error {
+	if r.DB == nil {
+		return errors.New("database is not configured")
+	}
+	_, err := r.DB.ExecContext(ctx, `
+UPDATE authentication_user
+SET full_name = $2, user_type = $3, password = $4, is_active = false, is_approved = $5
+WHERE id = $1`, userID, fullName, userType, encodedPassword, userType != "lecturer")
+	return err
+}

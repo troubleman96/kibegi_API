@@ -17,6 +17,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/config"
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
 	"github.com/troubleman96/kibegi_API/internal/platform/database"
+	"github.com/troubleman96/kibegi_API/internal/platform/email"
 	"github.com/troubleman96/kibegi_API/internal/platform/middleware"
 	"github.com/troubleman96/kibegi_API/internal/platform/storage"
 )
@@ -79,12 +80,23 @@ func main() {
 	})
 
 	tokens := authentication.NewTokenService(cfg.JWTSecretKey, cfg.AccessTokenLifetime, cfg.RefreshTokenLifetime)
+	mailer := email.NewSender(email.Config{
+		Host: cfg.EmailHost, Port: cfg.EmailPort, Username: cfg.EmailUsername,
+		Password: cfg.EmailPassword, From: cfg.EmailFrom, UseTLS: cfg.EmailUseTLS,
+	})
+	if !mailer.Configured() {
+		logger.Warn("SMTP is not configured; registration OTP delivery will be unavailable")
+	}
+
 	authApp := authentication.App{
 		Users:     authentication.UserRepository{DB: db},
 		Tokens:    tokens,
 		Cache:     redisClient,
 		MediaBase: cfg.MediaPublicBaseURL,
 	}
+	mux.Handle("/api/v1/auth/register/", authApp.RegisterHandler(mailer))
+	mux.Handle("/api/v1/auth/register/verify/", authApp.RegisterVerifyHandler())
+	mux.Handle("/api/v1/auth/register/resend/", authApp.RegisterResendHandler(mailer))
 	mux.Handle("/api/v1/auth/login/", authApp.LoginHandler())
 	mux.Handle("/api/v1/auth/token/refresh/", authApp.TokenRefreshHandler())
 	mux.Handle("/api/v1/auth/logout/", authApp.LogoutHandler())

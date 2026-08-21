@@ -31,6 +31,12 @@ type Config struct {
 	JWTSecretKey         string
 	AccessTokenLifetime  time.Duration
 	RefreshTokenLifetime time.Duration
+	EmailHost            string
+	EmailPort            int
+	EmailUsername        string
+	EmailPassword        string
+	EmailFrom            string
+	EmailUseTLS          bool
 }
 
 // FromEnv loads configuration from environment variables with safe local defaults.
@@ -59,6 +65,12 @@ func FromEnv() Config {
 		JWTSecretKey:         os.Getenv("SECRET_KEY"),
 		AccessTokenLifetime:  getDuration("ACCESS_TOKEN_LIFETIME", time.Hour),
 		RefreshTokenLifetime: getDuration("REFRESH_TOKEN_LIFETIME", 7*24*time.Hour),
+		EmailHost:            os.Getenv("EMAIL_HOST"),
+		EmailPort:            getInt("EMAIL_PORT", 587),
+		EmailUsername:        os.Getenv("EMAIL_HOST_USER"),
+		EmailPassword:        os.Getenv("EMAIL_HOST_PASSWORD"),
+		EmailFrom:            getenv("DEFAULT_FROM_EMAIL", os.Getenv("EMAIL_HOST_USER")),
+		EmailUseTLS:          getBool("EMAIL_USE_TLS", true),
 	}
 }
 

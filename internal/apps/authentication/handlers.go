@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -394,4 +395,198 @@ func validatePassword(password string) error {
 		return errors.New("This password is entirely numeric.")
 	}
 	return nil
+}
+
+type RegistrationMailer interface {
+	SendOTP(to, subject, body string) error
+}
+
+func (a App) RegisterHandler(mailer RegistrationMailer) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input struct {
+			Email           string `json:"email"`
+			FullName        string `json:"full_name"`
+			UserType        string `json:"user_type"`
+			Password        string `json:"password"`
+			ConfirmPassword string `json:"confirm_password"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid input", nil, nil)
+			return
+		}
+		input.Email = strings.ToLower(strings.TrimSpace(input.Email))
+		input.FullName = strings.TrimSpace(input.FullName)
+		if input.UserType == "" {
+			input.UserType = "student"
+		}
+		if input.Email == "" || input.FullName == "" || input.Password == "" || input.Password != input.ConfirmPassword || (input.UserType != "student" && input.UserType != "lecturer") {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid registration details", nil, nil)
+			return
+		}
+		if err := validatePassword(input.Password); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, err.Error(), nil, nil)
+			return
+		}
+		users := a.Users
+		existing, err := users.FindByEmail(r.Context(), input.Email)
+		if err == nil && existing.IsActive {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "A user with this email already exists.", nil, nil)
+			return
+		}
+		encoded, err := EncodeDjangoPassword(input.Password, 870000)
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		var user User
+		if err == nil && existing.ID != 0 {
+			if err := users.UpdatePendingRegistration(r.Context(), existing.ID, input.FullName, input.UserType, encoded); err != nil {
+				httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+				return
+			}
+			user = existing
+		} else {
+			user, err = users.CreatePending(r.Context(), input.Email, input.FullName, input.UserType, encoded)
+			if err != nil {
+				httpx.WriteEnvelope(w, http.StatusBadRequest, false, "A user with this email already exists.", nil, nil)
+				return
+			}
+		}
+		if err := a.issueRegistrationOTP(r, mailer, user); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusCreated, true, "Registration initiated. Check your email for the verification code.", nil, nil)
+	})
+}
+
+func (a App) RegisterVerifyHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input struct {
+			Email       string `json:"email"`
+			OTP         string `json:"otp"`
+			UserType    string `json:"user_type"`
+			University  string `json:"university"`
+			PhoneNumber string `json:"phone_number"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid input", nil, nil)
+			return
+		}
+		input.Email = strings.ToLower(strings.TrimSpace(input.Email))
+		record, err := (OTPRepository{DB: a.Users.DB}).LatestPending(r.Context(), input.Email, strings.TrimSpace(input.OTP), "registration")
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid code", nil, nil)
+			return
+		}
+		if time.Now().UTC().After(record.ExpiresAt) {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "OTP has expired", nil, nil)
+			return
+		}
+		user, err := a.Users.FindByEmail(r.Context(), input.Email)
+		if errors.Is(err, ErrUserNotFound) {
+			httpx.WriteEnvelope(w, http.StatusNotFound, false, "User not found", nil, nil)
+			return
+		}
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		userType := user.UserType
+		if input.UserType == "student" || input.UserType == "lecturer" {
+			userType = input.UserType
+		}
+		approved := userType != "lecturer"
+		if err := a.Users.SetVerifiedProfile(r.Context(), user.ID, userType, strings.TrimSpace(input.University), strings.TrimSpace(input.PhoneNumber), approved); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		if err := (OTPRepository{DB: a.Users.DB}).MarkUsed(r.Context(), record.ID); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		if userType == "lecturer" {
+			httpx.WriteEnvelope(w, http.StatusOK, true, "Email verified. Your lecturer account is pending admin approval. You will be notified once approved.", nil, nil)
+			return
+		}
+		user, err = a.Users.FindByID(r.Context(), user.ID)
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		refresh, access, err := a.Tokens.IssuePair(user.ID, time.Now().UTC())
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Authentication service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "Registration verified", loginData{User: a.profile(r, user), Tokens: tokenPair{Refresh: refresh, Access: access}}, nil)
+	})
+}
+
+func (a App) RegisterResendHandler(mailer RegistrationMailer) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input struct {
+			Email string `json:"email"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid input", nil, nil)
+			return
+		}
+		emailAddress := strings.ToLower(strings.TrimSpace(input.Email))
+		otpRepo := OTPRepository{DB: a.Users.DB}
+		count, err := otpRepo.CountRecent(r.Context(), emailAddress, "registration", time.Now().UTC().Add(-25*time.Minute))
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		if count >= 5 {
+			httpx.WriteEnvelope(w, http.StatusTooManyRequests, false, "Too many resend attempts. Try again later.", nil, nil)
+			return
+		}
+		user, _ := a.Users.FindByEmail(r.Context(), emailAddress)
+		if err := a.issueRegistrationOTP(r, mailer, user); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Registration service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "Registration code resent", nil, nil)
+	})
+}
+
+func (a App) issueRegistrationOTP(r *http.Request, mailer RegistrationMailer, user User) error {
+	if user.Email == "" {
+		return ErrUserNotFound
+	}
+	otpRepo := OTPRepository{DB: a.Users.DB}
+	if err := otpRepo.Invalidate(r.Context(), user.Email, "registration"); err != nil {
+		return err
+	}
+	code := fmt.Sprintf("%06d", time.Now().UnixNano()%1000000)
+	expiresAt := time.Now().UTC().Add(5 * time.Minute)
+	if _, err := otpRepo.Create(r.Context(), user.Email, code, "registration", expiresAt); err != nil {
+		return err
+	}
+	if mailer == nil {
+		return nil
+	}
+	subject, body := registrationEmail(user.FullName, code)
+	return mailer.SendOTP(user.Email, subject, body)
+}
+
+func registrationEmail(name, code string) (string, string) {
+	return "Kibegi email verification", fmt.Sprintf("Hello %s,\n\nYour Kibegi verification code is %s. It expires in 5 minutes.", name, code)
 }
