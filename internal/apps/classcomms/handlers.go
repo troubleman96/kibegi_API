@@ -23,7 +23,11 @@ func (a App) PathHandler() http.Handler {
 			httpx.WriteEnvelope(w, 401, false, "Authentication credentials were not provided.", nil, nil)
 			return
 		}
-		rest := strings.Trim(strings.TrimPrefix(r.URL.Path, "/api/v1/classcomms/"), "/")
+		rest := strings.TrimPrefix(r.URL.Path, "/api/v1/classcomms/")
+		if rest == r.URL.Path {
+			rest = strings.TrimPrefix(r.URL.Path, "/api/v1/class-comms/")
+		}
+		rest = strings.Trim(rest, "/")
 		parts := strings.Split(rest, "/")
 		switch {
 		case len(parts) == 3 && parts[0] == "classes" && parts[2] == "profile":
