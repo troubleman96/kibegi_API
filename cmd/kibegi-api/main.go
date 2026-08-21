@@ -17,6 +17,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/classcomms"
 	"github.com/troubleman96/kibegi_API/internal/apps/classes"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
+	"github.com/troubleman96/kibegi_API/internal/apps/files"
 	"github.com/troubleman96/kibegi_API/internal/apps/friends"
 	"github.com/troubleman96/kibegi_API/internal/apps/library"
 	"github.com/troubleman96/kibegi_API/internal/apps/marketplace"
@@ -135,6 +136,9 @@ func main() {
 		MediaBase:  cfg.MediaPublicBaseURL,
 	}
 	mux.Handle("/api/v1/uploads/", authentication.RequireAuth(tokens, uploadsApp.PathHandler()))
+
+	filesApp := files.App{Uploads: uploads.Repository{DB: db}, Auth: tokens, Cache: redisClient, Storage: objectStorage, MediaBase: cfg.MediaPublicBaseURL}
+	mux.Handle("/api/v1/files/", filesApp.PathHandler())
 
 	sharingApp := sharing.App{
 		Repository: sharing.Repository{DB: db},

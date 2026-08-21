@@ -80,6 +80,12 @@ func (r Repository) List(ctx context.Context, userID int64, userType, classID, q
 	if mode == "trash" {
 		filters = []string{"u.is_deleted = true", "u.uploader_id = $1"}
 		args = append(args, userID)
+	} else if mode == "own" {
+		filters = []string{"u.is_deleted = false", "u.uploader_id = $1"}
+		args = append(args, userID)
+	} else if mode == "shared" {
+		filters = []string{"u.is_deleted = false", "EXISTS(SELECT 1 FROM sharing_sharedfile sf WHERE sf.upload_id = u.id AND sf.shared_with_id = $1 AND sf.status = 'accepted')"}
+		args = append(args, userID)
 	} else if userType == "lecturer" {
 		filters = append(filters, fmt.Sprintf("u.uploader_id = $%d", len(args)+1))
 		args = append(args, userID)
