@@ -124,3 +124,16 @@ func (r Repository) CreateBroadcast(ctx context.Context, classID uuid.UUID, send
 	err := r.DB.QueryRowContext(ctx, `INSERT INTO classcomms_classbroadcast (id,subject,message,venue,status,recipient_count,sent_count,failed_count,skipped_count,credits_used,created_at,updated_at,class_obj_id,sender_id) VALUES ($1,$2,$3,$4,'draft',0,0,0,0,0,NOW(),NOW(),$5,$6) RETURNING id,class_obj_id,subject,message,venue,status,recipient_count,sent_count,failed_count,skipped_count,credits_used,created_at,sent_at`, uuid.New(), subject, message, venue, classID, senderID).Scan(&x.ID, &x.ClassID, &x.Subject, &x.Message, &x.Venue, &x.Status, &x.RecipientCount, &x.SentCount, &x.FailedCount, &x.SkippedCount, &x.CreditsUsed, &x.CreatedAt, &x.SentAt)
 	return x, err
 }
+
+func (r Repository) FindBroadcast(ctx context.Context, id uuid.UUID) (Broadcast, error) {
+	var x Broadcast
+	err := r.DB.QueryRowContext(ctx, `SELECT id,class_obj_id,subject,message,venue,status,recipient_count,sent_count,failed_count,skipped_count,credits_used,created_at,sent_at FROM classcomms_classbroadcast WHERE id=$1`, id).Scan(&x.ID, &x.ClassID, &x.Subject, &x.Message, &x.Venue, &x.Status, &x.RecipientCount, &x.SentCount, &x.FailedCount, &x.SkippedCount, &x.CreditsUsed, &x.CreatedAt, &x.SentAt)
+	return x, err
+}
+func (r Repository) SetRepresentative(ctx context.Context, classID uuid.UUID, userID int64, role string) (map[string]any, error) {
+	var membershipID int64
+	if err := r.DB.QueryRowContext(ctx, `UPDATE classes_membership SET role=$3 WHERE class_obj_id=$1 AND user_id=$2 RETURNING id`, classID, userID, role).Scan(&membershipID); err != nil {
+		return nil, err
+	}
+	return map[string]any{"membership_id": membershipID, "user_id": userID, "role": role}, nil
+}

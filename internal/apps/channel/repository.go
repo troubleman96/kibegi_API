@@ -181,3 +181,9 @@ func (r Repository) CreateBroadcast(ctx context.Context, channelID uuid.UUID, se
 	err := r.DB.QueryRowContext(ctx, `INSERT INTO channel_channelbroadcast (id,subject,message,venue,status,recipient_count,sent_count,failed_count,skipped_count,credits_used,created_at,updated_at,channel_id,sender_id) VALUES ($1,$2,$3,$4,'draft',0,0,0,0,0,NOW(),NOW(),$5,$6) RETURNING id,channel_id,subject,message,venue,status,recipient_count,sent_count,failed_count,skipped_count,credits_used,created_at,sent_at`, uuid.New(), subject, message, venue, channelID, senderID).Scan(&x.ID, &x.ChannelID, &x.Subject, &x.Message, &x.Venue, &x.Status, &x.RecipientCount, &x.SentCount, &x.FailedCount, &x.SkippedCount, &x.CreditsUsed, &x.CreatedAt, &x.SentAt)
 	return x, err
 }
+
+func (r Repository) FindBroadcast(ctx context.Context, id uuid.UUID) (Broadcast, error) {
+	var x Broadcast
+	err := r.DB.QueryRowContext(ctx, `SELECT id,channel_id,subject,message,venue,status,recipient_count,sent_count,failed_count,skipped_count,credits_used,created_at,sent_at FROM channel_channelbroadcast WHERE id=$1`, id).Scan(&x.ID, &x.ChannelID, &x.Subject, &x.Message, &x.Venue, &x.Status, &x.RecipientCount, &x.SentCount, &x.FailedCount, &x.SkippedCount, &x.CreditsUsed, &x.CreatedAt, &x.SentAt)
+	return x, err
+}

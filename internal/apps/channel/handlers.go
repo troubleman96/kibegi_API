@@ -1,6 +1,7 @@
 package channel
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -44,6 +45,8 @@ func (a App) PathHandler() http.Handler {
 			a.detail(w, r, userID, parts[1])
 		case len(parts) == 2 && parts[0] == "members":
 			a.removeMember(w, r, userID, parts[1])
+		case len(parts) == 2 && parts[0] == "broadcasts" && r.Method == http.MethodGet:
+			a.broadcastDetail(w, r, userID, parts[1])
 		default:
 			httpx.WriteEnvelope(w, 404, false, "Not found", nil, nil)
 		}
@@ -205,6 +208,28 @@ func (a App) wallet(w http.ResponseWriter, r *http.Request, userID int64, raw st
 	}
 	httpx.WriteEnvelope(w, 200, true, "Channel wallet retrieved successfully", wallet, nil)
 }
+func (a App) broadcastDetail(w http.ResponseWriter, r *http.Request, userID int64, raw string) {
+	id, err := uuid.Parse(raw)
+	if err != nil {
+		httpx.WriteEnvelope(w, 404, false, "Channel broadcast not found", nil, nil)
+		return
+	}
+	item, err := a.Repository.FindBroadcast(r.Context(), id)
+	if errors.Is(err, sql.ErrNoRows) {
+		httpx.WriteEnvelope(w, 404, false, "Channel broadcast not found", nil, nil)
+		return
+	}
+	if err != nil {
+		httpx.WriteEnvelope(w, 503, false, "Channel service unavailable", nil, nil)
+		return
+	}
+	if _, err := a.Repository.Find(r.Context(), userID, item.ChannelID); err != nil {
+		httpx.WriteEnvelope(w, 403, false, "You do not have permission to view this broadcast", nil, nil)
+		return
+	}
+	httpx.WriteEnvelope(w, 200, true, "Channel broadcast retrieved successfully", item, nil)
+}
+
 func (a App) broadcasts(w http.ResponseWriter, r *http.Request, userID int64, raw string) {
 	if r.Method != http.MethodPost {
 		httpx.WriteEnvelope(w, 405, false, "method not allowed", nil, nil)

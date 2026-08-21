@@ -1,6 +1,7 @@
 package classcomms
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -38,8 +39,12 @@ func (a App) PathHandler() http.Handler {
 			a.contacts(w, r, userID, parts[1])
 		case len(parts) == 3 && parts[0] == "classes" && parts[2] == "broadcasts":
 			a.broadcasts(w, r, userID, parts[1])
+		case len(parts) == 3 && parts[0] == "classes" && parts[2] == "representatives" && r.Method == http.MethodPost:
+			a.representative(w, r, userID, parts[1])
 		case len(parts) == 2 && parts[0] == "contacts":
 			a.contactDetail(w, r, parts[1])
+		case len(parts) == 2 && parts[0] == "broadcasts" && r.Method == http.MethodGet:
+			a.broadcastDetail(w, r, userID, parts[1])
 		default:
 			httpx.WriteEnvelope(w, 404, false, "Not found", nil, nil)
 		}
@@ -142,6 +147,60 @@ func (a App) contactDetail(w http.ResponseWriter, r *http.Request, raw string) {
 	}
 	httpx.WriteEnvelope(w, 200, true, "Class contact removed successfully", nil, nil)
 }
+func (a App) representative(w http.ResponseWriter, r *http.Request, userID int64, raw string) {
+	classID, err := uuid.Parse(raw)
+	if err != nil {
+		httpx.WriteEnvelope(w, 404, false, "Class not found", nil, nil)
+		return
+	}
+	var allowed bool
+	if err := a.Repository.DB.QueryRowContext(r.Context(), `SELECT EXISTS(SELECT 1 FROM classes_class c WHERE c.id=$1 AND (c.creator_id=$2 OR EXISTS(SELECT 1 FROM classes_membership m WHERE m.class_obj_id=c.id AND m.user_id=$2 AND m.role IN ('lecturer','admin'))))`, classID, userID).Scan(&allowed); err != nil || !allowed {
+		httpx.WriteEnvelope(w, 403, false, "You do not have permission to manage class communications", nil, nil)
+		return
+	}
+	var input struct {
+		UserID int64  `json:"user_id"`
+		Role   string `json:"role"`
+	}
+	if json.NewDecoder(r.Body).Decode(&input) != nil || input.UserID == 0 || strings.TrimSpace(input.Role) == "" {
+		httpx.WriteEnvelope(w, 400, false, "Invalid representative details", nil, nil)
+		return
+	}
+	item, err := a.Repository.SetRepresentative(r.Context(), classID, input.UserID, input.Role)
+	if errors.Is(err, sql.ErrNoRows) {
+		httpx.WriteEnvelope(w, 404, false, "Class member not found", nil, nil)
+		return
+	}
+	if err != nil {
+		httpx.WriteEnvelope(w, 503, false, "Class communications service unavailable", nil, nil)
+		return
+	}
+	httpx.WriteEnvelope(w, 200, true, "Class representative role updated successfully", item, nil)
+}
+func (a App) broadcastDetail(w http.ResponseWriter, r *http.Request, userID int64, raw string) {
+	id, err := uuid.Parse(raw)
+	if err != nil {
+		httpx.WriteEnvelope(w, 404, false, "Class broadcast not found", nil, nil)
+		return
+	}
+	item, err := a.Repository.FindBroadcast(r.Context(), id)
+	if errors.Is(err, sql.ErrNoRows) {
+		httpx.WriteEnvelope(w, 404, false, "Class broadcast not found", nil, nil)
+		return
+	}
+	if err != nil {
+		httpx.WriteEnvelope(w, 503, false, "Class communications service unavailable", nil, nil)
+		return
+	}
+	var allowed bool
+	_ = a.Repository.DB.QueryRowContext(r.Context(), `SELECT EXISTS(SELECT 1 FROM classes_class c WHERE c.id=$1 AND (c.creator_id=$2 OR EXISTS(SELECT 1 FROM classes_membership m WHERE m.class_obj_id=c.id AND m.user_id=$2)))`, item.ClassID, userID).Scan(&allowed)
+	if !allowed {
+		httpx.WriteEnvelope(w, 403, false, "You do not have permission to view this broadcast", nil, nil)
+		return
+	}
+	httpx.WriteEnvelope(w, 200, true, "Class broadcast retrieved successfully", item, nil)
+}
+
 func (a App) broadcasts(w http.ResponseWriter, r *http.Request, userID int64, raw string) {
 	if r.Method != http.MethodPost {
 		httpx.WriteEnvelope(w, 405, false, "method not allowed", nil, nil)
