@@ -12,6 +12,7 @@ import (
 
 	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
 	"github.com/troubleman96/kibegi_API/internal/apps/channel"
+	"github.com/troubleman96/kibegi_API/internal/apps/classcomms"
 	"github.com/troubleman96/kibegi_API/internal/apps/classes"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
 	"github.com/troubleman96/kibegi_API/internal/apps/friends"
@@ -164,6 +165,9 @@ func main() {
 
 	channelApp := channel.App{Repository: channel.Repository{DB: db}, Auth: tokens}
 	mux.Handle("/api/v1/channel/", channelApp.PathHandler())
+
+	classCommsApp := classcomms.App{Repository: classcomms.Repository{DB: db}, Auth: tokens}
+	mux.Handle("/api/v1/classcomms/", classCommsApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
