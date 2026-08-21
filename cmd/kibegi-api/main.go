@@ -22,6 +22,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/marketplace"
 	"github.com/troubleman96/kibegi_API/internal/apps/notifications"
 	"github.com/troubleman96/kibegi_API/internal/apps/schedule"
+	"github.com/troubleman96/kibegi_API/internal/apps/search"
 	"github.com/troubleman96/kibegi_API/internal/apps/sharing"
 	"github.com/troubleman96/kibegi_API/internal/apps/uploads"
 	"github.com/troubleman96/kibegi_API/internal/config"
@@ -176,6 +177,9 @@ func main() {
 
 	aiApp := ai.App{Repository: ai.Repository{DB: db}, Auth: tokens, DefaultModel: "ngamia-default"}
 	mux.Handle("/api/v1/ai/", aiApp.PathHandler())
+
+	searchApp := search.App{Repository: search.Repository{DB: db}, Auth: tokens}
+	mux.Handle("/api/v1/search/", searchApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
