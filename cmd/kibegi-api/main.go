@@ -14,6 +14,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/classes"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
 	"github.com/troubleman96/kibegi_API/internal/apps/friends"
+	"github.com/troubleman96/kibegi_API/internal/apps/library"
 	"github.com/troubleman96/kibegi_API/internal/apps/marketplace"
 	"github.com/troubleman96/kibegi_API/internal/apps/notifications"
 	"github.com/troubleman96/kibegi_API/internal/apps/schedule"
@@ -156,6 +157,9 @@ func main() {
 
 	marketplaceApp := marketplace.App{Repository: marketplace.Repository{DB: db}, Auth: tokens, MediaBase: cfg.MediaPublicBaseURL}
 	mux.Handle("/api/v1/marketplace/", marketplaceApp.PathHandler())
+
+	libraryApp := library.App{Repository: library.Repository{DB: db}, Auth: tokens, Storage: objectStorage, MediaBase: cfg.MediaPublicBaseURL}
+	mux.Handle("/api/v1/library/", libraryApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
