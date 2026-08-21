@@ -64,7 +64,8 @@ For the agent, connect an MCP client, call `health`, call one authenticated read
 Verify every documentation link and command path after changing directories or services. Search for deleted Django paths and stale setup commands:
 
 ```bash
-grep -RInE 'manage\.py|django\.core|apps/(authentication|classes|uploads)|python manage' README.md docs cmd internal services || true
+grep -RInE 'django\.core|python[[:space:]]+manage' README.md docs cmd internal services --exclude=testing.md || true
+[ ! -e apps ] && [ ! -e kibegi_api ] && [ ! -e manage.py ]
 find . -type f -name '*.py' | sort
 ```
 
