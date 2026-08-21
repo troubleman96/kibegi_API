@@ -106,6 +106,7 @@ func main() {
 		Users:     authentication.UserRepository{DB: db},
 		Tokens:    tokens,
 		Cache:     redisClient,
+		Storage:   objectStorage,
 		MediaBase: cfg.MediaPublicBaseURL,
 	}
 	mux.Handle("/api/v1/auth/register/", authApp.RegisterHandler(mailer))
@@ -121,6 +122,7 @@ func main() {
 	mux.Handle("/api/v1/auth/logout/", authApp.LogoutHandler())
 	mux.Handle("/api/v1/auth/change-password/", authApp.ChangePasswordHandler())
 	mux.Handle("/api/v1/auth/profile/", authApp.ProfileHandler())
+	mux.Handle("/api/v1/auth/profile/image/", authApp.ProfileImageHandler())
 	mux.Handle("/api/v1/auth/google/", authApp.GoogleLoginHandler())
 	mux.Handle("/api/v1/auth/lecturers/pending/", authApp.LecturerApprovalHandler(mailer))
 	mux.Handle("/api/v1/auth/phone/send-otp/", authApp.PhoneSendOTPHandler())
@@ -200,6 +202,9 @@ func main() {
 
 	userStorageApp := storageApp.App{Repository: storageApp.Repository{DB: db}, Auth: tokens, Cache: redisClient}
 	mux.Handle("/api/v1/storage/", userStorageApp.PathHandler())
+
+	mux.Handle("/register/", authApp.RegisterHandler(mailer))
+	mux.Handle("/login/", authApp.LoginHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)

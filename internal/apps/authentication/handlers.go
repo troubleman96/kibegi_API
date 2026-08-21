@@ -14,6 +14,7 @@ import (
 
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
 	"github.com/troubleman96/kibegi_API/internal/platform/httpx"
+	platformstorage "github.com/troubleman96/kibegi_API/internal/platform/storage"
 )
 
 const profileCacheTTL = 120 * time.Second
@@ -26,6 +27,7 @@ type App struct {
 	Users     UserRepository
 	Tokens    *TokenService
 	Cache     *cache.Redis
+	Storage   *platformstorage.ObjectStorage
 	MediaBase string
 }
 

@@ -300,3 +300,100 @@ func (a App) LecturerApprovalHandler(mailer RegistrationMailer) http.Handler {
 }
 
 var _ = io.EOF
+
+func (a App) ProfileImageHandler() http.Handler {
+	return RequireAuth(a.Tokens, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		uid, ok := UserIDFromContext(r.Context())
+		if !ok {
+			httpx.WriteEnvelope(w, 401, false, "Authentication credentials were not provided.", nil, nil)
+			return
+		}
+		switch r.Method {
+		case http.MethodPost:
+			if a.Storage == nil || !a.Storage.Configured() {
+				httpx.WriteEnvelope(w, 503, false, "Profile image storage is unavailable", nil, nil)
+				return
+			}
+			r.Body = http.MaxBytesReader(w, r.Body, 5*1024*1024)
+			if err := r.ParseMultipartForm(5 * 1024 * 1024); err != nil {
+				httpx.WriteEnvelope(w, 400, false, "Invalid profile image upload", nil, nil)
+				return
+			}
+			file, header, err := r.FormFile("profile_image")
+			if err != nil {
+				file, header, err = r.FormFile("image")
+			}
+			if err != nil {
+				httpx.WriteEnvelope(w, 400, false, "profile_image is required", nil, nil)
+				return
+			}
+			defer file.Close()
+			if header.Size <= 0 || header.Size > 5*1024*1024 {
+				httpx.WriteEnvelope(w, 400, false, "Profile image must be 5MB or smaller", nil, nil)
+				return
+			}
+			contentType := header.Header.Get("Content-Type")
+			if contentType == "" {
+				contentType = "application/octet-stream"
+			}
+			if contentType != "image/jpeg" && contentType != "image/png" && contentType != "image/gif" && contentType != "image/webp" {
+				httpx.WriteEnvelope(w, 400, false, "Unsupported profile image format", nil, nil)
+				return
+			}
+			ext := "jpg"
+			switch contentType {
+			case "image/png":
+				ext = "png"
+			case "image/gif":
+				ext = "gif"
+			case "image/webp":
+				ext = "webp"
+			}
+			objectName := fmt.Sprintf("profiles/%d/profile.%s", uid, ext)
+			user, err := a.Users.FindByID(r.Context(), uid)
+			if err != nil {
+				httpx.WriteEnvelope(w, 404, false, "User not found", nil, nil)
+				return
+			}
+			if _, err := a.Storage.Put(r.Context(), objectName, file, header.Size, contentType); err != nil {
+				httpx.WriteEnvelope(w, 503, false, "Profile image storage is unavailable", nil, nil)
+				return
+			}
+			if user.ProfileImage != "" {
+				_ = a.Storage.Remove(r.Context(), user.ProfileImage)
+			}
+			if _, err := a.Users.DB.ExecContext(r.Context(), `UPDATE authentication_user SET profile_image=$2 WHERE id=$1`, uid, objectName); err != nil {
+				httpx.WriteEnvelope(w, 503, false, "Profile service unavailable", nil, nil)
+				return
+			}
+			if a.Cache != nil && a.Cache.Configured() {
+				_ = a.Cache.Delete(r.Context(), "api-cache:profile:v1:user:"+formatInt64(uid))
+			}
+			updated, _ := a.Users.FindByID(r.Context(), uid)
+			httpx.WriteEnvelope(w, 200, true, "Profile image uploaded successfully", a.profile(r, updated), nil)
+		case http.MethodDelete:
+			user, err := a.Users.FindByID(r.Context(), uid)
+			if err != nil {
+				httpx.WriteEnvelope(w, 404, false, "User not found", nil, nil)
+				return
+			}
+			if user.ProfileImage == "" {
+				httpx.WriteEnvelope(w, 400, false, "No profile image to remove", nil, nil)
+				return
+			}
+			if a.Storage != nil && a.Storage.Configured() {
+				_ = a.Storage.Remove(r.Context(), user.ProfileImage)
+			}
+			if _, err := a.Users.DB.ExecContext(r.Context(), `UPDATE authentication_user SET profile_image=NULL WHERE id=$1`, uid); err != nil {
+				httpx.WriteEnvelope(w, 503, false, "Profile service unavailable", nil, nil)
+				return
+			}
+			if a.Cache != nil && a.Cache.Configured() {
+				_ = a.Cache.Delete(r.Context(), "api-cache:profile:v1:user:"+formatInt64(uid))
+			}
+			httpx.WriteEnvelope(w, 200, true, "Profile image removed successfully", nil, nil)
+		default:
+			httpx.WriteEnvelope(w, 405, false, "method not allowed", nil, nil)
+		}
+	}))
+}
