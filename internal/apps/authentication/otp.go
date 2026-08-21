@@ -72,3 +72,25 @@ func (r OTPRepository) MarkUsed(ctx context.Context, id int64) error {
 	_, err := r.DB.ExecContext(ctx, `UPDATE authentication_passwordresetotp SET is_used = true WHERE id = $1`, id)
 	return err
 }
+
+func (r OTPRepository) SetResetToken(ctx context.Context, id int64, token string) error {
+	if r.DB == nil {
+		return errors.New("database is not configured")
+	}
+	_, err := r.DB.ExecContext(ctx, `UPDATE authentication_passwordresetotp SET reset_token = $2 WHERE id = $1 AND is_used = false`, id, token)
+	return err
+}
+
+func (r OTPRepository) FindByResetToken(ctx context.Context, token string) (OTPRecord, error) {
+	if r.DB == nil {
+		return OTPRecord{}, errors.New("database is not configured")
+	}
+	var record OTPRecord
+	err := r.DB.QueryRowContext(ctx, `
+SELECT id, email, code, purpose, created_at, expires_at, is_used
+FROM authentication_passwordresetotp
+WHERE reset_token = $1 AND is_used = false
+ORDER BY created_at DESC LIMIT 1`, token).Scan(
+		&record.ID, &record.Email, &record.Code, &record.Purpose, &record.CreatedAt, &record.ExpiresAt, &record.IsUsed)
+	return record, err
+}

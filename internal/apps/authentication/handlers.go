@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
 	"github.com/troubleman96/kibegi_API/internal/platform/httpx"
 )
@@ -589,4 +591,154 @@ func (a App) issueRegistrationOTP(r *http.Request, mailer RegistrationMailer, us
 
 func registrationEmail(name, code string) (string, string) {
 	return "Kibegi email verification", fmt.Sprintf("Hello %s,\n\nYour Kibegi verification code is %s. It expires in 5 minutes.", name, code)
+}
+
+func (a App) PasswordResetRequestHandler(mailer RegistrationMailer) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input struct {
+			Email string `json:"email"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid input", nil, nil)
+			return
+		}
+		emailAddress := strings.ToLower(strings.TrimSpace(input.Email))
+		otpRepo := OTPRepository{DB: a.Users.DB}
+		if err := otpRepo.Invalidate(r.Context(), emailAddress, "password_reset"); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password reset service unavailable", nil, nil)
+			return
+		}
+		user, _ := a.Users.FindByEmail(r.Context(), emailAddress)
+		if err := a.issuePasswordResetOTP(r, mailer, emailAddress, user.FullName); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password reset service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "Password reset token has been sent to your email", nil, nil)
+	})
+}
+
+func (a App) PasswordResetVerifyHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input struct {
+			Email string `json:"email"`
+			OTP   string `json:"otp"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid input", nil, nil)
+			return
+		}
+		record, err := (OTPRepository{DB: a.Users.DB}).LatestPending(r.Context(), strings.ToLower(strings.TrimSpace(input.Email)), strings.TrimSpace(input.OTP), "password_reset")
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid code", nil, nil)
+			return
+		}
+		if time.Now().UTC().After(record.ExpiresAt) {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "OTP has expired", nil, nil)
+			return
+		}
+		resetToken := uuid.NewString()
+		if err := (OTPRepository{DB: a.Users.DB}).SetResetToken(r.Context(), record.ID, resetToken); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password reset service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "OTP verified", map[string]string{"reset_token": resetToken}, nil)
+	})
+}
+
+func (a App) PasswordResetConfirmHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input struct {
+			Token           string `json:"token"`
+			NewPassword     string `json:"new_password"`
+			ConfirmPassword string `json:"confirm_password"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || input.NewPassword != input.ConfirmPassword {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Password fields didn't match.", nil, nil)
+			return
+		}
+		if err := validatePassword(input.NewPassword); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, err.Error(), nil, nil)
+			return
+		}
+		otpRepo := OTPRepository{DB: a.Users.DB}
+		record, err := otpRepo.FindByResetToken(r.Context(), strings.TrimSpace(input.Token))
+		if err != nil || time.Now().UTC().After(record.ExpiresAt) {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid or expired token", nil, nil)
+			return
+		}
+		user, err := a.Users.FindByEmail(r.Context(), record.Email)
+		if errors.Is(err, ErrUserNotFound) {
+			httpx.WriteEnvelope(w, http.StatusNotFound, false, "User not found", nil, nil)
+			return
+		}
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password reset service unavailable", nil, nil)
+			return
+		}
+		encoded, err := EncodeDjangoPassword(input.NewPassword, 870000)
+		if err != nil || a.Users.UpdatePassword(r.Context(), user.ID, encoded) != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password reset service unavailable", nil, nil)
+			return
+		}
+		if err := otpRepo.MarkUsed(r.Context(), record.ID); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password reset service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "Password has been reset successfully", nil, nil)
+	})
+}
+
+func (a App) PasswordResetResendHandler(mailer RegistrationMailer) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input struct {
+			Email string `json:"email"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid input", nil, nil)
+			return
+		}
+		emailAddress := strings.ToLower(strings.TrimSpace(input.Email))
+		user, _ := a.Users.FindByEmail(r.Context(), emailAddress)
+		if err := a.issuePasswordResetOTP(r, mailer, emailAddress, user.FullName); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password reset service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "Password reset code resent", nil, nil)
+	})
+}
+
+func (a App) issuePasswordResetOTP(r *http.Request, mailer RegistrationMailer, emailAddress, name string) error {
+	if emailAddress == "" {
+		return errors.New("email is required")
+	}
+	otpRepo := OTPRepository{DB: a.Users.DB}
+	code := fmt.Sprintf("%06d", time.Now().UnixNano()%1000000)
+	if _, err := otpRepo.Create(r.Context(), emailAddress, code, "password_reset", time.Now().UTC().Add(5*time.Minute)); err != nil {
+		return err
+	}
+	if mailer == nil {
+		return nil
+	}
+	subject, body := registrationEmail(name, code)
+	return mailer.SendOTP(emailAddress, subject, body)
 }
