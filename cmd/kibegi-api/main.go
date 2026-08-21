@@ -175,6 +175,7 @@ func main() {
 	classCommsApp := classcomms.App{Repository: classcomms.Repository{DB: db}, Auth: tokens}
 	mux.Handle("/api/v1/classcomms/", classCommsApp.PathHandler())
 	mux.Handle("/api/v1/class-comms/", classCommsApp.PathHandler())
+	mux.Handle("/api/v1/public/class-comms/", classCommsApp.PublicHandler())
 
 	assignmentsApp := assignments.App{Repository: assignments.Repository{DB: db}, Auth: tokens}
 	mux.Handle("/api/v1/assignments/", assignmentsApp.PathHandler())
