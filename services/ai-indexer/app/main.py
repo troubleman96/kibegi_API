@@ -59,7 +59,10 @@ def health() -> dict[str, Any]:
 
 @app.get("/v1/index/jobs/{upload_id}", dependencies=[Depends(require_service_token)])
 def job_status(upload_id: UUID) -> dict[str, Any]:
-    job = database.get_job(upload_id)
+    try:
+        job = database.get_job(upload_id)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
     if not job:
         raise HTTPException(status_code=404, detail="AI processing job not found")
     return dict(job)
@@ -67,10 +70,16 @@ def job_status(upload_id: UUID) -> dict[str, Any]:
 
 @app.post("/v1/index/uploads/{upload_id}", dependencies=[Depends(require_service_token)])
 def index_one(upload_id: UUID, request: IndexRequest | None = None) -> dict[str, Any]:
-    return indexer.index_upload(upload_id, force=request.force if request else False)
+    try:
+        return indexer.index_upload(upload_id, force=request.force if request else False)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
 @app.post("/v1/index/process-due", dependencies=[Depends(require_service_token)])
 def process_due(request: BatchRequest | None = None) -> dict[str, Any]:
     request = request or BatchRequest()
-    return indexer.process_due(request.limit, request.include_done)
+    try:
+        return indexer.process_due(request.limit, request.include_done)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc

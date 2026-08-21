@@ -113,3 +113,18 @@ The migration was pushed incrementally to `origin/master`. The recent parity and
 | `dcec376` | CORS and Redis rate limiting. |
 
 The current migration branch is `master`, and every listed slice was formatted, tested, built where applicable, committed, and pushed before the next slice was started.
+
+## Python support services
+
+The Go API remains the primary domain backend. Two narrowly scoped Python services now complement it without restoring Django as the public API implementation.
+
+| Service | Location | Responsibility |
+|---|---|---|
+| FastAPI AI indexer | `services/ai-indexer` | Downloads upload objects from MinIO/S3, extracts supported document formats, writes `ai_documentchunk`, updates `ai_aiprocessingjob`, and optionally generates embeddings through the Ngamia-compatible OpenAI endpoint. |
+| FastAPI/FastMCP gateway | `services/kibegi-agent` | Exposes an authenticated Python gateway and FastMCP HTTP tools over the complete allowlisted Go API namespace while forwarding end-user JWTs. |
+
+The Go upload handler can asynchronously notify the indexer through `AI_INDEXER_URL` and `AI_INDEXER_TOKEN`. The indexer also provides a batch endpoint and an optional polling runner for pending, failed, and stale jobs. Redis locks prevent duplicate upload processing. The gateway requires explicit confirmation for mutation calls and rejects paths outside the migrated `/api/v1/` namespaces.
+
+The support services were syntax-checked and imported successfully, their unit tests passed, and isolated HTTP smoke tests verified indexer service-token rejection (`401`), missing-database handling (`503`), gateway proxy operation, invalid-path rejection (`400`), and FastMCP endpoint startup. Production verification still requires real PostgreSQL, Redis, MinIO/S3, and embedding credentials.
+
+Django has **not** been deleted. It remains the rollback/reference implementation until the new support services and the Go backend complete an environment-backed soak test and the user explicitly authorizes destructive cleanup.

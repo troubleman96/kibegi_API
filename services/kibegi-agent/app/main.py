@@ -39,14 +39,17 @@ async def health() -> dict[str, Any]:
 @app.post("/v1/proxy")
 async def proxy(request: ProxyRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
     require_gateway_token(authorization)
-    return await client.request(
-        request.method,
-        request.path,
-        user_token=request.user_token,
-        params=request.params,
-        body=request.body,
-        confirm=request.confirm,
-    )
+    try:
+        return await client.request(
+            request.method,
+            request.path,
+            user_token=request.user_token,
+            params=request.params,
+            body=request.body,
+            confirm=request.confirm,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 origins = [origin.strip() for origin in settings.mcp_allowed_origins.split(",") if origin.strip()]
