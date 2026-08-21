@@ -13,6 +13,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
 	"github.com/troubleman96/kibegi_API/internal/apps/classes"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
+	"github.com/troubleman96/kibegi_API/internal/apps/notifications"
 	"github.com/troubleman96/kibegi_API/internal/apps/sharing"
 	"github.com/troubleman96/kibegi_API/internal/apps/uploads"
 	"github.com/troubleman96/kibegi_API/internal/config"
@@ -131,6 +132,13 @@ func main() {
 		MediaBase:  cfg.MediaPublicBaseURL,
 	}
 	mux.Handle("/api/v1/sharing/", authentication.RequireAuth(tokens, sharingApp.PathHandler()))
+
+	notificationsApp := notifications.App{
+		Repository: notifications.Repository{DB: db},
+		Auth:       tokens,
+		Cache:      redisClient,
+	}
+	mux.Handle("/api/v1/notifications/", notificationsApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
