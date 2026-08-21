@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
 	"github.com/troubleman96/kibegi_API/internal/config"
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
@@ -56,6 +57,16 @@ func main() {
 		RedisTimeout: cfg.RedisPingTimeout,
 		ServiceName:  "kibegi_api",
 	})
+
+	tokens := authentication.NewTokenService(cfg.JWTSecretKey, cfg.AccessTokenLifetime, cfg.RefreshTokenLifetime)
+	authApp := authentication.App{
+		Users:     authentication.UserRepository{DB: db},
+		Tokens:    tokens,
+		Cache:     redisClient,
+		MediaBase: cfg.MediaPublicBaseURL,
+	}
+	mux.Handle("/api/v1/auth/login/", authApp.LoginHandler())
+	mux.Handle("/api/v1/auth/profile/", authApp.ProfileHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
