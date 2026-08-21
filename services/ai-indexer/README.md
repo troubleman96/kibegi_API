@@ -28,6 +28,11 @@ python3 -m venv .venv
 pip install -r requirements.txt
 cp .env.example .env
 uvicorn app.main:app --host 0.0.0.0 --port 8090
+
+# Optional continuous polling worker, when push callbacks are not sufficient
+python3 -m app.worker_runner
 ```
+
+The Go upload handler can push newly-created upload IDs to `AI_INDEXER_URL`, which is the preferred low-latency path. The continuous runner remains available for retries, stale jobs, and environments where the callback is temporarily unavailable.
 
 The service is intentionally separate from Django. Keep the existing Django implementation until the Go API, this indexer, and the later agent/MCP layer have passed end-to-end verification.
