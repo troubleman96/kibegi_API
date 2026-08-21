@@ -24,6 +24,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/schedule"
 	"github.com/troubleman96/kibegi_API/internal/apps/search"
 	"github.com/troubleman96/kibegi_API/internal/apps/sharing"
+	"github.com/troubleman96/kibegi_API/internal/apps/sms"
 	"github.com/troubleman96/kibegi_API/internal/apps/uploads"
 	"github.com/troubleman96/kibegi_API/internal/config"
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
@@ -180,6 +181,9 @@ func main() {
 
 	searchApp := search.App{Repository: search.Repository{DB: db}, Auth: tokens}
 	mux.Handle("/api/v1/search/", searchApp.PathHandler())
+
+	smsApp := sms.App{Repository: sms.Repository{DB: db}, Auth: tokens}
+	mux.Handle("/api/v1/sms/", smsApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
