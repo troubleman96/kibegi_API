@@ -1,19 +1,23 @@
-package httpapi
+package core
 
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"net/http"
 	"time"
+
+	"github.com/troubleman96/kibegi_API/internal/platform/cache"
+	"github.com/troubleman96/kibegi_API/internal/platform/httpx"
 )
 
 // HealthHandler exposes a lightweight uptime and database readiness check.
 type HealthHandler struct {
-	DB          *sql.DB
-	PingTimeout time.Duration
-	ServiceName string
-	Now         func() time.Time
+	DB           *sql.DB
+	Redis        *cache.Redis
+	PingTimeout  time.Duration
+	RedisTimeout time.Duration
+	ServiceName  string
+	Now          func() time.Time
 }
 
 type healthResponse struct {
@@ -32,6 +36,7 @@ type healthData struct {
 
 type healthChecks struct {
 	Database databaseCheck `json:"database"`
+	Redis    *cacheCheck   `json:"redis,omitempty"`
 }
 
 type databaseCheck struct {
@@ -39,10 +44,15 @@ type databaseCheck struct {
 	Error  any    `json:"error"`
 }
 
+type cacheCheck struct {
+	Status string `json:"status"`
+	Error  any    `json:"error"`
+}
+
 func (h HealthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		w.Header().Set("Allow", http.MethodGet)
-		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{
+		httpx.WriteJSON(w, http.StatusMethodNotAllowed, map[string]any{
 			"success": false,
 			"message": "method not allowed",
 			"data":    nil,
@@ -83,12 +93,28 @@ func (h HealthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if dbStatus != "ok" {
+	var redisStatus *cacheCheck
+	if h.Redis != nil && h.Redis.Configured() {
+		redisTimeout := h.RedisTimeout
+		if redisTimeout <= 0 {
+			redisTimeout = time.Second
+		}
+		ctx, cancel := context.WithTimeout(r.Context(), redisTimeout)
+		err := h.Redis.Ping(ctx)
+		cancel()
+		redisStatus = &cacheCheck{Status: "ok"}
+		if err != nil {
+			redisStatus.Status = "error"
+			redisStatus.Error = err.Error()
+		}
+	}
+
+	if dbStatus != "ok" || (redisStatus != nil && redisStatus.Status != "ok") {
 		statusCode = http.StatusServiceUnavailable
 		message = "unhealthy"
 	}
 
-	writeJSON(w, statusCode, healthResponse{
+	httpx.WriteJSON(w, statusCode, healthResponse{
 		// The Django implementation uses success_response even for its 503 branch,
 		// so this field intentionally remains true for compatibility.
 		Success: true,
@@ -102,6 +128,7 @@ func (h HealthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					Status: dbStatus,
 					Error:  dbError,
 				},
+				Redis: redisStatus,
 			},
 		},
 		Errors: nil,
@@ -113,10 +140,4 @@ func mapHealthStatus(databaseStatus string) string {
 		return "ok"
 	}
 	return "error"
-}
-
-func writeJSON(w http.ResponseWriter, statusCode int, payload any) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	_ = json.NewEncoder(w).Encode(payload)
 }

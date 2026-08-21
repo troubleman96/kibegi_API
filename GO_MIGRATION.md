@@ -18,14 +18,23 @@ The Go service will use the standard `net/http` stack initially, with small inte
 |---|---|
 | Process entrypoint and lifecycle | `cmd/kibegi-api` |
 | Environment configuration | `internal/config` |
-| HTTP routing and handlers | `internal/httpapi` |
-| Domain services | `internal/<domain>` |
-| Persistence interfaces and PostgreSQL implementations | `internal/<domain>` plus shared database helpers |
-| Cross-cutting middleware | `internal/middleware` |
+| HTTP routing and handlers | `internal/apps/<app>` |
+| Domain services | `internal/apps/<app>` |
+| Persistence interfaces and PostgreSQL implementations | `internal/apps/<app>` plus shared database helpers |
+| Shared response and middleware primitives | `internal/platform/httpx`, `internal/platform/middleware` |
+| Redis cache, locks, rate limits, and queue primitives | `internal/platform/cache` |
 | Database migrations | `db/migrations` |
-| External providers | `internal/providers` |
+| External providers | `internal/platform/providers` |
 
 PostgreSQL will be the canonical database for the Go service. The existing Django database schema should be treated as an external contract during the transition. Go models and queries will be introduced against the existing tables rather than changing table names or identifiers without an explicit compatibility migration.
+
+## App boundaries and performance strategy
+
+The Django app structure remains a first-class Go boundary. The target layout uses `internal/apps/authentication`, `internal/apps/classes`, `internal/apps/uploads`, `internal/apps/sharing`, and the corresponding package for every existing Django app. Shared infrastructure is kept outside those domains so the modules remain independently testable and can be migrated or routed separately.
+
+Redis is used aggressively where it improves latency without becoming the source of truth. It provides response caching for safe read endpoints, short-lived lookup and OTP state, rate limiting, idempotency keys, distributed locks, cache invalidation, and future queue coordination. PostgreSQL remains authoritative for users, memberships, balances, files, schedules, and other durable records. Every cache hit has a bounded TTL, every write invalidates affected keys, and correctness-sensitive operations use transactions plus Redis locks or idempotency keys where needed.
+
+The Go database pool is bounded and reusable, with environment-controlled maximum open and idle connections plus connection lifetimes. Redis uses a pooled client with configurable pool size and minimum idle connections. These defaults are intended for production throughput but remain overrideable for each deployment environment.
 
 ## Compatibility rules
 
@@ -62,17 +71,20 @@ The recommended order is based on dependency depth and operational risk:
 The first slice adds a compilable Go service with:
 
 - Go module metadata and PostgreSQL driver support.
-- Environment-backed HTTP and database configuration.
+- Environment-backed HTTP, PostgreSQL pool, and Redis configuration.
 - `GET /api/v1/health/` with the existing Kibegi response envelope.
 - Database readiness checking through `PingContext`.
+- Optional Redis readiness checking through a pooled client.
+- App-scoped core package at `internal/apps/core`.
+- Shared JSON response primitives at `internal/platform/httpx`.
 - JSON structured logging, request timeouts, and graceful shutdown.
-- Focused tests for the legacy health response and method handling.
+- Focused tests for the legacy health response, method handling, and safe Redis omission.
 
 The endpoint deliberately reports `503 Service Unavailable` when `DATABASE_URL` is missing or the database cannot be reached. The response shape remains compatible with the Django implementation, including its current `success: true` envelope on the unhealthy branch.
 
 ## Next implementation slice
 
-The next slice should introduce the shared HTTP response helpers, PostgreSQL connection pool, request ID middleware, and JWT verification. After that, authentication should be migrated endpoint-by-endpoint, beginning with profile reads and login before registration, OTP, password reset, Google login, and logout. No existing Django endpoint should be removed until its Go equivalent has contract tests and a controlled routing switch.
+The next slice should introduce request ID and structured access-log middleware, Redis-backed cache and rate-limit helpers, and JWT verification. After that, authentication should be migrated endpoint-by-endpoint, beginning with profile reads and login before registration, OTP, password reset, Google login, and logout. No existing Django endpoint should be removed until its Go equivalent has contract tests and a controlled routing switch.
 
 ## Local commands
 
