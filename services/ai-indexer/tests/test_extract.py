@@ -1,7 +1,7 @@
 from app.extract import chunk_text, should_process
 
 
-def test_supported_types_match_django_gate():
+def test_supported_types_match_file_gate():
     assert should_process("report.pdf", "other")
     assert should_process("notes.bin", "document")
     assert should_process("slides.pptx", "presentation")

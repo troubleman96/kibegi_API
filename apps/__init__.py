@@ -1,1 +1,0 @@
-"""Project Django apps package."""

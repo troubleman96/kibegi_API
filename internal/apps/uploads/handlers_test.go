@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestDetectFileTypeMatchesDjangoCategories(t *testing.T) {
+func TestDetectFileTypeMatchesCategories(t *testing.T) {
 	cases := map[string]string{
 		"notes.pdf":   "document",
 		"grades.xlsx": "spreadsheet",

@@ -5,9 +5,8 @@ import (
 	"net/http"
 )
 
-// Envelope is the response contract shared by the existing Django API and the
-// Go implementation. Data and Errors are intentionally flexible because the
-// legacy API returns both objects and arrays depending on the endpoint.
+// Envelope is the stable Kibegi API response contract. Data and Errors are
+// intentionally flexible because endpoints return both objects and arrays.
 type Envelope struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`

@@ -1,110 +1,86 @@
-# Kibegi API
+# Kibegi Backend
 
-Kibegi is a Django REST API for a digital school platform. The current backend covers authentication, profiles, classes, schedules, standalone broadcast channels, SMS delivery, uploads, sharing, notifications, and related support services.
+Kibegi is a Go-primary backend for the digital school platform. The public domain API is implemented in Go 1.22 using `net/http`, PostgreSQL pooling, Redis caching and coordination, MinIO/S3-compatible object storage, SMTP, SendAfrica SMS, JWT-compatible authentication, and the existing Django database schema.
 
-## What Is In Production
+## Repository layout
 
-- JWT auth with email registration, Google login, password reset, and phone verification
-- Student profiles with `phone_number` and `phone_verified`
-- Class management and resource sharing
-- Schedule calendars for classes and examinations
-- SMS reminders for schedule events
-- Standalone `channel` app for broadcast campaigns
-- SendAfrica SMS delivery
-- Admin pages for wallet, channel, and delivery management
+| Component | Location | Purpose |
+|---|---|---|
+| Go API entrypoint | `cmd/kibegi-api/` | Starts the primary HTTP backend and registers all API namespaces. |
+| Go domain apps | `internal/apps/` | One Go package per preserved domain: authentication, classes, uploads, files, sharing, storage, friends, notifications, schedules, marketplace, library, channels, class communications, assignments, AI, search, SMS, and core health. |
+| Shared platform | `internal/platform/` | PostgreSQL, Redis, HTTP envelopes/middleware, MinIO/S3, SMTP, and SMS providers. |
+| AI indexing service | `services/ai-indexer/` | FastAPI sidecar that extracts upload text, chunks content, stores AI jobs/chunks, and optionally generates embeddings. |
+| Agent/MCP gateway | `services/kibegi-agent/` | FastAPI gateway and FastMCP HTTP server exposing typed tools plus complete allowlisted access to the Go API. |
 
-## Main Apps
+The Go API uses the existing Django PostgreSQL tables and object keys for data compatibility. Django source code is no longer part of the active backend path; the historical pre-cleanup implementation is retained only in the Git backup tag and archive described below.
 
-- [`apps/authentication`](apps/authentication/README.md)
-- [`apps/classes`](apps/classes/README.md)
-- [`apps/schedule`](apps/schedule/README.md)
-- [`apps/channel`](apps/channel/README.md)
-- [`apps/classcomms`](apps/classcomms/README.md) legacy compatibility layer
-- [`apps/sms`](apps/sms)
-- [`apps/uploads`](apps/uploads/README.md)
-- [`apps/sharing`](apps/sharing/README.md)
-- [`apps/friends`](apps/friends/README.md)
-- [`apps/notifications`](apps/notifications/README.md)
-- [`apps/library`](apps/library/README.md)
-- [`apps/marketplace`](apps/marketplace/README.md)
-- [`apps/storage`](apps/storage/README.md)
+## API coverage
 
-## Local Setup
+The Go service preserves the migrated API namespaces and response envelope: `success`, `message`, `data`, and `errors`.
+
+| Namespace | Coverage |
+|---|---|
+| `/api/v1/health/` | Database and Redis readiness. |
+| `/api/v1/auth/` | Registration, OTP, login, JWT refresh/logout, password reset, password changes, profiles, Google, phone, lecturer approval, and profile images. |
+| `/api/v1/classes/` | Class listing, search, creation, detail, membership, leave, and QR. |
+| `/api/v1/uploads/` and `/api/v1/files/` | Uploads, search, trash, restore, permanent deletion, shared files, and downloads. |
+| `/api/v1/storage/` | Quotas, usage, recalculation, detail, and history. |
+| `/api/v1/sharing/` | Sharing, bulk sharing, requests, transitions, detail, and download. |
+| `/api/v1/friends/` and `/api/v1/notifications/` | Friend workflows and notification workflows. |
+| `/api/v1/schedule/` and `/api/v1/public/schedule/` | Calendars, events, sharing, ICS/webcal, QR, public feeds, and SMS accounts. |
+| `/api/v1/marketplace/` and `/api/v1/library/` | Catalogs, listings, purchases, orders, library items, counters, and downloads. |
+| `/api/v1/channel/` and `/api/v1/public/channel/` | Channel CRUD, memberships, wallets, broadcasts, public information, and invite joins. |
+| `/api/v1/class-comms/` and `/api/v1/public/class-comms/` | Profiles, contacts, representatives, wallets, broadcasts, and public registration. |
+| `/api/v1/assignments/`, `/api/v1/ai/`, `/api/v1/search/`, `/api/v1/sms/` | Assignments, AI settings/conversations/status, global search/history, SMS wallets, and delivery history. |
+
+## Local Go setup
 
 ```bash
-cd API
-python -m venv .venv
-source .venv/bin/activate
+GOTOOLCHAIN=local go test ./...
+GOTOOLCHAIN=local go test -race ./...
+GOTOOLCHAIN=local go vet ./...
+GOTOOLCHAIN=local go build -o bin/kibegi-api ./cmd/kibegi-api/
+
+DATABASE_URL='postgres://user:password@localhost:5432/kibegi_db?sslmode=disable' \
+SECRET_KEY='replace-with-a-long-random-secret' \
+HTTP_ADDR=':8080' \
+./bin/kibegi-api
+```
+
+Configure `REDIS_URL` for response caching, atomic counters, rate limiting, token revocation, distributed locks, and coordination. Configure the MinIO, SMTP, SendAfrica, and CORS variables in `.env.example` for production integrations.
+
+## FastAPI AI indexer
+
+The indexer is a separate Python service and does not run Django. It reads upload metadata from PostgreSQL, downloads the existing object key from MinIO/S3, extracts supported PDF, DOC/DOCX, TXT, Markdown, RTF, CSV, PPT/PPTX, and XLS/XLSX content, writes `ai_documentchunk` rows, and updates `ai_aiprocessingjob` states. The Go upload handler asynchronously calls the indexer through `AI_INDEXER_URL` and `AI_INDEXER_TOKEN`; the indexer also provides a batch endpoint and optional polling runner for retries and stale jobs.
+
+```bash
+cd services/ai-indexer
+python3 -m venv .venv
+. .venv/bin/activate
 pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
+cp .env.example .env
+uvicorn app.main:app --host 0.0.0.0 --port 8090
 ```
 
-## Environment
+## FastMCP agent gateway
 
-Create `API/.env` with the values your deployment uses. The important ones are:
-
-```env
-SECRET_KEY=...
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-DATABASE_URL=...
-DEFAULT_FROM_EMAIL=...
-EMAIL_HOST=...
-EMAIL_HOST_USER=...
-EMAIL_HOST_PASSWORD=...
-SEND_AFRICA_API_URL=https://sendafrica.online/api
-SEND_AFRICA_USERNAME=...
-SEND_AFRICA_API_KEY=...
-SEND_AFRICA_SENDER_ID=...
-```
-
-For production on the VPS:
+The agent gateway forwards authenticated user JWTs to the Go API. It exposes typed tools for health, search, classes, uploads, downloads, storage, sharing, notifications, friends, schedules, marketplace, library, channels, class communications, assignments, AI status, and SMS. Its guarded generic API tool covers every allowlisted migrated route, including detail and mutation paths. All mutations require explicit confirmation.
 
 ```bash
-git pull
-source .venv/bin/activate
-python manage.py migrate
-python manage.py collectstatic --noinput
-sudo systemctl restart kibegi.service
+cd services/kibegi-agent
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+uvicorn app.main:app --host 0.0.0.0 --port 8091
 ```
 
-## Channel Flow
+The FastMCP HTTP endpoint defaults to `/mcp`. Deploy it behind TLS and an authentication layer before exposing it outside a trusted network. See `services/kibegi-agent/API_TOOL_COVERAGE.md` for the complete tool map and safety controls.
 
-The standalone channel app lets a verified user:
+## Verification
 
-- create a unique channel name
-- choose public or private visibility
-- share an invite link
-- search and join public channels
-- add registered Kibegi users by email, phone, or full name
-- send broadcast SMS to active members
+The repository has been verified with Go unit tests, race-enabled Go tests, `go vet`, Go builds, Python compilation, FastAPI service imports, indexer extraction tests, agent gateway tests, and isolated HTTP smoke tests. The services must still be tested with deployment PostgreSQL, Redis, MinIO/S3, SMTP, SendAfrica, and embedding credentials before production rollout.
 
-Rules:
+## Backup and rollback
 
-- channel names must be unique
-- only registered users can be added
-- users must verify their phone number before creating, joining, or broadcasting
-- each recipient consumes 1 SMS credit
-
-## SMS Credits
-
-Credits are tracked in two places for compatibility:
-
-- the legacy `SmsAccount` wallet
-- the channel-specific `ChannelWallet`
-
-The channel wallet now syncs with the latest top-up source so the UI and admin pages show the same balance.
-
-## Testing
-
-```bash
-env DEBUG=False .venv/bin/python manage.py test apps.channel.tests --settings=kibegi_api.test_settings
-```
-
-## API Docs
-
-- Swagger: `/api/docs/`
-- ReDoc: `/api/redoc/`
-- Schema: `/api/schema/`
+The approved cleanup was created from commit `6148d29`. The complete pre-cleanup source snapshot is available under the Git tag `pre-go-primary-cleanup-6148d29` and the archive `kibegi_API-pre-go-primary-cleanup-6148d29.tar.gz`. Restoring the historical implementation is therefore possible without changing the active Go-primary branch.
