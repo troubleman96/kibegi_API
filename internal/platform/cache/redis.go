@@ -88,6 +88,49 @@ func (r *Redis) Delete(ctx context.Context, keys ...string) error {
 	return r.client.Del(ctx, keys...).Err()
 }
 
+// IncrementRateLimit atomically increments a counter and applies the TTL only
+// on its first write, which keeps rate-limit windows consistent across nodes.
+func (r *Redis) IncrementRateLimit(ctx context.Context, key string, ttl time.Duration) (int64, error) {
+	if !r.Configured() {
+		return 0, ErrNotConfigured
+	}
+	count, err := r.client.Incr(ctx, key).Result()
+	if err != nil {
+		return 0, err
+	}
+	if count == 1 {
+		if ttl <= 0 {
+			ttl = r.defaultTTL
+		}
+		if err := r.client.Expire(ctx, key, ttl).Err(); err != nil {
+			return 0, err
+		}
+	}
+	return count, nil
+}
+
+func (r *Redis) AcquireLock(ctx context.Context, key, token string, ttl time.Duration) (bool, error) {
+	if !r.Configured() {
+		return false, ErrNotConfigured
+	}
+	if ttl <= 0 {
+		ttl = r.defaultTTL
+	}
+	return r.client.SetNX(ctx, key, token, ttl).Result()
+}
+
+func (r *Redis) ReleaseLock(ctx context.Context, key, token string) error {
+	if !r.Configured() {
+		return ErrNotConfigured
+	}
+	const releaseScript = `
+if redis.call("get", KEYS[1]) == ARGV[1] then
+	return redis.call("del", KEYS[1])
+end
+return 0`
+	return r.client.Eval(ctx, releaseScript, []string{key}, token).Err()
+}
+
 func (r *Redis) Close() error {
 	if !r.Configured() {
 		return nil

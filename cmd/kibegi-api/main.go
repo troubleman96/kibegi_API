@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -11,11 +10,10 @@ import (
 	"syscall"
 	"time"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
-
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
 	"github.com/troubleman96/kibegi_API/internal/config"
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
+	"github.com/troubleman96/kibegi_API/internal/platform/database"
 	"github.com/troubleman96/kibegi_API/internal/platform/middleware"
 )
 
@@ -23,18 +21,18 @@ func main() {
 	cfg := config.FromEnv()
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	var db *sql.DB
-	if cfg.DatabaseURL != "" {
-		openedDB, err := sql.Open("pgx", cfg.DatabaseURL)
-		if err != nil {
-			logger.Error("open database", "error", err)
-			os.Exit(1)
-		}
-		db = openedDB
-		db.SetMaxOpenConns(cfg.DBMaxOpenConns)
-		db.SetMaxIdleConns(minInt(cfg.DBMaxIdleConns, cfg.DBMaxOpenConns))
-		db.SetConnMaxLifetime(cfg.DBConnMaxLifetime)
-		db.SetConnMaxIdleTime(cfg.DBConnMaxIdleTime)
+	db, err := database.OpenPostgres(database.Config{
+		URL:             cfg.DatabaseURL,
+		MaxOpenConns:    cfg.DBMaxOpenConns,
+		MaxIdleConns:    cfg.DBMaxIdleConns,
+		ConnMaxLifetime: cfg.DBConnMaxLifetime,
+		ConnMaxIdleTime: cfg.DBConnMaxIdleTime,
+	})
+	if err != nil {
+		logger.Error("open database", "error", err)
+		os.Exit(1)
+	}
+	if db != nil {
 		defer db.Close()
 	} else {
 		logger.Warn("DATABASE_URL is not configured; health endpoint will report database failure")
@@ -100,13 +98,6 @@ func main() {
 		}
 		logger.Info("Go API stopped")
 	}
-}
-
-func minInt(left, right int) int {
-	if left < right {
-		return left
-	}
-	return right
 }
 
 func requestTimeoutMiddleware(next http.Handler, timeout time.Duration) http.Handler {
