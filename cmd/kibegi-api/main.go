@@ -207,6 +207,8 @@ func main() {
 	mux.Handle("/login/", authApp.LoginHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
+	baseHandler = middleware.RateLimit(redisClient, 120, time.Minute)(baseHandler)
+	baseHandler = middleware.CORS(os.Getenv("KIBEGI_CORS_ORIGIN"))(baseHandler)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
 	baseHandler = middleware.AccessLog(logger)(baseHandler)
 	baseHandler = middleware.RequestID(baseHandler)

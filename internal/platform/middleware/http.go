@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/troubleman96/kibegi_API/internal/platform/httpx"
@@ -130,3 +131,66 @@ func (w *responseWriter) ReadFrom(reader io.Reader) (int64, error) {
 }
 
 type structWriter struct{ io.Writer }
+
+// CORS applies conservative headers for browser clients. Set KIBEGI_CORS_ORIGIN to
+// a specific frontend origin in production; the wildcard is the development default.
+func CORS(origin string) func(http.Handler) http.Handler {
+	if origin == "" {
+		origin = "*"
+	}
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			requestOrigin := r.Header.Get("Origin")
+			if origin == "*" || requestOrigin == origin {
+				w.Header().Set("Access-Control-Allow-Origin", func() string {
+					if origin == "*" {
+						return "*"
+					}
+					return requestOrigin
+				}())
+			}
+			w.Header().Set("Vary", "Origin")
+			w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Request-ID")
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+			w.Header().Set("Access-Control-Expose-Headers", "X-Request-ID")
+			if r.Method == http.MethodOptions {
+				w.WriteHeader(http.StatusNoContent)
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func RateLimit(redisClient interface {
+	IncrementRateLimit(context.Context, string, time.Duration) (int64, error)
+}, limit int64, window time.Duration) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if redisClient != nil && limit > 0 {
+				key := "http:ratelimit:" + clientIP(r)
+				count, err := redisClient.IncrementRateLimit(r.Context(), key, window)
+				if err == nil && count > limit {
+					w.Header().Set("Retry-After", "60")
+					httpx.WriteEnvelope(w, http.StatusTooManyRequests, false, "Rate limit exceeded", nil, nil)
+					return
+				}
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func clientIP(r *http.Request) string {
+	if forwarded := r.Header.Get("X-Forwarded-For"); forwarded != "" {
+		if comma := strings.IndexByte(forwarded, ','); comma >= 0 {
+			return strings.TrimSpace(forwarded[:comma])
+		}
+		return strings.TrimSpace(forwarded)
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err == nil {
+		return host
+	}
+	return r.RemoteAddr
+}
