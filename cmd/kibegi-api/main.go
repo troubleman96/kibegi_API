@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/troubleman96/kibegi_API/internal/apps/assignments"
 	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
 	"github.com/troubleman96/kibegi_API/internal/apps/channel"
 	"github.com/troubleman96/kibegi_API/internal/apps/classcomms"
@@ -168,6 +169,9 @@ func main() {
 
 	classCommsApp := classcomms.App{Repository: classcomms.Repository{DB: db}, Auth: tokens}
 	mux.Handle("/api/v1/classcomms/", classCommsApp.PathHandler())
+
+	assignmentsApp := assignments.App{Repository: assignments.Repository{DB: db}, Auth: tokens}
+	mux.Handle("/api/v1/assignments/", assignmentsApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
