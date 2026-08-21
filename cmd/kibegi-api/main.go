@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
+	"github.com/troubleman96/kibegi_API/internal/apps/classes"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
 	"github.com/troubleman96/kibegi_API/internal/config"
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
@@ -70,6 +71,13 @@ func main() {
 	mux.Handle("/api/v1/auth/logout/", authApp.LogoutHandler())
 	mux.Handle("/api/v1/auth/change-password/", authApp.ChangePasswordHandler())
 	mux.Handle("/api/v1/auth/profile/", authApp.ProfileHandler())
+
+	classesApp := classes.App{
+		Repository: classes.Repository{DB: db},
+		Auth:       tokens,
+		MediaBase:  cfg.MediaPublicBaseURL,
+	}
+	mux.Handle("/api/v1/classes/", classesApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
