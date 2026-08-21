@@ -1,0 +1,12 @@
+fastapi==0.141.1
+uvicorn[standard]>=0.35,<1
+psycopg[binary,pool]>=3.3,<4
+boto3==1.43.62
+pypdf>=6,<7
+python-docx==1.2.0
+python-pptx==1.0.2
+openpyxl==3.1.5
+python-multipart>=0.0.9,<1
+redis>=5.3,<6
+pydantic-settings>=2.10,<3
+openai>=1.109,<2

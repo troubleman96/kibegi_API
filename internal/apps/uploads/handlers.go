@@ -1,6 +1,9 @@
 package uploads
 
 import (
+	"bytes"
+	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -22,11 +25,13 @@ import (
 const maxUploadSize = 50 * 1024 * 1024
 
 type App struct {
-	Repository Repository
-	Auth       *authentication.TokenService
-	Cache      *cache.Redis
-	Storage    *storage.ObjectStorage
-	MediaBase  string
+	Repository   Repository
+	Auth         *authentication.TokenService
+	Cache        *cache.Redis
+	Storage      *storage.ObjectStorage
+	MediaBase    string
+	IndexerURL   string
+	IndexerToken string
 }
 
 type pageOptions struct {
@@ -187,7 +192,31 @@ func (a App) create(w http.ResponseWriter, r *http.Request) {
 		httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Uploads service unavailable", nil, nil)
 		return
 	}
+	a.enqueueIndex(item.ID)
 	httpx.WriteEnvelope(w, http.StatusCreated, true, "File uploaded successfully", a.fullPayload(r, item), nil)
+}
+
+func (a App) enqueueIndex(uploadID uuid.UUID) {
+	if strings.TrimSpace(a.IndexerURL) == "" {
+		return
+	}
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		body, _ := json.Marshal(map[string]bool{"force": false})
+		req, err := http.NewRequestWithContext(ctx, http.MethodPost, strings.TrimRight(a.IndexerURL, "/")+"/v1/index/uploads/"+uploadID.String(), bytes.NewReader(body))
+		if err != nil {
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+		if a.IndexerToken != "" {
+			req.Header.Set("Authorization", "Bearer "+a.IndexerToken)
+		}
+		resp, err := http.DefaultClient.Do(req)
+		if err == nil && resp.Body != nil {
+			_ = resp.Body.Close()
+		}
+	}()
 }
 
 func (a App) detail(w http.ResponseWriter, r *http.Request, code string) {

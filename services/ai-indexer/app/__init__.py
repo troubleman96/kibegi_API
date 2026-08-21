@@ -1,0 +1,1 @@
+"""Kibegi AI indexing service."""

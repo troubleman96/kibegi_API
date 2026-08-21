@@ -136,11 +136,13 @@ func main() {
 	mux.Handle("/api/v1/classes/", classesApp.PathHandler())
 
 	uploadsApp := uploads.App{
-		Repository: uploads.Repository{DB: db},
-		Auth:       tokens,
-		Cache:      redisClient,
-		Storage:    objectStorage,
-		MediaBase:  cfg.MediaPublicBaseURL,
+		Repository:   uploads.Repository{DB: db},
+		Auth:         tokens,
+		Cache:        redisClient,
+		Storage:      objectStorage,
+		MediaBase:    cfg.MediaPublicBaseURL,
+		IndexerURL:   os.Getenv("AI_INDEXER_URL"),
+		IndexerToken: os.Getenv("AI_INDEXER_TOKEN"),
 	}
 	mux.Handle("/api/v1/uploads/", authentication.RequireAuth(tokens, uploadsApp.PathHandler()))
 
