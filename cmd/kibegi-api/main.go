@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/troubleman96/kibegi_API/internal/apps/ai"
 	"github.com/troubleman96/kibegi_API/internal/apps/assignments"
 	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
 	"github.com/troubleman96/kibegi_API/internal/apps/channel"
@@ -172,6 +173,9 @@ func main() {
 
 	assignmentsApp := assignments.App{Repository: assignments.Repository{DB: db}, Auth: tokens}
 	mux.Handle("/api/v1/assignments/", assignmentsApp.PathHandler())
+
+	aiApp := ai.App{Repository: ai.Repository{DB: db}, Auth: tokens, DefaultModel: "ngamia-default"}
+	mux.Handle("/api/v1/ai/", aiApp.PathHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
