@@ -319,3 +319,79 @@ func (a App) isRevoked(ctx context.Context, jti string) bool {
 	}
 	return revoked
 }
+
+func (a App) ChangePasswordHandler() http.Handler {
+	return RequireAuth(a.Tokens, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		userID, ok := UserIDFromContext(r.Context())
+		if !ok {
+			httpx.WriteEnvelope(w, http.StatusUnauthorized, false, "Authentication credentials were not provided.", nil, nil)
+			return
+		}
+		var input struct {
+			CurrentPassword string `json:"current_password"`
+			NewPassword     string `json:"new_password"`
+			ConfirmPassword string `json:"confirm_password"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid input", nil, nil)
+			return
+		}
+		if input.NewPassword != input.ConfirmPassword {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Password fields didn't match.", nil, nil)
+			return
+		}
+		if err := validatePassword(input.NewPassword); err != nil {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, err.Error(), nil, nil)
+			return
+		}
+		user, err := a.Users.FindByID(r.Context(), userID)
+		if errors.Is(err, ErrUserNotFound) {
+			httpx.WriteEnvelope(w, http.StatusNotFound, false, "User not found", nil, nil)
+			return
+		}
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password service unavailable", nil, nil)
+			return
+		}
+		valid, err := VerifyDjangoPassword(user.Password, input.CurrentPassword)
+		if err != nil || !valid {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Current password is incorrect", nil, nil)
+			return
+		}
+		encoded, err := EncodeDjangoPassword(input.NewPassword, 870000)
+		if err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password service unavailable", nil, nil)
+			return
+		}
+		if err := a.Users.UpdatePassword(r.Context(), userID, encoded); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Password service unavailable", nil, nil)
+			return
+		}
+		if a.Cache != nil && a.Cache.Configured() {
+			_ = a.Cache.Delete(r.Context(), "api-cache:profile:v1:user:"+formatInt64(userID))
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "Password changed successfully", nil, nil)
+	}))
+}
+
+func validatePassword(password string) error {
+	if len([]rune(password)) < 8 {
+		return errors.New("This password is too short. It must contain at least 8 characters.")
+	}
+	allDigits := true
+	for _, character := range password {
+		if character < '0' || character > '9' {
+			allDigits = false
+			break
+		}
+	}
+	if allDigits {
+		return errors.New("This password is entirely numeric.")
+	}
+	return nil
+}

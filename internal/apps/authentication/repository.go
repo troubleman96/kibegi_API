@@ -50,6 +50,17 @@ WHERE id = $1
 LIMIT 1`, userID)
 }
 
+func (r UserRepository) UpdatePassword(ctx context.Context, userID int64, encodedPassword string) error {
+	if r.DB == nil {
+		return errors.New("database is not configured")
+	}
+	_, err := r.DB.ExecContext(ctx, `
+UPDATE authentication_user
+SET password = $2
+WHERE id = $1`, userID, encodedPassword)
+	return err
+}
+
 func (r UserRepository) UpdateProfile(ctx context.Context, userID int64, fullName, university, phoneNumber string) (User, error) {
 	_, err := r.DB.ExecContext(ctx, `
 UPDATE authentication_user
