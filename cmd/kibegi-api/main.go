@@ -15,6 +15,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
 	"github.com/troubleman96/kibegi_API/internal/apps/friends"
 	"github.com/troubleman96/kibegi_API/internal/apps/notifications"
+	"github.com/troubleman96/kibegi_API/internal/apps/schedule"
 	"github.com/troubleman96/kibegi_API/internal/apps/sharing"
 	"github.com/troubleman96/kibegi_API/internal/apps/uploads"
 	"github.com/troubleman96/kibegi_API/internal/config"
@@ -147,6 +148,10 @@ func main() {
 		MediaBase:  cfg.MediaPublicBaseURL,
 	}
 	mux.Handle("/api/v1/friends/", friendsApp.PathHandler())
+
+	scheduleApp := schedule.App{Repository: &schedule.Repository{DB: db}, Auth: tokens}
+	mux.Handle("/api/v1/schedule/", scheduleApp.PrivateHandler())
+	mux.Handle("/api/v1/public/schedule/", scheduleApp.PublicHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
