@@ -13,6 +13,7 @@ import (
 	"github.com/troubleman96/kibegi_API/internal/apps/authentication"
 	"github.com/troubleman96/kibegi_API/internal/apps/classes"
 	"github.com/troubleman96/kibegi_API/internal/apps/core"
+	"github.com/troubleman96/kibegi_API/internal/apps/sharing"
 	"github.com/troubleman96/kibegi_API/internal/apps/uploads"
 	"github.com/troubleman96/kibegi_API/internal/config"
 	"github.com/troubleman96/kibegi_API/internal/platform/cache"
@@ -122,6 +123,14 @@ func main() {
 		MediaBase:  cfg.MediaPublicBaseURL,
 	}
 	mux.Handle("/api/v1/uploads/", authentication.RequireAuth(tokens, uploadsApp.PathHandler()))
+
+	sharingApp := sharing.App{
+		Repository: sharing.Repository{DB: db},
+		Auth:       tokens,
+		Storage:    objectStorage,
+		MediaBase:  cfg.MediaPublicBaseURL,
+	}
+	mux.Handle("/api/v1/sharing/", authentication.RequireAuth(tokens, sharingApp.PathHandler()))
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)
 	baseHandler = middleware.Recoverer(logger)(baseHandler)
