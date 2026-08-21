@@ -90,6 +90,10 @@ celerybeat.pid
 *~
 start.md
 
+# Go
+bin/
+*.test
+
 # Node / frontend (should not exist in API, but guard against accidents)
 node_modules/
 package.json
