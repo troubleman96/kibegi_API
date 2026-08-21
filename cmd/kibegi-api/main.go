@@ -66,6 +66,8 @@ func main() {
 		MediaBase: cfg.MediaPublicBaseURL,
 	}
 	mux.Handle("/api/v1/auth/login/", authApp.LoginHandler())
+	mux.Handle("/api/v1/auth/token/refresh/", authApp.TokenRefreshHandler())
+	mux.Handle("/api/v1/auth/logout/", authApp.LogoutHandler())
 	mux.Handle("/api/v1/auth/profile/", authApp.ProfileHandler())
 
 	baseHandler := requestTimeoutMiddleware(mux, 30*time.Second)

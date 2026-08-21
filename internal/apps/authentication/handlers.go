@@ -1,6 +1,7 @@
 package authentication
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -236,4 +237,85 @@ func (a App) absoluteMediaURL(r *http.Request, imagePath string) string {
 
 func formatInt64(value int64) string {
 	return strconv.FormatInt(value, 10)
+}
+
+type refreshRequest struct {
+	Refresh string `json:"refresh"`
+}
+
+func (a App) TokenRefreshHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input refreshRequest
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || strings.TrimSpace(input.Refresh) == "" {
+			httpx.WriteJSON(w, http.StatusBadRequest, map[string]string{"detail": "refresh is required"})
+			return
+		}
+		claims, err := a.Tokens.ParseRefresh(input.Refresh)
+		if err != nil || a.isRevoked(r.Context(), claims.JTI) {
+			httpx.WriteJSON(w, http.StatusUnauthorized, map[string]string{"detail": "Token is invalid or expired"})
+			return
+		}
+		refresh, access, oldClaims, err := a.Tokens.RotateRefresh(input.Refresh, time.Now().UTC())
+		if err != nil {
+			httpx.WriteJSON(w, http.StatusUnauthorized, map[string]string{"detail": "Token is invalid or expired"})
+			return
+		}
+		if err := a.revoke(r.Context(), oldClaims); err != nil {
+			httpx.WriteJSON(w, http.StatusServiceUnavailable, map[string]string{"detail": "Token service unavailable"})
+			return
+		}
+		httpx.WriteJSON(w, http.StatusOK, tokenPair{Refresh: refresh, Access: access})
+	})
+}
+
+func (a App) LogoutHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			w.Header().Set("Allow", http.MethodPost)
+			httpx.WriteEnvelope(w, http.StatusMethodNotAllowed, false, "method not allowed", nil, nil)
+			return
+		}
+		var input refreshRequest
+		if err := json.NewDecoder(r.Body).Decode(&input); err != nil || strings.TrimSpace(input.Refresh) == "" {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid token", nil, nil)
+			return
+		}
+		claims, err := a.Tokens.ParseRefresh(input.Refresh)
+		if err != nil || a.isRevoked(r.Context(), claims.JTI) {
+			httpx.WriteEnvelope(w, http.StatusBadRequest, false, "Invalid token or already blacklisted", nil, nil)
+			return
+		}
+		if err := a.revoke(r.Context(), claims); err != nil {
+			httpx.WriteEnvelope(w, http.StatusServiceUnavailable, false, "Token service unavailable", nil, nil)
+			return
+		}
+		httpx.WriteEnvelope(w, http.StatusOK, true, "Successfully logged out", nil, nil)
+	})
+}
+
+func (a App) revoke(ctx context.Context, claims TokenClaims) error {
+	if a.Cache == nil || !a.Cache.Configured() {
+		return errors.New("redis is required for refresh token revocation")
+	}
+	ttl := time.Until(claims.ExpiresAt)
+	if ttl <= 0 {
+		return nil
+	}
+	return a.Cache.Set(ctx, "auth:blacklist:"+claims.JTI, true, ttl)
+}
+
+func (a App) isRevoked(ctx context.Context, jti string) bool {
+	if a.Cache == nil || !a.Cache.Configured() {
+		return false
+	}
+	var revoked bool
+	if err := a.Cache.Get(ctx, "auth:blacklist:"+jti, &revoked); err != nil {
+		return false
+	}
+	return revoked
 }
